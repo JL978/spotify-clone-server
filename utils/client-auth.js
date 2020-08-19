@@ -1,8 +1,7 @@
-const {client_id, client_secret} = require('../client_key')
 const qs = require('querystring')
 const axios = require('axios')
 
-const client_auth = ()=>{
+const client_auth = (client_id, client_secret)=>{
     return new Promise((res, rej) =>{
         const config = {
             headers: {

@@ -47,7 +47,7 @@ const scope = 'user-read-private user-read-playback-state streaming user-modify-
 //endpoint to send a full spotify endpoint to request data
 app.post('/', (req, res) => {
     const endpoint = req.body.endpoint
-    client_auth()
+    client_auth(client_id, client_secret)
         .then((token) => {
             axios.get(endpoint, authed_header(token))
                 .then((response) => {
