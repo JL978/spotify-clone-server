@@ -1,2 +1,2 @@
-# Spotify-FrontEnd-Clone
+# SERVER 
 Clone of Spotify Front-End using ReactJS
