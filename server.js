@@ -20,7 +20,7 @@ const app = express()
 const server = http.createServer(app)
 
 var corsOptions = {
-  origin: process.env.FRONT_URI,
+  origin: [process.env.FRONT_URI, process.env.REXP],
   credentials: true
 }
 
@@ -115,7 +115,11 @@ app.get('/callback', function(req, res) {
           var access_token = body.access_token,
               refresh_token = body.refresh_token;
           
-              res.cookie(refreshKey, refresh_token, {httpOnly: false})
+              res.cookie(refreshKey, refresh_token, {
+                httpOnly: true,
+                sameSite: true,
+                secure: true
+              })
           // Redirecting to front end with access and refresh token as hash params 
           res.redirect(front_end_uri + '/#' +
               qs.stringify({access_token, refresh_token}))
@@ -150,7 +154,11 @@ app.get('/refresh_token', (req, res) => {
       var {access_token, refresh_token} = body;
       //in case a new refresh token is sent back
       if (refresh_token){
-        res.cookie(refresh_token)
+        res.cookie(refresh_token, {
+          httpOnly: true,
+          sameSite: true,
+          secure: true
+        })
       }
       res.send({access_token});
 
