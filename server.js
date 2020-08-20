@@ -41,6 +41,12 @@ const front_end_uri = process.env.FRONT_URI
 
 const stateKey = 'spotify_auth_state';
 const refreshKey = 'refresh_key'
+const cookieOption = {
+  domain: process.env.FRONT_URI,
+  httpOnly:false, 
+  sameSite:false, 
+  secure:true
+}
 
 const scope = 'user-read-private user-read-playback-state streaming user-modify-playback-state playlist-modify-public user-library-modify user-top-read user-read-currently-playing playlist-read-private user-follow-read user-read-recently-played playlist-modify-private user-follow-modify user-library-read user-read-email';
 
@@ -115,11 +121,8 @@ app.get('/callback', function(req, res) {
           var access_token = body.access_token,
               refresh_token = body.refresh_token;
           
-              res.cookie(refreshKey, refresh_token, {
-                httpOnly:false,
-                sameSite:false,
-                //secure:true
-              })
+              res.cookie(refreshKey, refresh_token, cookieOption)
+
           // Redirecting to front end with access and refresh token as hash params 
           res.redirect(front_end_uri + '/#' +
               qs.stringify({access_token, refresh_token}))
@@ -154,11 +157,7 @@ app.get('/refresh_token', (req, res) => {
       var {access_token, refresh_token} = body;
       //in case a new refresh token is sent back
       if (refresh_token){
-        res.cookie(refreshKey, refresh_token, {
-          httpOnly:false,
-          sameSite:false,
-          //secure:true
-        })
+        res.cookie(refreshKey, refresh_token, cookieOption)
       }
       res.send({access_token});
 
@@ -169,11 +168,7 @@ app.get('/refresh_token', (req, res) => {
 });
 
 app.get('/logout', (req, res) => {
-  res.clearCookie(refreshKey, {
-    httpOnly:false,
-    sameSite:false,
-    //secure:true
-  })
+  res.clearCookie(refreshKey, cookieOption)
   res.status(200).send('logged out')
 })
 
