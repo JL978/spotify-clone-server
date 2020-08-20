@@ -117,7 +117,7 @@ app.get('/callback', function(req, res) {
           
               res.cookie(refreshKey, refresh_token, {
                 httpOnly: true,
-                sameSite: 'none',
+                sameSite: 'None',
                 secure: true
               })
           // Redirecting to front end with access and refresh token as hash params 
@@ -156,7 +156,7 @@ app.get('/refresh_token', (req, res) => {
       if (refresh_token){
         res.cookie(refresh_token, {
           httpOnly: true,
-          sameSite: 'none',
+          sameSite: 'None',
           secure: true
         })
       }
