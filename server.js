@@ -45,7 +45,7 @@ const cookieOption = {
   // domain: process.env.FRONT_URI,
   //httpOnly:false, 
   sameSite:'None', 
-  //secure:true
+  secure:true
 }
 
 const scope = 'user-read-private user-read-playback-state streaming user-modify-playback-state playlist-modify-public user-library-modify user-top-read user-read-currently-playing playlist-read-private user-follow-read user-read-recently-played playlist-modify-private user-follow-modify user-library-read user-read-email';
