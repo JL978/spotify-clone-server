@@ -42,10 +42,10 @@ const front_end_uri = process.env.FRONT_URI
 const stateKey = 'spotify_auth_state';
 const refreshKey = 'refresh_key'
 const cookieOption = {
-  domain: process.env.FRONT_URI,
-  httpOnly:false, 
-  SameSite:'None', 
-  secure:true
+  // domain: process.env.FRONT_URI,
+  //httpOnly:false, 
+  //SameSite:'None', 
+  //secure:true
 }
 
 const scope = 'user-read-private user-read-playback-state streaming user-modify-playback-state playlist-modify-public user-library-modify user-top-read user-read-currently-playing playlist-read-private user-follow-read user-read-recently-played playlist-modify-private user-follow-modify user-library-read user-read-email';
