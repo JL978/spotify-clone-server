@@ -118,7 +118,7 @@ app.get('/callback', function(req, res) {
               res.cookie(refreshKey, refresh_token, {
                 httpOnly:false,
                 sameSite:false,
-                secure:true
+                //secure:true
               })
           // Redirecting to front end with access and refresh token as hash params 
           res.redirect(front_end_uri + '/#' +
@@ -157,7 +157,7 @@ app.get('/refresh_token', (req, res) => {
         res.cookie(refreshKey, refresh_token, {
           httpOnly:false,
           sameSite:false,
-          secure:true
+          //secure:true
         })
       }
       res.send({access_token});
@@ -172,7 +172,7 @@ app.get('/logout', (req, res) => {
   res.clearCookie(refreshKey, {
     httpOnly:false,
     sameSite:false,
-    secure:true
+    //secure:true
   })
   res.status(200).send('logged out')
 })
