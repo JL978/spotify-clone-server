@@ -44,7 +44,7 @@ const refreshKey = 'refresh_key'
 const cookieOption = {
   domain: process.env.FRONT_URI,
   httpOnly:false, 
-  sameSite:false, 
+  SameSite:false, 
   secure:true
 }
 
