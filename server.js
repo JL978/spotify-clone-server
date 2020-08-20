@@ -25,7 +25,7 @@ var corsOptions = {
 }
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", req.headers.origin);
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
@@ -115,7 +115,7 @@ app.get('/callback', function(req, res) {
           var access_token = body.access_token,
               refresh_token = body.refresh_token;
           
-              res.cookie(refreshKey, refresh_token)
+              res.cookie(refreshKey, refresh_token, {httpOnly: false})
           // Redirecting to front end with access and refresh token as hash params 
           res.redirect(front_end_uri + '/#' +
               qs.stringify({access_token, refresh_token}))
