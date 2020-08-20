@@ -154,7 +154,7 @@ app.get('/refresh_token', (req, res) => {
       var {access_token, refresh_token} = body;
       //in case a new refresh token is sent back
       if (refresh_token){
-        res.cookie(refresh_key, refresh_token, {
+        res.cookie(refreshKey, refresh_token, {
           httpOnly:false,
           sameSite:false,
           secure:true
@@ -169,7 +169,11 @@ app.get('/refresh_token', (req, res) => {
 });
 
 app.get('/logout', (req, res) => {
-  res.clearCookie(refreshKey)
+  res.clearCookie(refreshKey, {
+    httpOnly:false,
+    sameSite:false,
+    secure:true
+  })
   res.status(200).send('logged out')
 })
 
