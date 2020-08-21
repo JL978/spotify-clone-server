@@ -121,7 +121,7 @@ app.get('/callback', function(req, res) {
           var access_token = body.access_token,
               refresh_token = body.refresh_token;
           
-              res.cookie(refreshKey, refresh_token, cookieOption).send(`set cookie with options ${cookieOption}`)
+              res.cookie(refreshKey, refresh_token, cookieOption)
 
           // Redirecting to front end with access and refresh token as hash params 
           res.redirect(front_end_uri + '/#' +
