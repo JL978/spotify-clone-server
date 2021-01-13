@@ -35,7 +35,7 @@ To run the dev server
 $ npm run dev
 ```
 
-### **Other requirement**
+### **Other requirements**
 [The Spotify Developer Dashboard](https://developer.spotify.com/dashboard/login)
 
 Create a new .env file in the root folder and add the following key value pairs to the file
@@ -61,3 +61,25 @@ The following endpoints are available
 |/refresh_token|GET|none|if a valid refresh token is available in the cookie, an access_token is sent back as data|
 |/logout|GET|none|clear the refresh token and effectively log the user out off the app|
 
+## The architecture
+### Client Credential Flow (un-authorized requests)
+
+![client credential flow](demo/unauthed.png)
+
+The advantage of doing request this way instead of using the implicit grant flow as outlined in the Spotify API document is that you have a higher rate limit. It also doesn't prompt the user to login, which would be a bad experience for users who don't have a Spotify account but just want to browse their selections. 
+
+An improvement to this process would be to store the access_token in memory after the first request and use that for subsequent requests instead of requesting for a new access token on every request.
+
+### Authorization code flow 
+
+The majority of code flow is very similar to the authorization code flow as outlined in the API [documentation](https://developer.spotify.com/documentation/general/guides/authorization-guide/), a diagram of which is shown bellow
+
+![spotify authorization flow](demo/spotify-auth.png)
+
+The only difference with this server is that the sent back data at step 2 is the access_token as JSON so that the client can store that in memory (the client will now show the logged in version of the app) and set the refresh token in a cookie. At this point the client is free to make requests for personal data as outlined in step 3-4 however an issue would arise if the user refreshed the page. Since the access_token is stored in memory, the user would be logged out during page refresh and provide a bad user experience. To solve this issue, a /refresh_token endpoint is also provided. During any initial loading, the client checks for if their is a refresh_token stored in a cookie, if there is then it makes a request to the /refresh_token endpoint which uses the refresh_token to obtain a new access_key from the Spotify API. 
+
+![refresh token flow](demo/refresh.png)
+
+## Logging out
+
+Since "logged in" just means that there is a refresh_token stored in cookies, to log the user out it is simply deleting the cookie and refresh the client.
