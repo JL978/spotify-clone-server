@@ -52,9 +52,6 @@ RE_URI = http://localhost:4000/callback
 REXP = /\.localhost:3000/
 ```
 
-## Usage
-~ANYTHING WE WANT TO SPECIFY ABOUT USAGE~
-
 ## The architecture
 ### Client Credential Flow (un-authorized requests)
 
