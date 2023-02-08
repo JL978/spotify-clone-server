@@ -10,7 +10,7 @@
 * axios
 
 ## Installation
-This project requires [node](http://nodejs.org), [npm](https://npmjs.com), and [concurrently](https://www.npmjs.com/package/concurrently#installation)installed globally. 
+This project requires [node](http://nodejs.org), [npm](https://npmjs.com), and [concurrently](https://www.npmjs.com/package/concurrently#installation) installed globally. 
 
 Clone the repository to a directory of your choosing
 
