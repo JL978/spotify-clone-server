@@ -1,30 +1,23 @@
 {
-  "name": "spotify-frontend-clone",
+  "name": "shoutify",
   "version": "1.0.0",
-  "description": "Clone of Spotify Front-End using ReactJS",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server",
-    "dev": "nodemon server"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "npm start --prefix server",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JL978/Spotify-FrontEnd-Clone.git"
+    "url": "git+https://github.com/UwemWilson4/shoutify.git"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/JL978/Spotify-FrontEnd-Clone/issues"
+    "url": "https://github.com/UwemWilson4/shoutify/issues"
   },
-  "homepage": "https://github.com/JL978/Spotify-FrontEnd-Clone#readme",
-  "dependencies": {
-    "axios": "^0.19.2",
-    "cookie-parser": "^1.4.5",
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "nodemon": "^2.0.7",
-    "querystring": "^0.2.0",
-    "request": "^2.88.2"
-  }
+  "homepage": "https://github.com/UwemWilson4/shoutify#readme"
 }
