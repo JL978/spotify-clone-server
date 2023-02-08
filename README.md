@@ -22,6 +22,9 @@ Install necessary packages in `/client` and `/server` by running the following c
 ```sh
 $ npm install 
 ```
+
+## Usage
+
 To run the client and server concurrently
 
 ```sh
