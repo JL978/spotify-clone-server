@@ -12,6 +12,7 @@ Finally, existing social innovations implemented in modern streaming platforms h
 * Node.js
 * Express.js
 * axios
+* MongoDB
 
 ## Installation
 This project requires [node](http://nodejs.org), [npm](https://npmjs.com), and [concurrently](https://www.npmjs.com/package/concurrently#installation) installed globally. 
