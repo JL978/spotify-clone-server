@@ -137,11 +137,7 @@ function App() {
                 <NavList>
                   <NavItem to='/' exact={true} name='Home' label='Home' />
                   <NavItem to='/search' exact={true} name='Search' label='Search' />
-<<<<<<< HEAD
-                  <NavItem to='/social' exact={true} name='Social' label='Social' />
-=======
                   <NavItem to='/social' exact={true} name='Social' label='Social' /> 
->>>>>>> b67f83a095d8a195abc17dd9d3b4c2c81567a7d5
                   <NavItem to='/collection' exact={false} name='Library' label='Your Library' data_tip='library' data_for='tooltip' data_event='click' style={{ pointerEvents: loggedIn? 'auto':'none'}}/>
                 </NavList>
                 <PlayLists 
