@@ -20,10 +20,6 @@ import Speaker from './Speaker'
 import Volume from './Volume'
 import Pause from './Pause'
 import Social from './Social'
-<<<<<<< HEAD
-=======
-
->>>>>>> b67f83a095d8a195abc17dd9d3b4c2c81567a7d5
 import React from 'react'
 
 export default function Icon(props) {
@@ -71,11 +67,7 @@ export default function Icon(props) {
         case 'Pause':
             return <Pause />
         case 'Social':
-<<<<<<< HEAD
             return <Social />
-=======
-            return <Social/>
->>>>>>> b67f83a095d8a195abc17dd9d3b4c2c81567a7d5
         default:
             return null
     }
