@@ -1,9 +1,12 @@
 import React from 'react'
 import axios from 'axios'
 
+import { MessageContext} from '../../utilities/context'
+
 // Lyrics container component. The component receives a `playInfo` prop
 // that contains current track name, artist, and id. 
 const LyricsContainer = React.forwardRef(({playInfo}, ref) => {
+    setMessage = userContext(MessageContext)
     const {name, artist, spotify_id} = playInfo
     // Need a state variable for the text displaying lyrics in the component.
     // The state variable, `currentLyrics` is first set to an empty string.
@@ -26,22 +29,25 @@ const LyricsContainer = React.forwardRef(({playInfo}, ref) => {
 
         return result
     }
-    let track_id
+    let track_id = null
     trackIdRequest(search_call)
         .then(response => {
             if (response.status === 204){
                 setTimeout(() => updatePlayer(), 1000)
                 // set track_id to track_id returned from the response
+                console.log(response.data.body.track_list)
             }else{
-                setLyrics() // Set lyrics to blank
+                setLyrics('') // Set lyrics to blank
                 // set error message to fail gracefully
+                setMessage('Sorry, we couldn\'t find lyrics for this song')
             }
         }).catch(err => {
             // set error message to fail gracefully
+            setMessage('Sorry, we couldn\'t find lyrics for this song')
         })
 
     // Use axios to make a musixmatch api call to search for the musixmatch lyrics for the given
-    // track_id. 
+    // track_id.
     const lyrics_params = 'track.lyrics.get?track_id='.concat(track_id, '&apikey=', apikey)
     const lyrics_call = base_url.concat(lyrics_params)
     const lyricsRequest = async (url) => {
@@ -56,18 +62,26 @@ const LyricsContainer = React.forwardRef(({playInfo}, ref) => {
         return result
     }
     
-    lyricsRequest(lyrics_call)
-        .then(response => {
-            if (response.status === 204){
-                setTimeout(() => updatePlayer(), 1000)
-                // set track_id to track_id returned from the response
-            }else{
-                setLyrics() // Set lyrics to blank
+    if (track_id !== null) {
+        // Only search for lyrics if we were able to obtain the musixmatch track_id
+        lyricsRequest(lyrics_call)
+            .then(response => {
+                if (response.status === 204){
+                    setTimeout(() => updatePlayer(), 1000)
+                    // set track_id to track_id returned from the response
+                    console.log(response.data)
+                }else{
+                    setLyrics() // Set lyrics to blank
+                    // set error message to fail gracefully
+                    setLyrics('')
+                    setMessage('Sorry, we couldn\'t find lyrics for this song')
+                }
+            }).catch(err => {
                 // set error message to fail gracefully
-            }
-        }).catch(err => {
-            // set error message to fail gracefully
-        })
+                setLyrics('No Lyrics')
+                setMessage('Sorry, we couldn\'t find lyrics for this song')
+            })
+    }
 
     // Return JSX for the component. Will likely need the <div> tag with some react components
     // sprinkled in. 
