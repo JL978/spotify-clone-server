@@ -437,6 +437,15 @@ const Player = React.forwardRef(({ token }, ref) => {
 
 				<div className="player-right">
 					<div className="extra-controls">
+						<div className="social-features">
+								<ControlButton
+									title="Annotations" 
+									icon="Bars"
+									size="x-larger"
+									onClick={() => {setMessage('TODO: Display annotations page')}}
+									/>
+						</div>
+
 						<span className="connect-devices-wrapper">
 							{connectTip && (
 								<ConnectDevices

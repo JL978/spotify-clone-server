@@ -19,6 +19,7 @@ import Repeat from './Repeat'
 import Speaker from './Speaker'
 import Volume from './Volume'
 import Pause from './Pause'
+import Bars from './Bars.js'
 
 import React from 'react'
 
@@ -66,6 +67,8 @@ export default function Icon(props) {
             return <Volume />
         case 'Pause':
             return <Pause />
+        case 'Bars':
+            return <Bars />
         default:
             return null
     }

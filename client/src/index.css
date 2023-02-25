@@ -509,6 +509,10 @@ body{
     user-select: none;
 }
 
+.social-features{
+    position: relative
+}
+
 .connect-devices-wrapper{
     position: relative
 }
