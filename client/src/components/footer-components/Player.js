@@ -17,6 +17,7 @@ import reqWithToken from "../../utilities/reqWithToken";
 import msTimeFormat from "../../utilities/utils";
 import putWithToken from "../../utilities/putWithToken";
 import { MessageContext } from "../../utilities/context";
+import { useHistory } from "react-router-dom";
 
 const Player = React.forwardRef(({ token }, ref) => {
 	const setMessage = useContext(MessageContext);
@@ -370,6 +371,13 @@ const Player = React.forwardRef(({ token }, ref) => {
 			.catch((error) => setMessage(`ERROR: ${error}`));
 	};
 
+	// Redirects to the annotations page
+	const history = useHistory()
+	const routeChangeAnnotations = () => {
+		const path = '/annotations'
+		history.push(path)
+	}
+
 	return (
 		<>
 			{/* {playbackState.play ? null:<Heartbeat heartbeatFunction={updateState} heartbeatInterval={10000}/>} */}
@@ -438,12 +446,13 @@ const Player = React.forwardRef(({ token }, ref) => {
 				<div className="player-right">
 					<div className="extra-controls">
 						<div className="social-features">
-								<ControlButton
-									title="Annotations" 
+							<ControlButton
+									title="Annotations"
 									icon="Bars"
 									size="x-larger"
-									onClick={() => {setMessage('TODO: Display annotations page')}}
-									/>
+									onClick={routeChangeAnnotations}
+								/>
+
 						</div>
 
 						<span className="connect-devices-wrapper">
