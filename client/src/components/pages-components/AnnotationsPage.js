@@ -46,7 +46,7 @@ export default function AnnotationsPage() {
         const musixMatchRequest = async (url) => {
             let result
             try {
-                result = axios.get(url)
+                result = await axios.get(url)
             } catch (err) {
                 console.log(err)
                 return err
