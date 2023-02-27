@@ -19,7 +19,7 @@ import Loading from './components/featured-components/Loading.js'
 
 import getHashParams from './utilities/getHashParams'
 import reqWithToken from './utilities/reqWithToken'
-import {UserContext, LoginContext, TokenContext, MessageContext, PlayContext} from './utilities/context'
+import {UserContext, LoginContext, TokenContext, MessageContext, PlayContext, SongContext} from './utilities/context'
 
 function App() {
   const [loading, setLoading] = useState(true)
@@ -30,6 +30,8 @@ function App() {
 
   const [status, setStatus] = useState(false) 
   const [message, setMessage] = useState('')
+  // Boolean value that will be used to detect when I song has changed
+  const [song, setSong] = useState(0)
 
   const timerRef = useRef(null)
 
@@ -131,7 +133,7 @@ function App() {
         <MessageContext.Provider value={setStatusMessage}>
           <LoginContext.Provider
             value={loggedIn}>
-              
+            <SongContext.Provider value={{song, setSong}}>
               <Sidebar>
                 <Logo />
                 <NavList>
@@ -159,7 +161,7 @@ function App() {
               <Footer>
                 {loggedIn? <Player token={token} ref={playerRef}/>: <CTAbanner/>}
               </Footer>
-                  
+            </SongContext.Provider>     
           </LoginContext.Provider>
 
         </MessageContext.Provider>

@@ -982,6 +982,19 @@ body{
     position: relative;
 }
 
+.LyricsContainer{
+    background: #d66d47;
+    border-radius: 20px;
+    width: 50%;
+    height: 150px;
+}
+
+.lyric-container{
+    position: relative;
+    left: 15px;
+    top: 10px;
+}
+
 .smallButton{
     display: flex;
     align-items: center;

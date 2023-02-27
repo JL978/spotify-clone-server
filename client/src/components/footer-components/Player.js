@@ -16,11 +16,14 @@ import ControlButton from "./ControlButton";
 import reqWithToken from "../../utilities/reqWithToken";
 import msTimeFormat from "../../utilities/utils";
 import putWithToken from "../../utilities/putWithToken";
-import { MessageContext } from "../../utilities/context";
+import { MessageContext, SongContext } from "../../utilities/context";
 import { useHistory } from "react-router-dom";
 
 const Player = React.forwardRef(({ token }, ref) => {
 	const setMessage = useContext(MessageContext);
+	// Song status that will be used to keep track of when a song has changed and the setter
+	// function that indicates that change.
+	const {song, setSong} = useContext(SongContext)
 	const [playbackState, setPlaybackState] = useState({
 		play: false,
 		shuffle: false,
@@ -194,6 +197,9 @@ const Player = React.forwardRef(({ token }, ref) => {
 						total_time: item.duration_ms,
 					}));
 					setPlayInfo(item);
+					// Toggle the song context to indicate that the song has changed.
+					// This assumes that apiupdate is being called when the song changes.
+					song === 0 ? setSong(1) : setSong(0)
 				} else if (response.status === 204) {
 					setMessage(
 						"Player is not working, select a device to start listening"
