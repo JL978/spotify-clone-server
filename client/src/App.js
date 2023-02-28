@@ -16,7 +16,6 @@ import Player from './components/footer-components/Player'
 import Featured from './components/featured-components/Featured.js'
 import Loading from './components/featured-components/Loading.js'
 
-
 import getHashParams from './utilities/getHashParams'
 import reqWithToken from './utilities/reqWithToken'
 import {UserContext, LoginContext, TokenContext, MessageContext, PlayContext} from './utilities/context'
@@ -137,7 +136,7 @@ function App() {
                 <NavList>
                   <NavItem to='/' exact={true} name='Home' label='Home' />
                   <NavItem to='/search' exact={true} name='Search' label='Search' />
-                  <NavItem to='/social' exact={false} name='Social' label='Social' /> 
+                  <NavItem to='/social' name='Social' label='Social' /> 
                   <NavItem to='/collection' exact={false} name='Library' label='Your Library' data_tip='library' data_for='tooltip' data_event='click' style={{ pointerEvents: loggedIn? 'auto':'none'}}/>
                 </NavList>
                 <PlayLists 
@@ -168,7 +167,5 @@ function App() {
     </div>
   );
 }
-
-
 
 export default App;

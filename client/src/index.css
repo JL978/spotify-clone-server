@@ -775,6 +775,7 @@ body{
     letter-spacing: .015em;
 }
 
+
 .cNavWrapper{
     white-space: nowrap;
     flex-grow: 1;
@@ -1098,7 +1099,10 @@ body{
     padding-top: 16px
 }
 
-.SocialPage{
+.socialPage{
+    color: #fff;
+    margin-top: 16px; 
+    padding: 16px 0;
     background-color: rgb(255, 0, 0);
 }
 
@@ -1114,6 +1118,40 @@ body{
     grid-auto-flow: row;
     grid-template-columns: 1fr;
     grid-gap: 32px;
+    background-color: #1db954;
+}
+
+.socialGrid {
+    margin: 16px 0;
+    display: grid;
+    grid-gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(164px, 1fr));
+    grid-auto-rows: auto;
+}
+
+.socialCardContainer {
+    background-color: #1db954;
+}
+
+.social-card-user-info {
+    background-color: #1db954;
+}
+
+.social-sidebar{
+    background: #08eb2a;
+    width: 232px;
+    padding-top: 24px;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+}
+
+.comment-info {
+    background-color: #1db954;
+}
+
+.comment-like {
+    background-color: #1db954;
 }
 
 .listPage{
