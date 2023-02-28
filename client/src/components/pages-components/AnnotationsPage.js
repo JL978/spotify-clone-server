@@ -15,7 +15,7 @@ export default function AnnotationsPage() {
     // eslint-disable-next-line
     const { song } = useContext(SongContext)
     const setMessage = useContext(MessageContext)
-    const [songName, setSongName] = useState('hello')
+    const [songName, setSongName] = useState('')
     // See line 101 for reason for ignoring lint warning.
     // eslint-disable-next-line
     const [artists, setArtists] = useState([])

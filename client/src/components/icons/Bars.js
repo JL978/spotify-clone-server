@@ -9,6 +9,7 @@ const Bars = (props) => {
     strokeLinecap='round'
     stroke-width='40'
     space="preserve"
+    data-testid='bars-icon'
     >
         <path d="M80 362.667v-213.333"/>
         <path d="M156 416v-320"></path>
@@ -16,8 +17,6 @@ const Bars = (props) => {
         <path d="M316 416v-320"></path>
         <path d="M396 362.667v-213.333"></path>
         </svg>
-    
-    
     );
 }
 
