@@ -1098,6 +1098,24 @@ body{
     padding-top: 16px
 }
 
+.SocialPage{
+    background-color: rgb(255, 0, 0);
+}
+
+.social-page-content{
+    padding: 0 32px;
+    max-width: 1955px;
+    z-index: 3;
+}
+
+.socialPageContent{
+    padding: 16px 0;
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-columns: 1fr;
+    grid-gap: 32px;
+}
+
 .listPage{
     margin-top: -60px;
     padding-bottom: 32px;
