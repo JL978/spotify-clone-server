@@ -19,6 +19,7 @@ import Loading from './components/featured-components/Loading.js'
 import getHashParams from './utilities/getHashParams'
 import reqWithToken from './utilities/reqWithToken'
 import {UserContext, LoginContext, TokenContext, MessageContext, PlayContext} from './utilities/context'
+import SocialSidebar from './components/featured-components/SocialSidebar.js';
 
 function App() {
   const [loading, setLoading] = useState(true)
@@ -136,7 +137,7 @@ function App() {
                 <NavList>
                   <NavItem to='/' exact={true} name='Home' label='Home' />
                   <NavItem to='/search' exact={true} name='Search' label='Search' />
-                  <NavItem to='/social' name='Social' label='Social' /> 
+                  <NavItem to='/social' exact={true} name='Social' label='Social' /> 
                   <NavItem to='/collection' exact={false} name='Library' label='Your Library' data_tip='library' data_for='tooltip' data_event='click' style={{ pointerEvents: loggedIn? 'auto':'none'}}/>
                 </NavList>
                 <PlayLists 
@@ -154,6 +155,7 @@ function App() {
                       <Featured loggedIn={loggedIn} playlists={playlists} refreshPlaylist={() => refreshPlaylist()} message={message} status={status} />
                     </UserContext.Provider>
                 </TokenContext.Provider>
+                
               </PlayContext.Provider>
 
               <Footer>

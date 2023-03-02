@@ -22,32 +22,17 @@ export default function BrowsePage() {
     return () => source.cancel();
   }, []);
 
-  // return (
-  //     <div className="page-content">
-  //         <div className='browsePage'>
-  //             <PageTitle name='Browse All' />
-  //             <div className="browseGrid">
-  //                 {genre.map((genre) => {
-  //                     return <BrowseCard key={genre.id} info={genre}/>
-  //                 })}
-  //             </div>
-  //         </div>
-  //     </div>
-  // )
-
   return (
-    <div>
-    <div className="page-content">
-      <div className="socialPage">
-        <PageTitle name="Your Feed" />
-        <div className="socialGrid">
-          {genre.map((genre) => {
-            return <BrowseCard key={genre.id} info={genre} />;
-          })}
-        </div>
+      <div className="page-content">
+          <div className='browsePage'>
+              <PageTitle name='Browse All'/>
+              <div className="browseGrid">
+                  {genre.map((genre) => {
+                      return <BrowseCard key={genre.id} info={genre}/>
+                  })}
+              </div>
+          </div>
       </div>
-    </div>
-    <div className="social-sidebar"></div>
-    </div>
-  );
+  )
+
 }
