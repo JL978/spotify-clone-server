@@ -1095,7 +1095,7 @@ body {
 
 .social-page-content {
   padding: 0 16px;
-  width: 973px;
+  width: 960px;
   z-index: 3;
   margin: 1rem;
 }
@@ -1122,15 +1122,15 @@ body {
 }
 
 .social-sidebar {
-  background: #000000;
+  background: #ff0000;
   width: 232px;
   height: 100%;
   padding-top: 24px;
   text-align: center;
   margin-right: 24px;
   position: absolute;
-  top: 75px;
-  left: 973px;
+  top: 76px;
+  left: 960px;
   overflow-y: auto;
 }
 
