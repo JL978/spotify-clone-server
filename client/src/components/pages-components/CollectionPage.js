@@ -21,9 +21,21 @@ const CollectionPage = ({playlists}) => {
                 const requestArtist = reqWithToken('https://api.spotify.com/v1/me/following?type=artist', token, cancelSource)
                 const requestAlbum = reqWithToken('https://api.spotify.com/v1/me/albums', token, cancelSource)
 
-                const [_artists, _albums] = await Promise.all([requestArtist(), requestAlbum()])
-                setArtists(_artists.data.artists.items)
-                setAlbums(_albums.data.items)
+                try {
+                    const [_artists, _albums] = await Promise.all([requestArtist(), requestAlbum()]);
+
+                    // for debugging purposes
+                    console.log('Artists:', _artists);
+                    console.log('Albums:', _albums);
+
+                    setArtists(_artists.data.artists.items)
+                    setAlbums(_albums.data.items)
+
+                  } catch (error) {
+                    console.error('Error:', error);
+                  }
+
+                
             }
 
             makeRequests()
