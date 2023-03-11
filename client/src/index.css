@@ -1090,7 +1090,7 @@ body {
   padding: 1rem 1rem;
   vertical-align: middle;
   width: 100%;
-  background: #1db954;
+  /* background: #1db954; */
 }
 
 .social-page-content {
@@ -1720,4 +1720,104 @@ body {
   .mediaNoneXL {
     display: none;
   }
+}
+
+
+/* BELOW THIS IS EXPERIMENTAL */
+.spotify-tweet-box {
+  display: flex;
+  margin-bottom: 20px;
+  background-color: #0D0D0D;
+  color: #FFFFFF;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.avatar {
+  margin-right: 16px;
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  border-radius: 50%;
+  position: relative;
+}
+
+.avatar img {
+  display: block;
+  width: 100%;
+  height: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.content {
+  flex: 1;
+}
+
+.header {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.username {
+  font-weight: bold;
+  margin-right: 8px;
+  color: var(--spotify-green);
+}
+
+.handle {
+  color: #697787;
+  margin-right: 8px;
+}
+
+.time {
+  color: #697787;
+}
+
+.message {
+  margin-bottom: 12px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  color: #697787;
+  font-size: 14px;
+  margin-right: 16px;
+  cursor: pointer;
+}
+
+button svg {
+  margin-right: 4px;
+  fill: currentColor;
+}
+
+.reply-button svg {
+  transform: rotate(-90deg);
+  margin-right: 0;
+  margin-left: 2px;
+}
+
+.like-button svg {
+  margin-right: 4px;
+}
+
+.retweet-button svg {
+  margin-right: 4px;
+}
+
+body {
+  font-family: "Rubik", "Poppins", "Nunito", "Open Sans", "Roboto", "Helvetica Neue", Helvetica, Arial, "Hiragino Kaku Gothic Pro", "Meiryo", "MS Gothic", sans-serif;
+}
+
+i {
+  margin: 0.5em;
 }
