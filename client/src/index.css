@@ -1723,7 +1723,7 @@ body {
 }
 
 
-/* BELOW THIS IS EXPERIMENTAL */
+/* SOCIAL PAGE */
 .spotify-tweet-box {
   display: flex;
   margin-bottom: 20px;
@@ -1735,8 +1735,8 @@ body {
 
 .avatar {
   margin-right: 16px;
-  width: 50px;
-  height: 50px;
+  width: 75px;
+  height: 75px;
   overflow: hidden;
   border-radius: 50%;
   position: relative;
@@ -1814,10 +1814,54 @@ button svg {
   margin-right: 4px;
 }
 
+.share-button svg {
+  margin-right: 4px;
+}
+
 body {
   font-family: "Rubik", "Poppins", "Nunito", "Open Sans", "Roboto", "Helvetica Neue", Helvetica, Arial, "Hiragino Kaku Gothic Pro", "Meiryo", "MS Gothic", sans-serif;
 }
 
 i {
   margin: 0.5em;
+}
+
+.spotify-track {
+  display: flex;
+  /* align-items: center; */
+  gap: 16px;
+  background-color: #121212;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.track-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.track-name {
+  margin: 0;
+  font-size: 24px;
+}
+
+.artist-name {
+  margin: 0;
+  font-size: 18px;
+  color: #888;
+}
+
+img {
+  width: 100px;
+  height: 100px;
+}
+
+.timestamp {
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #f7f7f7;
+  color: #333;
+  padding: 0 4px;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-right: 5px;
 }
