@@ -7,6 +7,9 @@ const UserInfo = () => {
     const [open, setOpen] = useState(false)
     const user = useContext(UserContext)
 
+    if (!user) {
+        return null;
+    }
     const {images, display_name, id} = user
 
     const toggleOpen = () => {
