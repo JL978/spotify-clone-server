@@ -19,7 +19,7 @@ import Loading from './components/featured-components/Loading.js'
 import getHashParams from './utilities/getHashParams'
 import reqWithToken from './utilities/reqWithToken'
 import {UserContext, LoginContext, TokenContext, MessageContext, PlayContext} from './utilities/context'
-import SocialSidebar from './components/featured-components/SocialSidebar.js';
+// import SocialSidebar from './components/featured-components/SocialSidebar.js';s
 
 function App() {
   const [loading, setLoading] = useState(true)
@@ -49,13 +49,14 @@ function App() {
 
         const makeRequests = async() => {
           const requestUserInfo = reqWithToken('https://api.spotify.com/v1/me', access_token, cancelSource) 
-          const requestPlayList = reqWithToken(`https://api.spotify.com/v1/me/playlists`, access_token, cancelSource)
+          const requestPlayList = reqWithToken('https://api.spotify.com/v1/me/playlists', access_token, cancelSource)
 
-          try{
+          try {
             const [_userInfo, _playlists] = await Promise.all([requestUserInfo(), requestPlayList()])
             setuserInfo(_userInfo.data)
             setPlaylists(_playlists.data.items)
-          }catch(error){
+
+          } catch(error){
             setStatusMessage(`LOGIN ERROR: ${error}`)
           }
         }
@@ -72,15 +73,15 @@ function App() {
             setloggedIn(true)
             
             const makeRequests = async() => {
-              const requestUserInfo = reqWithToken('https://api.spotify.com/v1/me', access_token, cancelSource) 
-              const requestPlayList = reqWithToken(`https://api.spotify.com/v1/me/playlists`, access_token, cancelSource)
+              const requestUserInfo = reqWithToken('https://api.spotify.com/v1/me', token, cancelSource) 
+              const requestPlayList = reqWithToken('https://api.spotify.com/v1/me/playlists', token, cancelSource)
     
-              try{
+              try {
                 const [_userInfo, _playlists] = await Promise.all([requestUserInfo(), requestPlayList()])
                 setuserInfo(_userInfo.data)
                 setPlaylists(_playlists.data.items)
 
-              }catch(error){
+              } catch(error){
                 console.log(error)
               }
             }
@@ -103,7 +104,7 @@ function App() {
 
   const refreshPlaylist= () =>{
     const source = Axios.CancelToken.source()
-    const requestPlayList = reqWithToken(`https://api.spotify.com/v1/me/playlists`, token, source)
+    const requestPlayList = reqWithToken('https://api.spotify.com/v1/me/playlists', token, source)
     requestPlayList()
       .then(response => setPlaylists(response.data.items))
       .catch(error => console.log(error))
