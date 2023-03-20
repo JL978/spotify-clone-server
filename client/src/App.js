@@ -16,8 +16,8 @@ import Player from './components/footer-components/Player'
 import Featured from './components/featured-components/Featured.js'
 import Loading from './components/featured-components/Loading.js'
 
-import getHashParams from './utilities/getHashParams'
-import reqWithToken from './utilities/reqWithToken'
+// import getHashParams from './utilities/getHashParams'
+// import reqWithToken from './utilities/reqWithToken'
 import {UserContext, LoginContext, TokenContext, MessageContext, PlayContext} from './utilities/context'
 // import SocialSidebar from './components/featured-components/SocialSidebar.js';s
 
@@ -34,80 +34,89 @@ function App() {
   const timerRef = useRef(null)
 
   useEffect(() => {
-    var params = getHashParams();
-    const {access_token, error} = params
+    let access_token = null;
+    let error = "Not logged in."
 
-    var cancelSource = Axios.CancelToken.source()
-    if (error){
-      setLoading(false)
-      setStatusMessage(`ERROR: ${error}`)
-    }else{
-      if (access_token) {
-        setToken(access_token)
-        setloggedIn(true)
-        window.location.hash = ''
-
-        const makeRequests = async() => {
-          const requestUserInfo = reqWithToken('https://api.spotify.com/v1/me', access_token, cancelSource) 
-          const requestPlayList = reqWithToken('https://api.spotify.com/v1/me/playlists', access_token, cancelSource)
-
-          try {
-            const [_userInfo, _playlists] = await Promise.all([requestUserInfo(), requestPlayList()])
-            setuserInfo(_userInfo.data)
-            setPlaylists(_playlists.data.items)
-
-          } catch(error){
-            setStatusMessage(`LOGIN ERROR: ${error}`)
-          }
+    const hash = window.location.hash
+      .substring(1)
+      .split("&")
+      .reduce(function(initial, item) {
+        if (item) {
+          var parts = item.split("=");
+          initial[parts[0]] = decodeURIComponent(parts[1]);
         }
-        
-        makeRequests()
-
-        setLoading(false)
-      //If nothing is found on in the hash params -> check with the server if there is a valid refresh token in the cookie
-      }else{
-        Axios(`${process.env.REACT_APP_BACK_URI}/refresh_token`, {withCredentials: true})
-          .then((response) => {
-            const access_token = response.data.access_token
-            setToken(access_token)
-            setloggedIn(true)
-            
-            const makeRequests = async() => {
-              const requestUserInfo = reqWithToken('https://api.spotify.com/v1/me', token, cancelSource) 
-              const requestPlayList = reqWithToken('https://api.spotify.com/v1/me/playlists', token, cancelSource)
+        return initial;
+      }, {});
     
-              try {
-                const [_userInfo, _playlists] = await Promise.all([requestUserInfo(), requestPlayList()])
-                setuserInfo(_userInfo.data)
-                setPlaylists(_playlists.data.items)
-
-              } catch(error){
-                console.log(error)
-              }
-            }
-            
-            makeRequests()
-            setLoading(false)
-          })
-          .catch((error) => {
-            console.log(error)
-            setLoading(false)
-            return
-          })
-      }
+    if (hash.access_token) {
+      access_token = hash.access_token;
+      error = null;
     }
-    return (()=> {
-      cancelSource.cancel()
-      clearTimeout(timerRef.current)
-    })
+
+    if (error) {
+      setLoading(false);
+      setStatusMessage(`ERROR: ${error}`);
+
+    } else {
+      // The access token exists within the hash params
+      setToken(access_token)
+      setloggedIn(true)
+      window.location.hash = ''
+
+      fetch('https://api.spotify.com/v1/me', {
+        method: 'GET', headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + access_token
+        }
+      })
+      .then((response) => {
+        console.log(response.json().then(
+          (data) => { 
+              console.log(data)
+              setuserInfo(data)
+            }
+          ));
+        });
+      
+      fetch('https://api.spotify.com/v1/me/playlists', {
+          method: 'GET', headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + access_token
+          }
+      })
+      .then((response) => {
+        console.log(response.json().then(
+          (data) => { 
+            setPlaylists(data.items)
+          }
+        ));
+      });
+      // add a catch error to this
+      setLoading(false);
+
+    }
+
   }, [])
 
-  const refreshPlaylist= () =>{
-    const source = Axios.CancelToken.source()
-    const requestPlayList = reqWithToken('https://api.spotify.com/v1/me/playlists', token, source)
-    requestPlayList()
-      .then(response => setPlaylists(response.data.items))
-      .catch(error => console.log(error))
+
+  const refreshPlaylist = () =>{
+    fetch('https://api.spotify.com/v1/me/playlists', {
+          method: 'GET', headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+          }
+      })
+      .then((response) => {
+        console.log(response.json().then(
+          (data) => { 
+            setPlaylists(data.items)
+          }
+        ));
+      })
+      .catch(error => console.log(error));
   }
 
   const setStatusMessage = (message) => {
