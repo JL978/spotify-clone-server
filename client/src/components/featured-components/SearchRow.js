@@ -20,9 +20,11 @@ export default function SearchRow({title, type, query}) {
         if (formatedQuery.length > 0){
             makeRequest()
                 .then((data) => {
-                    const key = Object.keys(data)[0]
-                    const result = data[key].items
-                    setResult(result)
+                    if (data) {
+                        const key = Object.keys(data)[0]
+                        const result = data[key].items
+                        setResult(result)
+                    }
                 })
                 .catch((error) => {
                     console.log(error)
