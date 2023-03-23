@@ -131,7 +131,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-height: 234px;
+  min-height: 455px;
 }
 
 .play-title {
@@ -1379,6 +1379,7 @@ body {
 
 .highlight {
   background-color: hsla(0, 0%, 100%, 0.1);
+  color: var(--spotify-green);
 }
 
 .trackItemPlay {
@@ -1851,10 +1852,10 @@ i {
   color: #888;
 }
 
-img {
+/* img {
   width: 100px;
   height: 100px;
-}
+} */
 
 .timestamp {
   font-family: 'Courier New', Courier, monospace;
