@@ -6,13 +6,16 @@ const reqWithToken = (endpoint, access_token, cancelSource) =>{
         const options = {
             url: endpoint,
             method: 'GET',
-            headers: { 'Authorization': 'Bearer ' + access_token },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + access_token 
+            },
             cancelToken
         };
         let result
         try {
             result = await axios(options)
-            return result; // maybe we wanna do result.data
+            return result.data; // maybe we wanna do result.data
 
         } catch (error) {
             if (axios.isCancel(error)) {
