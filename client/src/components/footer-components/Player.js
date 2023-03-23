@@ -199,9 +199,10 @@ const Player = React.forwardRef(({ token }, ref) => {
 					);
 					setConnectTip(true);
 				} else {
-					setMessage(
-						`ERROR: server response with ${response}. Player feature is unavailable!`
-					);
+					console.log(response);
+					// setMessage(
+					// 	`ERROR: server response with ${response}. Player feature is unavailable!`
+					// );
 				}
 			})
 			.catch((error) => console.log(error));
@@ -224,15 +225,16 @@ const Player = React.forwardRef(({ token }, ref) => {
 		request()
 			.then((response) => {
 				if (response.status !== 204) {
-					setMessage(
-						`ERROR: Something went wrong! Server response: ${response}`
-					);
+					// setMessage(
+					// 	`ERROR: Something went wrong! Server response: ${response}`
+					// );
+					console.log(response.status);
 				} else {
 					setPlaybackState((state) => ({ ...state, play: !state.play }));
 					updateState();
 				}
 			})
-			.catch((error) => setMessage(`ERROR: ${error}`));
+			.catch((error) => setMessage(`ERROR: Choose a Device before using the Player ${error}`));
 	};
 
 	const toggleShuffle = () => {
@@ -248,12 +250,15 @@ const Player = React.forwardRef(({ token }, ref) => {
 					setPlaybackState((state) => ({ ...state, shuffle: !state.shuffle }));
 					updateState();
 				} else {
-					setMessage(
-						`ERROR: Something went wrong! Server response: ${response.status}`
-					);
+					if (response.status !== 202) {
+						setMessage(
+							`ERROR: Something went wrong! Server response: ${response.status}`
+						);
+					}
+					
 				}
 			})
-			.catch((error) => setMessage(`ERROR: ${error}`));
+			.catch((error) => setMessage(`ERROR: shuffle state ${error}`));
 	};
 
 	const toggleRepeat = () => {
@@ -269,12 +274,14 @@ const Player = React.forwardRef(({ token }, ref) => {
 					setPlaybackState((state) => ({ ...state, repeat: !state.repeat }));
 					updateState();
 				} else {
-					setMessage(
-						`ERROR: Something went wrong! Server response: ${response.status}`
-					);
+					if (response.status !== 202) {
+						setMessage(
+							`ERROR: Something went wrong! Server response: ${response.status}`
+						);
+					}
 				}
 			})
-			.catch((error) => setMessage(`ERROR: ${error}`));
+			.catch((error) => setMessage(`ERROR: repeat ${error}`));
 	};
 
 	const skipNext = () => {
@@ -289,13 +296,13 @@ const Player = React.forwardRef(({ token }, ref) => {
 			.then((response) => {
 				if (response.status !== 204) {
 					setMessage(
-						`ERROR: Something went wrong! Server response: ${response.status}`
+						`ERROR: (skipnext) Something went wrong! Server response: ${response.status}`
 					);
 					return;
 				}
 				updateState();
 			})
-			.catch((error) => setMessage(`ERROR: ${error}`));
+			.catch((error) => setMessage(`ERROR: (skipnext 2) ${error}`));
 	};
 
 	const skipPrev = () => {
@@ -316,7 +323,7 @@ const Player = React.forwardRef(({ token }, ref) => {
 				}
 				updateState();
 			})
-			.catch((error) => setMessage(`ERROR: ${error}`));
+			.catch((error) => setMessage(`ERROR: previos ${error}`));
 	};
 
 	const seekPlayback = (ratio) => {
@@ -339,7 +346,7 @@ const Player = React.forwardRef(({ token }, ref) => {
 					);
 				}
 			})
-			.catch((error) => setMessage(`ERROR: ${error}`));
+			.catch((error) => setMessage(`ERROR: playback ${error}`));
 
 		setScrubPb(null);
 	};
@@ -367,7 +374,7 @@ const Player = React.forwardRef(({ token }, ref) => {
 					);
 				}
 			})
-			.catch((error) => setMessage(`ERROR: ${error}`));
+			.catch((error) => setMessage(`ERROR: volume ${error}`));
 	};
 
 	return (
