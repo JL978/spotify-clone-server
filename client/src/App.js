@@ -131,7 +131,10 @@ function App() {
 
   const playerRef = useRef(null)
   const updatePlayer = () => {
-    playerRef.current.updateState()
+    if (playerRef.current) {
+      playerRef.current.updateState();
+    }
+    
   }
 
   return (
