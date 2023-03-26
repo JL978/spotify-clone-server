@@ -38,11 +38,11 @@ const LikePage = () => {
                 setNext(data.data.next)
             })
             .catch((error) => console.log(error))
-        
+        console.log(tracks)
         return () => source.cancel()
     // eslint-disable-next-line
     }, [])
-
+    console.log(tracks)
     const playTracks = (trackUri) => {
         const track_uris = tracks.map(track => {
             return track.uri
