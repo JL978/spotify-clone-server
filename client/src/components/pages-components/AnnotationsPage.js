@@ -9,14 +9,13 @@ import LyricsContainer from '../featured-components/LyricsContainer'
 
 export default function AnnotationsPage() {
     const token = useContext(TokenContext)
-    // See line useEffect for reason for ignoring lint warning.
     // eslint-disable-next-line
     const { song } = useContext(SongContext)
     const setMessage = useContext(MessageContext)
     const [songName, setSongName] = useState('')
     const [trackIDs, setTrackIDs] = useState([])
+    const [NumTrackIDs, setNumTrackIDs] = useState(0)
     let num_track_ids = useRef(trackIDs.length)
-    // See useEffect for reason for ignoring lint warning.
     // eslint-disable-next-line
     const [artists, setArtists] = useState([])
     // Need a state variable for the text displaying lyrics in the component.
@@ -31,10 +30,12 @@ export default function AnnotationsPage() {
             .then((response) => {
                 setSongName(response.data.item.name)
                 setArtists(response.data.item.artists.map(({name}) => name))
+                console.log(artists)
             }).catch((error) => {
                 setMessage(error.message)
             })
     
+
 
         // Make the axios request for the lyrics from musixmatch
         const apikey = 'd6c8b83bfc21e9bb13c124be7dc6062b' // apikey for musixmatch requests
@@ -64,10 +65,18 @@ export default function AnnotationsPage() {
                 console.log(response)
                 if (response.status === 200){
                     // set track_id to track_id returned from the response
+                    console.log(response.data.message.body.track_list)
                     const track_ids = response.data.message.body.track_list.map((track) => track.track.track_id)
+                    console.log(track_ids)
+                    /**TODO: loop through all returned tracks' track_ids to see which one gives lyrics.
+                     * musixmatch returns a track list of tracks and there can be multiple entries for the
+                     * same song. One entry may have the track_id that gives lyrics and another may not.
+                    */
                     setTrackIDs(track_ids)
+                    console.log(trackIDs)
+
                 }else{
-                    setLyrics('')
+                    setLyrics('') // Set lyrics to blank
                     // set error message to fail gracefully
                     setMessage(`Sorry, we couldn't find lyrics for this song:${songName}. No track id.(${response.status})`)
                 }
@@ -101,7 +110,7 @@ export default function AnnotationsPage() {
                     }).catch(err => {
                         setLyrics('No Lyrics')
                         // set error message to fail gracefully
-                        setMessage(`Sorry, we couldn\'t find lyrics for this song: ${err}`)
+                        setMessage(`Sorry, we couldn't find lyrics for this song: ${err}`)
                     })
                 if (lyrics !== 'No Lyrics') {
                     break
@@ -119,6 +128,8 @@ export default function AnnotationsPage() {
     // eslint-disable-next-line
 
     }, [song])
+    console.log(songName)
+    console.log(lyrics)
 
     return (
         <div className='page-content'>
