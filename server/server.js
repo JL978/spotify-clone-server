@@ -10,7 +10,6 @@ const random_string = require("./utils/random");
 const axios = require("axios");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-var request = require("request");
 const express = require("express");
 const http = require("http");
 
@@ -147,36 +146,42 @@ app.get("/callback", function (req, res) {
   }
 });
 
+app.get("/refresh_token", async (req, res) => {
+  // Get the refresh token from the cookie
+  const refresh_token = req.cookies.refreshKey;
 
-app.get("/refresh_token", (req, res) => {
-	const refresh_key = req.cookies.refresh_key;
+  try {
+    // Make a POST request to Spotify API with refresh token to get new access token
+      const response = await axios.post(
+          "https://accounts.spotify.com/api/token",
+          new URLSearchParams({
+              grant_type: "refresh_token",
+              refresh_token,
+          }),
+          {
+              headers: {
+                  Authorization: `Basic ${Buffer.from(
+                  `${client_id}:${client_secret}`
+                  ).toString("base64")}`,
+              },
+          }
+      );
 
-	var authOptions = {
-		url: "https://accounts.spotify.com/api/token",
-		headers: {
-			Authorization:
-				"Basic " +
-				Buffer.from(client_id + ":" + client_secret).toString("base64"),
-		},
-		form: {
-			grant_type: "refresh_token",
-			refresh_token: refresh_key,
-		},
-		json: true,
-	};
+      // Extract access token and new refresh token from response
+      const { access_token, refresh_token: new_refresh_token } = response.data;
 
-	request.post(authOptions, function (error, response, body) {
-		if (!error && response.statusCode === 200) {
-			var { access_token, refresh_token } = body;
-			//in case a new refresh token is sent back
-			if (refresh_token) {
-				res.cookie(refreshKey, refresh_token, cookieOption);
-			}
-			res.send({ access_token });
-		} else {
-			res.status(400).send(body.error);
-		}
-	});
+      // Set new refresh token if available
+      if (new_refresh_token) {
+          res.cookie(refreshKey, new_refresh_token, cookieOption);
+      }
+
+      // Send response with access token
+      res.send({ access_token });
+
+  } catch(error) {
+      // Send error response if there is an error with the request
+      res.status(400).send(error.response.data.error);
+  }
 });
 
 app.get("/logout", (req, res) => {
