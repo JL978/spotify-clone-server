@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useRef} from 'react';
-import Axios from 'axios';
 
 import Sidebar from './components/sidebar-components/Sidebar.js'
 import Logo from './components/sidebar-components/Logo.js'
@@ -16,15 +15,12 @@ import Player from './components/footer-components/Player'
 import Featured from './components/featured-components/Featured.js'
 import Loading from './components/featured-components/Loading.js'
 
-// import getHashParams from './utilities/getHashParams'
-// import reqWithToken from './utilities/reqWithToken'
 import {UserContext, LoginContext, TokenContext, MessageContext, PlayContext} from './utilities/context'
-// import SocialSidebar from './components/featured-components/SocialSidebar.js';s
 
 function App() {
   const [loading, setLoading] = useState(true)
-  const [loggedIn, setloggedIn] = useState(false)
-  const [token, setToken] = useState(null)
+  const [loggedIn, setloggedIn] = useState(localStorage.getItem('token') !== null)
+  const [token, setToken] = useState(localStorage.getItem('token'));
   const [userInfo, setuserInfo] = useState({})
   const [playlists, setPlaylists] = useState([])
 
@@ -60,14 +56,23 @@ function App() {
     } else {
       // The access token exists within the hash params
       setToken(access_token)
+      localStorage.setItem('token', access_token);
       setloggedIn(true)
       window.location.hash = ''
+      // add a catch error to this
+      setLoading(false);
 
+    }
+
+  }, [])
+
+  useEffect(() => {
+    if (token) {
       fetch('https://api.spotify.com/v1/me', {
         method: 'GET', headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + access_token
+          "Authorization": "Bearer " + token
         }
       })
       .then((response) => {
@@ -78,12 +83,12 @@ function App() {
             }
           ));
         });
-      
-      fetch('https://api.spotify.com/v1/me/playlists', {
+
+        fetch('https://api.spotify.com/v1/me/playlists', {
           method: 'GET', headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + access_token
+            "Authorization": "Bearer " + token
           }
       })
       .then((response) => {
@@ -93,11 +98,7 @@ function App() {
           }
         ));
       });
-      // add a catch error to this
-      setLoading(false);
-
     }
-
   }, [])
 
 
@@ -112,7 +113,7 @@ function App() {
       .then((response) => {
         console.log(response.json().then(
           (data) => { 
-            setPlaylists(data.items)
+            setPlaylists(data.items);
           }
         ));
       })
@@ -142,8 +143,7 @@ function App() {
       {loading? 
         <Loading type='app'/> :
         <MessageContext.Provider value={setStatusMessage}>
-          <LoginContext.Provider
-            value={loggedIn}>
+          <LoginContext.Provider value={loggedIn}>
               
               <Sidebar>
                 <Logo />
