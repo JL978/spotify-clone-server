@@ -1866,3 +1866,32 @@ i {
   font-size: 14px;
   margin-right: 5px;
 }
+
+
+
+.userInfo {
+  position: relative;
+  white-space: nowrap;
+}
+
+.figureStyle {
+  width: 28px;
+  height: 28px;
+  overflow: hidden;
+  position: relative;
+  display: inline-block;
+}
+
+.imgStyle {
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.arrowStyle {
+  margin-right: 6px;
+  margin-left: 8px;
+  font-size: 10px;
+}
