@@ -5,13 +5,11 @@ const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
 
 const { client_auth, authed_header } = require("./utils/client-auth");
-const randString = require("./utils/random");
+const random_string = require("./utils/random");
 
 const axios = require("axios");
-const qs = require("qs");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-var request = require("request");
 const express = require("express");
 const http = require("http");
 
@@ -45,8 +43,8 @@ const stateKey = "spotify_auth_state";
 const refreshKey = "refresh_key";
 const cookieOption = {
 	// Comment out the following 2 lines while in development for the authoriazation flow to work properly
-	// sameSite:'None',
-	// secure: true
+	sameSite:'None',
+	secure: true
 };
 
 const scope =
@@ -73,111 +71,117 @@ app.post("/", (req, res) => {
 //aux endpoint to make and store a cookie value as the state and redirect to the spotify authorization page
 app.get("/login", function (req, res) {
 	//respond with randomly generated cookie value for the state key - used to prevent XSRF
-	const state = randString(16);
-	res.cookie(stateKey, state);
-
-	//redirect to the spotify authentification page with the required parameters
-	res.redirect(
-		"https://accounts.spotify.com/authorize?" +
-			qs.stringify({
-				response_type: "code",
-				client_id: client_id,
-				scope: scope,
-				redirect_uri: redirect_uri,
-				state: state,
-				show_dialog: true,
-			})
-	);
+	const state = random_string(16);
+    res.cookie(stateKey, state);
+  
+    // Build the URL to the Spotify authorization page with the required parameters
+    const authUrl = new URL("https://accounts.spotify.com/authorize");
+    authUrl.searchParams.append("response_type", "code");
+    authUrl.searchParams.append("client_id", client_id);
+    authUrl.searchParams.append("scope", scope);
+    authUrl.searchParams.append("redirect_uri", redirect_uri);
+    authUrl.searchParams.append("state", state);
+    authUrl.searchParams.append("show_dialog", true);
+  
+    // Redirect to the Spotify authorization page
+    res.redirect(authUrl.toString());
 });
 
 app.get("/callback", function (req, res) {
-	const code = req.query.code || null;
-	const state = req.query.state || null;
-	const storedState = req.cookies ? req.cookies[stateKey] : null;
+  const code = req.query.code || null;
+  const state = req.query.state || null;
+  const storedState = req.cookies ? req.cookies[stateKey] : null;
 
-	//cross checking the callback state and the stored state
-	if (state === null || state !== storedState) {
-		res.redirect(
-			front_end_uri +
-				qs.stringify({
-					error: "state_mismatch",
-				})
-		);
-	} else {
-		//statekey is not needed anymore since it is to be newly generated every request
-		res.clearCookie(stateKey);
+  if (state === null || state !== storedState) {
+    res.redirect(
+      front_end_uri +
+      new URLSearchParams({
+        error: "state_mismatch",
+      }).toString()
+    );
+  } else {
+    res.clearCookie(stateKey);
 
-		const authOptions = {
-			url: "https://accounts.spotify.com/api/token",
-			form: {
-				code: code,
-				redirect_uri: redirect_uri,
-				grant_type: "authorization_code",
-			},
-			headers: {
-				Authorization:
-					"Basic " +
-					Buffer.from(client_id + ":" + client_secret).toString("base64"),
-			},
-			json: true,
-		};
+    const params = new URLSearchParams({
+      code: code,
+      redirect_uri: redirect_uri,
+      grant_type: "authorization_code",
+    }).toString();
 
-		//make the request to get token
+    const authOptions = {
+      method: "POST",
+      url: "https://accounts.spotify.com/api/token",
+      data: params,
+      headers: {
+        Authorization:
+          "Basic " +
+          Buffer.from(client_id + ":" + client_secret).toString("base64"),
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    };
 
-		request.post(authOptions, function (error, response, body) {
-			if (!error && response.statusCode === 200) {
-				var access_token = body.access_token,
-					refresh_token = body.refresh_token;
+    axios(authOptions)
+      .then((response) => {
+        const access_token = response.data.access_token;
+        const refresh_token = response.data.refresh_token;
 
-				res.cookie(refreshKey, refresh_token, cookieOption);
+        res.cookie(refreshKey, refresh_token, cookieOption);
 
-				// Redirecting to front end with access and refresh token as hash params
-				res.redirect(
-					front_end_uri + "/#" + qs.stringify({ access_token, refresh_token })
-				);
-			} else {
-				res.redirect(
-					front_end_uri +
-						"/#" +
-						qs.stringify({
-							error: "invalid_token",
-						})
-				);
-				console.log(error);
-			}
-		});
-	}
+        res.redirect(
+          front_end_uri +
+          "/#" +
+          new URLSearchParams({ access_token, refresh_token }).toString()
+        );
+      })
+      .catch((error) => {
+        res.redirect(
+          front_end_uri +
+          "/#" +
+          new URLSearchParams({
+            error: "invalid_token",
+          }).toString()
+        );
+        console.log(error);
+      });
+  }
 });
 
-app.get("/refresh_token", (req, res) => {
-	const refresh_key = req.cookies.refresh_key;
+app.get("/refresh_token", async (req, res) => {
+  // Get the refresh token from the cookie
+  const refresh_token = req.cookies.refreshKey;
 
-	var authOptions = {
-		url: "https://accounts.spotify.com/api/token",
-		headers: {
-			Authorization:
-				"Basic " +
-				Buffer.from(client_id + ":" + client_secret).toString("base64"),
-		},
-		form: {
-			grant_type: "refresh_token",
-			refresh_token: refresh_key,
-		},
-		json: true,
-	};
+  try {
+    // Make a POST request to Spotify API with refresh token to get new access token
+      const response = await axios.post(
+          "https://accounts.spotify.com/api/token",
+          new URLSearchParams({
+              grant_type: "refresh_token",
+              refresh_token,
+          }),
+          {
+              headers: {
+                  Authorization: `Basic ${Buffer.from(
+                  `${client_id}:${client_secret}`
+                  ).toString("base64")}`,
+              },
+          }
+      );
 
-	request.post(authOptions, function (error, response, body) {
-		if (!error && response.statusCode === 200) {
-			var { access_token, refresh_token } = body;
-			//in case a new refresh token is sent back
-			if (refresh_token) {
-				res.cookie(refreshKey, refresh_token, cookieOption);
-			}
-			res.send({ access_token });
-		} else {
-			res.status(400).send(body.error);
-		}
-	});
+      // Extract access token and new refresh token from response
+      const { access_token, refresh_token: new_refresh_token } = response.data;
+
+      // Set new refresh token if available
+      if (new_refresh_token) {
+          res.cookie(refreshKey, new_refresh_token, cookieOption);
+      }
+
+      // Send response with access token
+      res.send({ access_token });
+
+  } catch(error) {
+      // Send error response if there is an error with the request
+      res.status(400).send(error.response.data.error);
+  }
 });
 
 app.get("/logout", (req, res) => {
