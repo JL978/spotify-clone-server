@@ -12,12 +12,12 @@ export default function AnnotationsPage() {
     // eslint-disable-next-line
     const { song } = useContext(SongContext)
     const setMessage = useContext(MessageContext)
-    const [songName, setSongName] = useState('')
+    // const [songName, setSongName] = useState('')
     const [trackIDs, setTrackIDs] = useState([])
     const [NumTrackIDs, setNumTrackIDs] = useState(0)
-    let num_track_ids = useRef(trackIDs.length)
+    // let num_track_ids = useRef(trackIDs.length)
     // eslint-disable-next-line
-    const [artists, setArtists] = useState([])
+    // const [artists, setArtists] = useState([])
     // Need a state variable for the text displaying lyrics in the component.
     // The state variable, `currentLyrics` is first set to an empty string.
     const [lyrics, setLyrics] = useState('')
@@ -25,24 +25,12 @@ export default function AnnotationsPage() {
     const cancelSource = axios.CancelToken.source()
     useEffect(() => {
         // Get the info on the curretly-playing song
-        const requestSongInfo = reqWithToken('https://api.spotify.com/v1/me/player/currently-playing', token, cancelSource)
-        requestSongInfo()
-            .then((response) => {
-                setSongName(response.data.item.name)
-                setArtists(response.data.item.artists.map(({name}) => name))
-                console.log(artists)
-            }).catch((error) => {
-                setMessage(error.message)
-            })
-    
+        let songName = ''
+        songName = 'Uwem'
+        let artists = ['mr', 'you']
 
-
-        // Make the axios request for the lyrics from musixmatch
         const apikey = 'd6c8b83bfc21e9bb13c124be7dc6062b' // apikey for musixmatch requests
         const base_url = 'https://api.musixmatch.com/ws/1.1/'
-        // Append the search params. We take the first artist in the list of artists, assuming that the first is the primary artist.
-        const search_params = 'track.search?q_artist='.concat(artists[0], '&q_track=', songName, '&apikey=', apikey)
-        console.log(search_params)
         // Function to make axios requests to musixMatch
         const musixMatchRequest = async (url) => {
             let result
@@ -50,75 +38,107 @@ export default function AnnotationsPage() {
                 result = await axios.get(url)
             } catch (err) {
                 console.log(err)
+                setMessage(err.message)
+                // THROW MUSIXMATCH ERROR
                 return err
             }
     
             return result
         }
 
-        // Use axios to make a musixmatch api call to search for the musixmatch track_id.
-        const search_call = base_url.concat(search_params)
-        console.log(search_call)
-        const track_ids = []
-        musixMatchRequest(search_call)
-            .then(response => {
+        const requestSongInfo = reqWithToken('https://api.spotify.com/v1/me/player/currently-playing', token, cancelSource)
+        requestSongInfo()
+            .then((response) => {
+                songName = response.data.item.name
+                console.log(songName)
+                artists = response.data.item.artists.map(({name}) => name)
+                console.log(artists)
+                const info = {
+                    songName: songName, 
+                    artists: artists
+                }
+                console.log(info)
+                return info
+            }).catch((error) => {
+                setMessage(error.message)
+            })
+            .then((info) => {
+                console.log(info.songName)
+                console.log(info.artists)
+                // Append the search params. We take the first artist in the list of artists, assuming that the first is the primary artist.
+                const search_params = 'track.search?q_artist='.concat(info.artists[0], '&q_track=', info.songName, '&apikey=', apikey)
+                console.log(search_params)
+
+                // Use axios to make a musixmatch api call to search for the musixmatch track_id.
+                const search_call = base_url.concat(search_params)
+                console.log(search_call)
+                musixMatchRequest(search_call)
+                .then((response) => {
+                let track_ids = []
                 console.log(response)
                 if (response.status === 200){
                     // set track_id to track_id returned from the response
                     console.log(response.data.message.body.track_list)
-                    const track_ids = response.data.message.body.track_list.map((track) => track.track.track_id)
+                    track_ids = response.data.message.body.track_list.map((track) => track.track.track_id)
                     console.log(track_ids)
-                    /**TODO: loop through all returned tracks' track_ids to see which one gives lyrics.
-                     * musixmatch returns a track list of tracks and there can be multiple entries for the
-                     * same song. One entry may have the track_id that gives lyrics and another may not.
-                    */
-                    setTrackIDs(track_ids)
-                    console.log(trackIDs)
+                    console.log(track_ids)
 
                 }else{
                     setLyrics('') // Set lyrics to blank
                     // set error message to fail gracefully
                     setMessage(`Sorry, we couldn't find lyrics for this song:${songName}. No track id.(${response.status})`)
                 }
-            }).catch(err => {
-                // set error message to fail gracefully
-                setMessage(err.message)
-            })
-    
-        // Only search for lyrics if we were able to obtain the musixmatch track_id
-        console.log(trackIDs)
-        num_track_ids = trackIDs.length
-        console.log(num_track_ids)
-        if (num_track_ids > 0) {
-            console.log('Searching for track lyrics')
-            // Use axios to make a musixmatch api call to search for the musixmatch lyrics for the given
-            // track_id.
-            for (const track_id of trackIDs) {
-                console.log(`checking track id ${track_id}`)
-                const lyrics_params = 'track.lyrics.get?track_id='.concat(track_id, '&apikey=', apikey)
-                const lyrics_call = base_url.concat(lyrics_params)
-                musixMatchRequest(lyrics_call)
-                    .then(response => {
-                        if (response.status === 200){
-                            console.log('got lyrics')
-                            setLyrics(response.data.message.body.lyrics.lyrics_body)
-                        }else{
-                            setLyrics('No Lyrics') // Set lyrics to blank
-                            // set error message to fail gracefully
-                            setMessage('Sorry, we couldn\'t find lyrics for this song')
+                
+                return track_ids
+                })
+                .then((track_ids) => {
+                    // Only search for lyrics if we were able to obtain the musixmatch track_id
+                    console.log(track_ids)
+                    let num_track_ids = track_ids.length
+                    console.log(num_track_ids)
+                    if (num_track_ids > 0) {
+                        console.log('Searching for track lyrics')
+                        // Use axios to make a musixmatch api call to search for the musixmatch lyrics for the given
+                        // track_id.
+                        for (const track_id of track_ids) {
+                            console.log(`checking track id ${track_id}`)
+                            const lyrics_params = 'track.lyrics.get?track_id='.concat(track_id, '&apikey=', apikey)
+                            const lyrics_call = base_url.concat(lyrics_params)
+                            musixMatchRequest(lyrics_call)
+                                .then(response => {
+                                    if (response.status === 200 && response.data.message.header.status_code !== 404){
+                                        console.log('got lyrics')
+                                        console.log(response.data)
+                                        setLyrics('\n'.concat(response.data.message.body.lyrics.lyrics_body))
+                                        console.log(lyrics)
+                                    }else{
+                                        setLyrics('No Lyrics') // Set lyrics to blank
+                                        // set error message to fail gracefully
+                                        setMessage('Sorry, we couldn\'t find lyrics for this song')
+                                    }
+                                }).catch(err => {
+                                    setLyrics('No Lyrics')
+                                    // set error message to fail gracefully
+                                    setMessage(`Sorry, we couldn't find lyrics for this song: ${err}`)
+                                })
+                            if (lyrics !== 'No Lyrics') {
+                                break
+                            }
                         }
-                    }).catch(err => {
-                        setLyrics('No Lyrics')
-                        // set error message to fail gracefully
-                        setMessage(`Sorry, we couldn't find lyrics for this song: ${err}`)
-                    })
-                if (lyrics !== 'No Lyrics') {
-                    break
-                }
-            }
-        } else {
-            console.log(`Not searching for track lyrics. ${track_ids.length}`)
-        }
+                    } else {
+                        console.log(`Not searching for track lyrics. ${track_ids.length}`)
+                    }
+                })
+            }).catch((err) => {
+                // Just show error message for now, but eventaually add an error handler
+                //**TODO: Add error handler to handle errors from different steps in the promise chain. */
+                setMessage(`general error: ${err}`)
+            })
+
+
+        
+    
+        
     /**NOTE: Right now, the code is set up to use the song context to detect when a song has changed. The issue is that
      * it song context detects a change whenver the player is updated, and the player is updated more than I think we want it to be.
      * We need to figure out a when to update the song context only whenever a different song starts playing. Because of that, I'm leaving
@@ -127,9 +147,9 @@ export default function AnnotationsPage() {
     // Disabling lint line because it is asking to add dependencies that I don't think are necessary.
     // eslint-disable-next-line
 
-    }, [song])
-    console.log(songName)
-    console.log(lyrics)
+    }, [song, token, lyrics])
+    // console.log(songName)
+    // console.log(lyrics)
 
     return (
         <div className='page-content'>

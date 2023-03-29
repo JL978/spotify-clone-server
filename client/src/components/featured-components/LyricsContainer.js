@@ -7,9 +7,14 @@ const LyricsContainer = ({lyrics}) => {
     // sprinkled in. 
     return (
         <div className='LyricsContainer'>
-            <div className='lyric-container'>
+            <div className='lyric-container-title'>
                 <h1>
-                    Lyrics: {lyrics}
+                    Lyrics:
+                </h1>
+            </div>
+            <div className='lyric-container-body'>
+                <h1>
+                    {lyrics}
                 </h1>
             </div>
         </div>
