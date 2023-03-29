@@ -5,10 +5,22 @@ const router = express.Router();
 const Comment = require('../models/Comment');
 
 // GET all comments
-router.get("/", async (_req, res) => {
+router.get("/comments", async (_req, res) => {
     const comments = await Comment.find();
     res.send({ comments });
   });
+
+//GET comment by ID
+router.get("/comments/:id", async (_req, res) => {
+    try {
+      Comment.findById(request.params.id);
+      res.send({comment});
+    } catch (err) {
+      console.error(err);
+    }
+});
+
+//GET all comments from friends
 
 // POST a comment
 router.post("/", async (req, res) => {

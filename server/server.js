@@ -15,6 +15,7 @@ const express = require("express");
 const http = require("http");
 const mongoose = require("mongoose");
 const commentRoute = require('./routes/comments');
+const noteRoute = require('./routes/annotations');
 
 //connect db
 mongoose
@@ -54,6 +55,7 @@ app.use(function (req, res, next) {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/comments', commentRoute);
+app.use('/annotations', noteRoute);
 
 const redirect_uri = process.env.RE_URI;
 const front_end_uri = process.env.FRONT_URI;
