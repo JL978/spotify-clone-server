@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import axios from 'axios'
 import { MessageContext, SongContext, TokenContext } from '../../utilities/context'
 import reqWithToken from '../../utilities/reqWithToken'
@@ -12,12 +12,6 @@ export default function AnnotationsPage() {
     // eslint-disable-next-line
     const { song } = useContext(SongContext)
     const setMessage = useContext(MessageContext)
-    // const [songName, setSongName] = useState('')
-    const [trackIDs, setTrackIDs] = useState([])
-    const [NumTrackIDs, setNumTrackIDs] = useState(0)
-    // let num_track_ids = useRef(trackIDs.length)
-    // eslint-disable-next-line
-    // const [artists, setArtists] = useState([])
     // Need a state variable for the text displaying lyrics in the component.
     // The state variable, `currentLyrics` is first set to an empty string.
     const [lyrics, setLyrics] = useState('')
@@ -26,8 +20,7 @@ export default function AnnotationsPage() {
     useEffect(() => {
         // Get the info on the curretly-playing song
         let songName = ''
-        songName = 'Uwem'
-        let artists = ['mr', 'you']
+        let artists = []
 
         const apikey = 'd6c8b83bfc21e9bb13c124be7dc6062b' // apikey for musixmatch requests
         const base_url = 'https://api.musixmatch.com/ws/1.1/'
