@@ -18,7 +18,7 @@ const putWithToken = (endpoint, access_token, cancelSource, data, method='PUT') 
             result = await axios(options)
         }catch (err){
             if (axios.isCancel(err)) return
-            return err
+            throw err
         }
         return result 
     }

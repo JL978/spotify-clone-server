@@ -11,6 +11,7 @@ import {TokenContext, LoginContext, MessageContext, PlayContext} from '../../uti
 import useId from '../../utilities/hooks/useId'
 import useInfiScroll from '../../utilities/hooks/useInfiScroll'
 import putWithToken from '../../utilities/putWithToken'
+import reqWithToken from '../../utilities/reqWithToken'
 
 export default function PlayListPage({playlists, refreshPlaylist}) {
     const id = useId('playlist')
@@ -54,16 +55,36 @@ export default function PlayListPage({playlists, refreshPlaylist}) {
         if (id){
             makeRequest()
             .then((data) => {
-                const {name, description, owner, followers, primary_color, tracks, images, uri} = data
-                setbannerInfo(bannerInfo => ({...bannerInfo, name, description, user:[owner], followers, primary_color, images}))
-                setTracks(tracks.items.map((track) => track.track))
-                setNext(tracks.next)
-                setUri(uri)
-                setLoading(false)
+                try {
+                    console.log(data);
+                    const {name, description, owner, followers, primary_color, tracks, images, uri} = data;
+                    setbannerInfo(bannerInfo => ({...bannerInfo, name, description, user:[owner], followers, primary_color, images}))
+                    setTracks(tracks.items.map((track) => track.track))
+                    setNext(tracks.next)
+                    setUri(uri)
+                    setLoading(false)
+
+                } catch (error) {
+                    const mixRequest = reqWithToken(`https://api.spotify.com/v1/playlists/${id}`, token, source);
+                    mixRequest()
+                        .then(response => {
+                            console.log(response)
+                            const {name, description, owner, followers, primary_color, tracks, images, uri} = response;
+                            
+                            setbannerInfo(bannerInfo => ({...bannerInfo, name, description, user:[owner], followers, primary_color, images}))
+                            setTracks(tracks.items.map((track) => track.track))
+                            setNext(tracks.next)
+                            setUri(uri)
+                            setLoading(false)
+                        })
+                        .catch(error => console.log(error))
+                }
+                
             })
             .catch((error) => {
+                console.log(error);
                 setLoading(false)
-                setMessage(`ERROR: ${error}`)
+                setMessage(`ERROR: line 66 playlistpage ${error}`)
             })
         }
         
@@ -100,7 +121,7 @@ export default function PlayListPage({playlists, refreshPlaylist}) {
                     setMessage(`ERROR: Something went wrong! Server response: ${response.status}`)
                 }
             })
-            .catch(error => setMessage(`ERROR: ${error}`))
+            .catch(error => setMessage(`ERROR: line 103 playlist page ${error}`))
     }
 
     const playContext = () => {

@@ -11,6 +11,7 @@ import UserInfo from './UserInfo'
 import CollectionNav from './CollectionNav'
 
 
+// top bar that features additional information for a sidebar page
 function Featured (props){
     const loggedIn = props.loggedIn
     const [query, setQuery] = useState('')

@@ -6,6 +6,10 @@ import { MessageContext } from '../../utilities/context';
 
 export default function NowPlaying({playInfo}) {
     const setMessage = useContext(MessageContext)
+
+    if (!playInfo) {
+        return (<></>);
+    }
     const {album, artists, name, id} = playInfo
 
     let imageUrl
