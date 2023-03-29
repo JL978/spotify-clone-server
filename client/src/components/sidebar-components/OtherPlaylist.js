@@ -1,21 +1,21 @@
 import React from 'react';
-import ListItem from './ListItem.js'
+import ListItem from './ListItem.js';
 
-//Other playlist component - to be updated with playlists from the spotify api
-//The ListItems in here are just placeholders to test out layouts
-function OtherPlaylist({playlists}) {
+function OtherPlaylist({ playlists }) {
+    const renderListItems = () => {
+        if (!playlists) return null;
+
+        return playlists.map((playlist) => {
+            if (!playlist) return null;
+            return <ListItem key={playlist.id} name={playlist.name} id={playlist.id} />;
+        });
+    };
+
     return (
         <div className="other-playlist-container">
-            <ul className="other-list">
-                {playlists.map((playlist) => <ListItem key={playlist.id} name={playlist.name} id={playlist.id}/>)}
-            </ul>
+            <ul className="other-list">{renderListItems()}</ul>
         </div>
     );
 }
-
-
-
-
-
 
 export default OtherPlaylist;
