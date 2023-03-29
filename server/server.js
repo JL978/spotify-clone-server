@@ -3,6 +3,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
+const db_uri = process.env.MY_MONGO_URI;
 
 const { client_auth, authed_header } = require("./utils/client-auth");
 const random_string = require("./utils/random");
@@ -12,6 +13,18 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const express = require("express");
 const http = require("http");
+const mongoose = require("mongoose");
+const commentRoute = require('./routes/comments');
+
+//connect db
+mongoose
+  .connect(db_uri)
+  .then((x) => {
+    console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
+  })
+  .catch((err) => {
+    console.error('Error connecting to mongo', err.reason)
+  })
 
 const PORT = process.env.PORT || 4000;
 const app = express();
@@ -22,6 +35,13 @@ var corsOptions = {
 	credentials: true,
 };
 
+
+// const bodyParser = require("body-parser")
+
+// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(cors(corsOptions));
+
 app.use(function (req, res, next) {
 	res.header("Access-Control-Allow-Origin", req.headers.origin);
 	res.header(
@@ -31,10 +51,9 @@ app.use(function (req, res, next) {
 	next();
 });
 
-app.use(cors(corsOptions));
-app.use(cookieParser());
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use('/comments', commentRoute);
 
 const redirect_uri = process.env.RE_URI;
 const front_end_uri = process.env.FRONT_URI;
