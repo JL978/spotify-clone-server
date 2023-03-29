@@ -5,25 +5,27 @@ const router = express.Router();
 const Comment = require('../models/Comment');
 
 // GET all comments
-router.get("/comments", async (_req, res) => {
+router.get("/all", async (_req, res) => {
     const comments = await Comment.find();
     res.send({ comments });
   });
 
 //GET comment by ID
-router.get("/comments/:id", async (_req, res) => {
+router.get("/:id", async (_req, res) => {
     try {
-      Comment.findById(request.params.id);
-      res.send({comment});
+      const f_comment = await Comment.findById(_req.params.id);
+      res.send({f_comment});
     } catch (err) {
       console.error(err);
+      console.log(err);
     }
 });
 
 //GET all comments from friends
+//this is not possible with the public API
 
 // POST a comment
-router.post("/", async (req, res) => {
+router.post("/add", async (req, res) => {
     const { authorID, songID, commentBody, timestamp } = req.body;
     console.log(req.body);
     const comment = await Comment.create({
@@ -38,19 +40,13 @@ router.post("/", async (req, res) => {
   });
 
 //DELETE a comment
-router.delete("/", async (req, res) => {
-    const { id } = req.query;
-    if (!id) return res.status(400).send({ message: "Please provide an id." });
-  
-    const comment = await Comment.findById(id);
-    if (!comment)
-      return res
-        .status(400)
-        .send({ message: "Invalid comment id." });
-  
-    await comment.remove();
-  
-    res.status(200).send({ message: "Comment removed." });
-  });
+router.delete("/delete/:id", async (req, res) => {
+  Comment.deleteOne({ id: req.params.id }).then(function(){
+    console.log("Comment deleted"); // Success
+    res.status(201).send("")
+}).catch(function(error){
+    console.log(error); // Failure
+});
+});
 
 module.exports = router;
