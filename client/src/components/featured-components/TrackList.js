@@ -1,21 +1,32 @@
-import React from 'react'
-import TrackListItem from './TrackListItem'
+import React, { forwardRef } from 'react';
+import TrackListItem from './TrackListItem';
 
-const TrackList = React.forwardRef(({tracks, styleName, highlight, playContextTrack}, ref) => {
-    return (
-        <div className="trackListContainer">
-            <ol className="trackList">
-                {tracks.map((track, index) => {
-                    if (index+1 < tracks.length){
-                        return <TrackListItem track={track} key={track.id} styleName={styleName} highlight={track.id === highlight} playContextTrack={playContextTrack}/>
-                    }else{
-                        return <TrackListItem ref={ref} track={track} key={track.id} styleName={styleName} highlight={track.id === highlight} playContextTrack={playContextTrack}/>
-                    }
-                })}
-            </ol>
-        </div>
-    )
-})
+const TrackList = forwardRef(({ tracks, styleName, highlight, playContextTrack }, ref) => {
+  const renderTrackListItem = (track, index) => {
+    if (!track) {
+      return null;
+    }
 
+    const isLastTrack = index + 1 === tracks.length;
+    const itemProps = {
+      track,
+      key: track.id,
+      styleName,
+      highlight: track.id === highlight,
+      playContextTrack,
+      ...(isLastTrack ? { ref } : {})
+    };
 
-export default TrackList
+    return <TrackListItem {...itemProps} />;
+  };
+
+  return (
+    <div className="trackListContainer">
+      <ol className="trackList">
+        {tracks.map((track, index) => renderTrackListItem(track, index))}
+      </ol>
+    </div>
+  );
+});
+
+export default TrackList;

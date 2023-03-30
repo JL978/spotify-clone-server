@@ -14,12 +14,14 @@ export default function makeAxiosRequest(endpoint){
         }
         try{
             var result = await axios(config)
+            return result.data;
+
         }catch (error){
             if (axios.isCancel(error)) return
-            return error
+            throw error
         }
         
-        return result.data
+        // return result.data
     }
     
     return [source, makeRequest]

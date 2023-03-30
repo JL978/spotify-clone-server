@@ -10,22 +10,24 @@ export default function SearchRow({title, type, query}) {
     const [formatedQuery, setformatedQuery] = useState('')
 
     useEffect(() => {
-        const formatedQuery = query.toLowerCase().split().join('+')
-        setformatedQuery(formatedQuery)
+        const formatedQuery = query.toLowerCase().trim().split().join('+');
+        setformatedQuery(formatedQuery);
     }, [query])
 
 
     useEffect(() => {
-        const [source, makeRequest] = makeAxiosRequest(`https://api.spotify.com/v1/search?q=${formatedQuery}&type=${type}&limit=9`)
+        const [source, makeRequest] = makeAxiosRequest(`https://api.spotify.com/v1/search?q=${formatedQuery}&type=${type}&limit=9`);
         if (formatedQuery.length > 0){
             makeRequest()
                 .then((data) => {
-                    const key = Object.keys(data)[0]
-                    const result = data[key].items
-                    setResult(result)
+                    if (data) {
+                        const key = Object.keys(data)[0];
+                        const result = data[key].items;
+                        setResult(result);
+                    }
                 })
                 .catch((error) => {
-                    console.log(error)
+                    console.log(error);
                 })
         }
         return () => source.cancel()
