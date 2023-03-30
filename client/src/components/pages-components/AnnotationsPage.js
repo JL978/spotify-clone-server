@@ -44,9 +44,10 @@ export default function AnnotationsPage() {
         requestSongInfo()
             .then((response) => {
                 console.log("Song info requested")
-                songName = response.data.item.name
-                console.log(response.data)
-                artists = response.data.item.artists.map(({name}) => name)
+                console.log(response.item.name)
+                songName = response.item.name
+                console.log(response.item.name)
+                artists = response.item.artists.map(({name}) => name)
                 console.log(artists)
                 const info = {
                     songName: songName, 
@@ -143,7 +144,7 @@ export default function AnnotationsPage() {
     // Disabling lint line because it is asking to add dependencies that I don't think are necessary.
     // eslint-disable-next-line
 
-    }, [song, token, lyrics])
+    }, [song, token])
     // console.log(songName)
     // console.log(lyrics)
 
