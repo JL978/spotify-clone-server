@@ -159,7 +159,6 @@ const Player = React.forwardRef(({ token }, ref) => {
 	};
 
 	const apiUpdate = () => {
-		console.log("hello");
 		if (timerRef.current) {
 			clearTimeout(timerRef.current);
 		}
@@ -461,7 +460,7 @@ const Player = React.forwardRef(({ token }, ref) => {
 						<div className="social-features">
 							<ControlButton
 									title="Annotations"
-									icon="Bars"
+									icon="Annotation"
 									size="x-larger"
 									onClick={routeChangeAnnotations}
 								/>
