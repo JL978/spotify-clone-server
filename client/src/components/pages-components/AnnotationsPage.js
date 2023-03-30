@@ -18,6 +18,7 @@ export default function AnnotationsPage() {
 
     const cancelSource = axios.CancelToken.source()
     useEffect(() => {
+        console.log('useEffect rendering')
         // Get the info on the curretly-playing song
         let songName = ''
         let artists = []
@@ -42,8 +43,9 @@ export default function AnnotationsPage() {
         const requestSongInfo = reqWithToken('https://api.spotify.com/v1/me/player/currently-playing', token, cancelSource)
         requestSongInfo()
             .then((response) => {
+                console.log("Song info requested")
                 songName = response.data.item.name
-                console.log(songName)
+                console.log(response.data)
                 artists = response.data.item.artists.map(({name}) => name)
                 console.log(artists)
                 const info = {
@@ -53,6 +55,7 @@ export default function AnnotationsPage() {
                 console.log(info)
                 return info
             }).catch((error) => {
+                console.log('Error getting song info')
                 setMessage(error.message)
             })
             .then((info) => {
