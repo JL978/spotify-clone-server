@@ -12,6 +12,7 @@ const random_string = require("./utils/random");
 const axios = require("axios");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const path = require('path');
 const express = require("express");
 const http = require("http");
 const mongoose = require("mongoose");
