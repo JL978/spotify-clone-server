@@ -1,9 +1,4 @@
-if (process.env.NODE_ENV !== "production") {
-	require("dotenv").config();
-} else {
-  app.use(express.static('client/build'));
-  app.get('*', (req,res) => res.sendFile(path.resolve(__dirname, 'client', 'build','index.html')));
-}
+
 
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
@@ -74,6 +69,13 @@ const cookieOption = {
 
 const scope =
 	"user-read-private user-read-playback-state streaming user-modify-playback-state playlist-modify-public user-library-modify user-top-read user-read-currently-playing playlist-read-private user-follow-read user-read-recently-played playlist-modify-private user-follow-modify user-library-read user-read-email";
+
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+} else {
+  app.use(express.static('client/build'));
+  app.get('*', (req,res) => res.sendFile(path.resolve(__dirname, 'client', 'build','index.html')));
+}
 
 //endpoint to send a full spotify endpoint to request data
 app.post("/", (req, res) => {
