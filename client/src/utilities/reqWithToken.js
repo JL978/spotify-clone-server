@@ -15,6 +15,7 @@ const reqWithToken = (endpoint, access_token, cancelSource) =>{
         let result
         try {
             result = await axios(options)
+            console.log(result)
             return result.data; // maybe we wanna do result.data
 
         } catch (error) {

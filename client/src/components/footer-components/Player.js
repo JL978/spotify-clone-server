@@ -154,6 +154,7 @@ const Player = React.forwardRef(({ token }, ref) => {
 	//Use for other components to update the player state only if not connected to the web player
 	const updateState = () => {
 		if (!player.current) {
+			console.log('updating api')
 			apiUpdate();
 		}
 	};
@@ -170,7 +171,9 @@ const Player = React.forwardRef(({ token }, ref) => {
 
 		requestInfo()
 			.then((response) => {
+				console.log(response)
 				if (response.status === 200) {
+					console.log('Song info request status 200')
 					const {
 						repeat_state,
 						shuffle_state,
@@ -198,6 +201,7 @@ const Player = React.forwardRef(({ token }, ref) => {
 					setPlayInfo(item);
 					// Toggle the song context to indicate that the song has changed.
 					// This assumes that apiupdate is being called when the song changes.
+					console.log('Song switched')
 					song === 0 ? setSong(1) : setSong(0)
 				} else if (response.status === 204) {
 					setMessage(
@@ -291,6 +295,7 @@ const Player = React.forwardRef(({ token }, ref) => {
 	};
 
 	const skipNext = () => {
+		console.log('Skip button pressed')
 		const request = putWithToken(
 			"https://api.spotify.com/v1/me/player/next",
 			token,
@@ -301,11 +306,13 @@ const Player = React.forwardRef(({ token }, ref) => {
 		request()
 			.then((response) => {
 				if (response.status !== 204) {
+					console.log('Server error')
 					setMessage(
 						`ERROR: (skipnext) Something went wrong! Server response: ${response.status}`
 					);
 					return;
 				}
+				console.log('Updating state')
 				updateState();
 			})
 			.catch((error) => setMessage(`ERROR: (skipnext 2) ${error}`));
