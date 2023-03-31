@@ -1,6 +1,10 @@
 if (process.env.NODE_ENV !== "production") {
 	require("dotenv").config();
+} else {
+  app.use(express.static('client/build'));
+  app.get('*', (req,res) => res.sendFile(path.resolve(__dirname, 'client', 'build','index.html')));
 }
+
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
 const db_uri = process.env.MY_MONGO_URI;
