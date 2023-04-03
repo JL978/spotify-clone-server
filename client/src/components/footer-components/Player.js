@@ -13,6 +13,8 @@ import NowPlaying from "./NowPlaying";
 import ConnectDevices from "./ConnectDevices";
 import ControlButton from "./ControlButton";
 
+import AddComment from "./AddComment";
+
 import reqWithToken from "../../utilities/reqWithToken";
 import msTimeFormat from "../../utilities/utils";
 import putWithToken from "../../utilities/putWithToken";
@@ -36,6 +38,7 @@ const Player = React.forwardRef(({ token }, ref) => {
 	const [playback, setPlayback] = useState(0);
 	const [volume, setVolume] = useState(1);
 	const [connectTip, setConnectTip] = useState(false);
+	const [commentTip, setCommentTip] = useState(false);
 	const [playInfo, setPlayInfo] = useState({
 		album: {},
 		artists: [],
@@ -465,12 +468,27 @@ const Player = React.forwardRef(({ token }, ref) => {
 				<div className="player-right">
 					<div className="extra-controls">
 						<div className="social-features">
-							<ControlButton
-									title="Annotations"
-									icon="Annotation"
+							<span className="comment-wrapper">
+								{commentTip && (
+									<AddComment
+										closeTip={() => setCommentTip(false)}
+									/>
+								)}
+								<ControlButton
+									title="Comment"
+									icon="Comment" 
 									size="x-larger"
-									onClick={routeChangeAnnotations}
+									onClick={() => setCommentTip(!commentTip)}
 								/>
+							</span>
+							<span className="annotation-wrapper">
+								<ControlButton
+										title="Annotations"
+										icon="Annotation"
+										size="x-larger"
+										onClick={routeChangeAnnotations}
+									/>
+							</span>
 
 						</div>
 
