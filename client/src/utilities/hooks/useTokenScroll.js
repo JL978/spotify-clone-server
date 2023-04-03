@@ -14,9 +14,9 @@ function useTokenScroll(setList, token, source){
                 const makeRequest = reqWithToken(next, token, source)
                 makeRequest()
                     .then(response => {
-                        // const data = response.data
-                        const resultList = response.items.map(track => track.track)
-                        const next = response.next || response.playlists.next
+                        const data = response.data
+                        const resultList = data.items.map(track => track.track)
+                        const next = data.next || data.playlists.next
                         setList(tracks => [...tracks, ...resultList])
                         setNext(next)
                     })

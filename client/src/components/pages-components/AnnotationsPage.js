@@ -44,11 +44,11 @@ export default function AnnotationsPage() {
         requestSongInfo()
             .then((response) => {
                 console.log("Song info requested")
-                console.log(response.item.name)
-                songName = response.item.name
-                console.log(response.item.name)
-                artists = response.item.artists.map(({name}) => name)
-                console.log(artists)
+                const data = response.data
+                songName = data.item.name
+                // console.log(data.item.name)
+                artists = data.item.artists.map(({name}) => name)
+                // console.log(artists)
                 const info = {
                     songName: songName, 
                     artists: artists
@@ -60,11 +60,11 @@ export default function AnnotationsPage() {
                 setMessage(error.message)
             })
             .then((info) => {
-                console.log(info.songName)
-                console.log(info.artists)
+                // console.log(info.songName)
+                // console.log(info.artists)
                 // Append the search params. We take the first artist in the list of artists, assuming that the first is the primary artist.
                 const search_params = 'track.search?q_artist='.concat(info.artists[0], '&q_track=', info.songName, '&apikey=', apikey)
-                console.log(search_params)
+                // console.log(search_params)
 
                 // Use axios to make a musixmatch api call to search for the musixmatch track_id.
                 const search_call = base_url.concat(search_params)

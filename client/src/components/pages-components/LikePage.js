@@ -36,7 +36,7 @@ const LikePage = () => {
 
             requestPlaylist()
                 .then((data) => {
-                    const _tracks = data.items
+                    const _tracks = data.data.items
                     setTracks(tracks => [...tracks, ..._tracks.map((track) => track.track)])
                     setNext(data.data.next)
                 })
