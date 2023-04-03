@@ -467,7 +467,7 @@ const Player = React.forwardRef(({ token }, ref) => {
 
 				<div className="player-right">
 					<div className="extra-controls">
-						<div className="social-features">
+						 <div className="social-features">
 							<span className="comment-wrapper">
 								{commentTip && (
 									<AddComment
