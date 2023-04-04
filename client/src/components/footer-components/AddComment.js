@@ -49,10 +49,16 @@ const AddComment = ({ closeTip, song_id, token}) => {
 			.then((response) => {
 				
 				// const time_stamp = response.timestamp;
-				const {timestamp, item} = response.data;
+				const {is_playing, progress_ms, item} = response.data;
 				console.log(item)
 				const song_id = item.id;
-				setSongInfo({...songInfo, songId:song_id, timestamp: timestamp});
+				const duration = item.duration_ms;
+				if (is_playing) {
+					setSongInfo({...songInfo, songId:song_id, timestamp: progress_ms});
+				} else {
+					setSongInfo({...songInfo, songId:song_id, timestamp: 0});
+				}
+				
 				// source.cancel();
 			})
 			.catch((error) => console.log(error));
