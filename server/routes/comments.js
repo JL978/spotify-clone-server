@@ -21,6 +21,16 @@ router.get("/:id", async (_req, res) => {
     }
 });
 
+//GET comments by songID
+router.get("/:song", async(_req, res) => {
+  try {
+    const comments = await Comment.find({"songID":_req.params.song});
+    res.send({comments})
+  } catch (e) {
+    console.error(e);
+  }
+})
+
 //GET all comments from friends
 //this is not possible with the public API
 
