@@ -472,6 +472,9 @@ const Player = React.forwardRef(({ token }, ref) => {
 								{commentTip && (
 									<AddComment
 										closeTip={() => setCommentTip(false)}
+										song_id={playInfo.id}
+										token={token}
+
 									/>
 								)}
 								<ControlButton
