@@ -2,7 +2,7 @@ import React from 'react';
 import CommentSongInfo from './CommentSongInfo';
 
 export default function Comment(props) {
-    const { token, user, time, timestamp, track, artist, commentBody, replies, likes, reshares} = props;
+    const {user, time, timestamp, songID, commentBody, replies, likes, reshares} = props;
 
     function millisToTime(millis) {
       var minutes = Math.floor(millis / 60000);
@@ -26,7 +26,7 @@ export default function Comment(props) {
                 <span class="timestamp">@{millisToTime(timestamp)}</span>
                 {commentBody}
               </div>
-              <CommentSongInfo track={track} artist={artist}/>
+              <CommentSongInfo songID = {songID}/>
               <div class="actions">
                 <button class="reply-button">
                     <i class="fa fa-reply" aria-hidden="true"></i>

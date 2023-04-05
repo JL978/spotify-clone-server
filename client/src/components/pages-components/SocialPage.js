@@ -5,7 +5,7 @@ import { LoginContext } from "../../utilities/context";
 // import SocialCard from '../featured-components/SocialCard';
 import Comment from "../featured-components/Comment";
 
-export default function SocialPage({token}) {
+export default function SocialPage() {
     const [feed,setFeed] = useState([]);
     const loggedIn = useContext(LoginContext);
 
@@ -56,7 +56,7 @@ export default function SocialPage({token}) {
             replies={comm.replies}
             likes={comm.likes}
             reshares={comm.reshares}
-            token={token}
+            songID = {comm.songID}
             ></Comment>)}
           {/* <Comment user="viducco" timeOfPost="20m" timestamp="0:10" track="Love Sosa" artist="Chief Keef" comment="Lorem Ipsum" replies="10" likes="15" reshares="100"/> */}
         </div>
