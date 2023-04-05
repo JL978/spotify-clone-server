@@ -149,10 +149,13 @@ function App() {
               <Sidebar>
                 <Logo />
                 <NavList>
-                  <NavItem to='/' exact={true} name='Home' label='Home' />
-                  <NavItem to='/search' exact={true} name='Search' label='Search' />
-                  <NavItem to='/social' exact={true} name='Social' label='Social' /> 
-                  <NavItem to='/collection' exact={false} name='Library' label='Your Library' data_tip='library' data_for='tooltip' data_event='click' style={{ pointerEvents: loggedIn? 'auto':'none'}}/>
+                  <TokenContext.Provider value={token}>
+                    <NavItem to='/' exact={true} name='Home' label='Home' />
+                    <NavItem to='/search' exact={true} name='Search' label='Search' />
+                    <NavItem to='/social' exact={true} name='Social' label='Social' /> 
+                    <NavItem to='/collection' exact={false} name='Library' label='Your Library' data_tip='library' data_for='tooltip' data_event='click' style={{ pointerEvents: loggedIn? 'auto':'none'}}/>
+                  </TokenContext.Provider>
+                  
                 </NavList>
                 <PlayLists 
                   top={<FeaturedPlaylist>

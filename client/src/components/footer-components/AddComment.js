@@ -7,7 +7,7 @@ import axios from "axios";
 //import putWithToken from "../../utilities/putWithToken";
 
 import { MessageContext } from "../../utilities/context";
-import { UserContext } from '../../utilities/context';
+// import { UserContext } from '../../utilities/context';
 import reqWithToken from "../../utilities/reqWithToken";
 
 
@@ -19,7 +19,7 @@ const AddComment = ({ closeTip, song_id, token}) => {
 		timestamp: ""
 	});
 	const [userInfo, setUserInfo] = useState("");
-	const user = useContext(UserContext);
+	// const user = useContext(UserContext);
 	const setMessage = useContext(MessageContext);
 	const [commenttext, setCommentText] = useState("");
 	
@@ -49,15 +49,16 @@ const AddComment = ({ closeTip, song_id, token}) => {
 			.then((response) => {
 				
 				// const time_stamp = response.timestamp;
-				const {is_playing, progress_ms, item} = response.data;
+				const {progress_ms, item} = response.data;
 				console.log(item)
 				const song_id = item.id;
-				const duration = item.duration_ms;
-				if (is_playing) {
+				// const duration = item.duration_ms;
+				if (true) {
 					setSongInfo({...songInfo, songId:song_id, timestamp: progress_ms});
-				} else {
-					setSongInfo({...songInfo, songId:song_id, timestamp: 0});
-				}
+				} 
+				// else {
+				// 	setSongInfo({...songInfo, songId:song_id, timestamp: 0});
+				// }
 				
 				// source.cancel();
 			})
@@ -123,7 +124,10 @@ const AddComment = ({ closeTip, song_id, token}) => {
 			authorID: userInfo,
 			songID: songInfo.songId,
 			commentBody: commenttext,
-			timestamp: songInfo.timestamp
+			timestamp: songInfo.timestamp,
+			likes: 0,
+			replies: 0,
+			reshares: 0
 		}
 		console.log(commentData);
 		axios.post("/comments/add",commentData);

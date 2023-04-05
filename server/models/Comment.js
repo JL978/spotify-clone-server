@@ -14,6 +14,15 @@ const CommentSchema = new mongoose.Schema({
     },
     timestamp: {
         type: "number"
+    },
+    likes: {
+        type: "number"
+    },
+    replies: {
+        type: "number"
+    },
+    reshares : {
+        type: "number"
     }}, {
         collection: "Comments"
     })
