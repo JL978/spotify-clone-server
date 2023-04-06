@@ -39,6 +39,10 @@ const Player = React.forwardRef(({ token }, ref) => {
 	const [volume, setVolume] = useState(1);
 	const [connectTip, setConnectTip] = useState(false);
 	const [commentTip, setCommentTip] = useState(false);
+	
+	//added close function to annotations
+  	const [closeAnnotations, setCloseAnnotations] = useState(false);
+	
 	const [playInfo, setPlayInfo] = useState({
 		album: {},
 		artists: [],
@@ -395,10 +399,18 @@ const Player = React.forwardRef(({ token }, ref) => {
 
 	// Redirects to the annotations page
 	const history = useHistory()
+	
 	const routeChangeAnnotations = () => {
-		const path = '/annotations'
-		history.push(path)
-	}
+	    const path = "/annotations";
+	    if (!closeAnnotations) {
+	      setCloseAnnotations(!closeAnnotations);
+	      history.push(path);
+	    } else {
+	      const path = "/";
+	      setCloseAnnotations(!closeAnnotations);
+	      history.push(path);
+	    }
+	  };
 
 	return (
 		<>
