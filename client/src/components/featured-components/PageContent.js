@@ -57,7 +57,6 @@ export default function PageContent({
         <Route path="/social">
           <div className="social-page-content">
             <SocialPage />
-            <SocialSidebar />
           </div>
         </Route>
         <Route path="/collection">
