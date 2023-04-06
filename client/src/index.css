@@ -2005,3 +2005,28 @@
 
 /* END COMMENT INFORMATION */
 
+.lyric-container-body{
+  position: relative;
+  height: 100%;
+  width: 60%;
+  left: 15px;
+  top: 10px;
+  line-height: 230%;
+  overflow: auto;
+  white-space: pre;
+  outline: 1px solid blue;
+}
+
+.lyric-container-title{
+  position: relative;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  height: 8%;
+  width: 60%;
+  left: 15px;
+  top: 10px;
+  line-height: 150%;
+  overflow: auto;
+  outline: 1px solid blue;
+}
+
