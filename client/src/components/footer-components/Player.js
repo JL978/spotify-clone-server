@@ -399,7 +399,7 @@ const Player = React.forwardRef(({ token }, ref) => {
 
 	// Redirects to the annotations page
 	const history = useHistory()
-	
+	// annotations closes when you press it again
 	const routeChangeAnnotations = () => {
 	    const path = "/annotations";
 	    if (!closeAnnotations) {
