@@ -24,19 +24,22 @@ export default function AnnotationsPage() {
         let artists = []
 
         const apikey = 'd6c8b83bfc21e9bb13c124be7dc6062b' // apikey for musixmatch requests
-        const base_url = 'https://api.musixmatch.com/ws/1.1/'
+        const track_search_base_url = 'http://localhost:3001/api/track-search?'
+        const lyrics_search_base_url = 'http://localhost:3002/api/lyrics-search?'
         // Function to make axios requests to musixMatch
         const musixMatchRequest = async (url) => {
             let result
             try {
+                console.log('Making API request to localhost')
                 result = await axios.get(url)
+                console.log(result)
             } catch (err) {
                 console.log(err)
                 setMessage(err.message)
                 // THROW MUSIXMATCH ERROR
                 return err
             }
-    
+
             return result
         }
 
@@ -63,11 +66,11 @@ export default function AnnotationsPage() {
                 // console.log(info.songName)
                 // console.log(info.artists)
                 // Append the search params. We take the first artist in the list of artists, assuming that the first is the primary artist.
-                const search_params = 'track.search?q_artist='.concat(info.artists[0], '&q_track=', info.songName, '&apikey=', apikey)
+                const search_params = 'artist='.concat(info.artists[0], '&track=', info.songName, '&apikey=', apikey)
                 // console.log(search_params)
 
                 // Use axios to make a musixmatch api call to search for the musixmatch track_id.
-                const search_call = base_url.concat(search_params)
+                const search_call = track_search_base_url.concat(search_params)
                 console.log(search_call)
                 musixMatchRequest(search_call)
                 .then((response) => {
@@ -99,8 +102,8 @@ export default function AnnotationsPage() {
                         // track_id.
                         for (const track_id of track_ids) {
                             console.log(`checking track id ${track_id}`)
-                            const lyrics_params = 'track.lyrics.get?track_id='.concat(track_id, '&apikey=', apikey)
-                            const lyrics_call = base_url.concat(lyrics_params)
+                            const lyrics_params = 'track_id='.concat(track_id, '&apikey=', apikey)
+                            const lyrics_call = lyrics_search_base_url.concat(lyrics_params)
                             musixMatchRequest(lyrics_call)
                                 .then(response => {
                                     if (response.status === 200 && response.data.message.header.status_code !== 404){
