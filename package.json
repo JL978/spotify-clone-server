@@ -1,23 +1,26 @@
 {
-  "name": "shoutify",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "npm start --prefix server",
-    "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/UwemWilson4/shoutify.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/UwemWilson4/shoutify/issues"
-  },
-  "homepage": "https://github.com/UwemWilson4/shoutify#readme"
+    "name": "shoutify",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "server": "npm start --prefix server",
+        "client": "npm start --prefix client",
+        "dev": "concurrently \"npm run server\" \"npm run client\""
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/UwemWilson4/shoutify.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/UwemWilson4/shoutify/issues"
+    },
+    "homepage": "https://github.com/UwemWilson4/shoutify#readme",
+    "dependencies": {
+        "react-scripts": "^2.1.3"
+    }
 }

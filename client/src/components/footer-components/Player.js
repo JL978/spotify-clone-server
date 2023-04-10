@@ -13,13 +13,19 @@ import NowPlaying from "./NowPlaying";
 import ConnectDevices from "./ConnectDevices";
 import ControlButton from "./ControlButton";
 
+import AddComment from "./AddComment";
+
 import reqWithToken from "../../utilities/reqWithToken";
 import msTimeFormat from "../../utilities/utils";
 import putWithToken from "../../utilities/putWithToken";
-import { MessageContext } from "../../utilities/context";
+import { MessageContext, SongContext } from "../../utilities/context";
+import { useHistory } from "react-router-dom";
 
 const Player = React.forwardRef(({ token }, ref) => {
 	const setMessage = useContext(MessageContext);
+	// Song status that will be used to keep track of when a song has changed and the setter
+	// function that indicates that change.
+	const {song, setSong} = useContext(SongContext)
 	const [playbackState, setPlaybackState] = useState({
 		play: false,
 		shuffle: false,
@@ -32,6 +38,11 @@ const Player = React.forwardRef(({ token }, ref) => {
 	const [playback, setPlayback] = useState(0);
 	const [volume, setVolume] = useState(1);
 	const [connectTip, setConnectTip] = useState(false);
+	const [commentTip, setCommentTip] = useState(false);
+	
+	//added close function to annotations
+  	const [closeAnnotations, setCloseAnnotations] = useState(false);
+	
 	const [playInfo, setPlayInfo] = useState({
 		album: {},
 		artists: [],
@@ -150,12 +161,12 @@ const Player = React.forwardRef(({ token }, ref) => {
 	//Use for other components to update the player state only if not connected to the web player
 	const updateState = () => {
 		if (!player.current) {
+			console.log('updating api')
 			apiUpdate();
 		}
 	};
 
 	const apiUpdate = () => {
-		console.log("hello");
 		if (timerRef.current) {
 			clearTimeout(timerRef.current);
 		}
@@ -167,7 +178,9 @@ const Player = React.forwardRef(({ token }, ref) => {
 
 		requestInfo()
 			.then((response) => {
+				console.log(response)
 				if (response.status === 200) {
+					console.log('Song info request status 200')
 					const {
 						repeat_state,
 						shuffle_state,
@@ -193,6 +206,10 @@ const Player = React.forwardRef(({ token }, ref) => {
 						total_time: item.duration_ms,
 					}));
 					setPlayInfo(item);
+					// Toggle the song context to indicate that the song has changed.
+					// This assumes that apiupdate is being called when the song changes.
+					console.log('Song switched')
+					song === 0 ? setSong(1) : setSong(0)
 				} else if (response.status === 204) {
 					setMessage(
 						"Player is not working, select a device to start listening"
@@ -285,6 +302,7 @@ const Player = React.forwardRef(({ token }, ref) => {
 	};
 
 	const skipNext = () => {
+		console.log('Skip button pressed')
 		const request = putWithToken(
 			"https://api.spotify.com/v1/me/player/next",
 			token,
@@ -295,11 +313,13 @@ const Player = React.forwardRef(({ token }, ref) => {
 		request()
 			.then((response) => {
 				if (response.status !== 204) {
+					console.log('Server error')
 					setMessage(
 						`ERROR: (skipnext) Something went wrong! Server response: ${response.status}`
 					);
 					return;
 				}
+				console.log('Updating state')
 				updateState();
 			})
 			.catch((error) => setMessage(`ERROR: (skipnext 2) ${error}`));
@@ -377,6 +397,21 @@ const Player = React.forwardRef(({ token }, ref) => {
 			.catch((error) => setMessage(`ERROR: volume ${error}`));
 	};
 
+	// Redirects to the annotations page
+	const history = useHistory()
+	// annotations closes when you press it again
+	const routeChangeAnnotations = () => {
+	    const path = "/annotations";
+	    if (!closeAnnotations) {
+	      setCloseAnnotations(!closeAnnotations);
+	      history.push(path);
+	    } else {
+	      const path = "/";
+	      setCloseAnnotations(!closeAnnotations);
+	      history.push(path);
+	    }
+	  };
+
 	return (
 		<>
 			{/* {playbackState.play ? null:<Heartbeat heartbeatFunction={updateState} heartbeatInterval={10000}/>} */}
@@ -444,6 +479,34 @@ const Player = React.forwardRef(({ token }, ref) => {
 
 				<div className="player-right">
 					<div className="extra-controls">
+						 <div className="social-features">
+							<span className="comment-wrapper">
+								{commentTip && (
+									<AddComment
+										closeTip={() => setCommentTip(false)}
+										song_id={playInfo.id}
+										token={token}
+
+									/>
+								)}
+								<ControlButton
+									title="Comment"
+									icon="Comment" 
+									size="x-larger"
+									onClick={() => setCommentTip(!commentTip)}
+								/>
+							</span>
+							<span className="annotation-wrapper">
+								<ControlButton
+										title="Annotations"
+										icon="Annotation"
+										size="x-larger"
+										onClick={routeChangeAnnotations}
+									/>
+							</span>
+
+						</div>
+
 						<span className="connect-devices-wrapper">
 							{connectTip && (
 								<ConnectDevices

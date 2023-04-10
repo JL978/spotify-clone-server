@@ -22,6 +22,8 @@ import Pause from "./Pause";
 import Social from "./Social";
 import Comment from './Comment';
 import Annotation from './Annotation';
+import Bars from './Bars.js'
+
 import React from "react";
 
 export default function Icon(props) {

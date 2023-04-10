@@ -1,8 +1,10 @@
 if (process.env.NODE_ENV !== "production") {
-	require("dotenv").config();
+  require("dotenv").config();
 }
+
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
+const db_uri = process.env.MY_MONGO_URI;
 
 const { client_auth, authed_header } = require("./utils/client-auth");
 const random_string = require("./utils/random");
@@ -10,8 +12,22 @@ const random_string = require("./utils/random");
 const axios = require("axios");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const path = require('path');
 const express = require("express");
 const http = require("http");
+const mongoose = require("mongoose");
+const commentRoute = require('./routes/comments');
+const noteRoute = require('./routes/annotations');
+
+//connect db
+mongoose
+  .connect(db_uri)
+  .then((x) => {
+    console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
+  })
+  .catch((err) => {
+    console.error('Error connecting to mongo', err.reason)
+  })
 
 const PORT = process.env.PORT || 4000;
 const app = express();
@@ -22,6 +38,13 @@ var corsOptions = {
 	credentials: true,
 };
 
+
+// const bodyParser = require("body-parser")
+
+// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(cors(corsOptions));
+
 app.use(function (req, res, next) {
 	res.header("Access-Control-Allow-Origin", req.headers.origin);
 	res.header(
@@ -31,10 +54,10 @@ app.use(function (req, res, next) {
 	next();
 });
 
-app.use(cors(corsOptions));
-app.use(cookieParser());
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use('/comments', commentRoute);
+app.use('/annotations', noteRoute);
 
 const redirect_uri = process.env.RE_URI;
 const front_end_uri = process.env.FRONT_URI;
@@ -49,6 +72,11 @@ const cookieOption = {
 
 const scope =
 	"user-read-private user-read-playback-state streaming user-modify-playback-state playlist-modify-public user-library-modify user-top-read user-read-currently-playing playlist-read-private user-follow-read user-read-recently-played playlist-modify-private user-follow-modify user-library-read user-read-email";
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static('client/build'));
+  app.get('*', (req,res) => res.sendFile(path.resolve(__dirname, 'client', 'build','index.html')));
+}
 
 //endpoint to send a full spotify endpoint to request data
 app.post("/", (req, res) => {
@@ -187,6 +215,51 @@ app.get("/refresh_token", async (req, res) => {
 app.get("/logout", (req, res) => {
 	res.clearCookie(refreshKey, cookieOption);
 	res.status(200).send("logged out");
+});
+
+// Handles proxy requests for tracks. 
+app.get("/api/track-search", async (req, res) => {
+  const track = req.query.track;
+  const artist = req.query.artist;
+  const apikey = req.query.apikey;
+  // console.log('Got request');
+  try {
+    const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.search?q_artist=${artist}&q_track=${track}&apikey=${apikey}`);
+    // console.log(`musixmatch track search response:${response}`);
+    res.json(response.data);
+  } catch (error) {
+    // console.log('failed');
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Handles proxy requests for lyrics. 
+app.get("/api/lyrics-search", async (req, res) => {
+  const track_id = req.query.track_id;
+  const apikey = req.query.apikey;
+  // console.log('Got request');
+  try {
+    const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=${track_id}&apikey=${apikey}`);
+    // console.log(`musixmatch lyrics search response:${response}`);
+    res.json(response.data);
+  } catch (error) {
+    // console.log('failed');
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/**
+ * TODO: Figure out a way to make proxy requests on the same
+ * port.
+ */
+// Server for listening for requests to search for a track.
+app.listen(3001, () => {
+  console.log('Server running on port 3001');
+});
+
+// Server for listening for requests to search for lyrics.
+app.listen(3002, () => {
+  console.log('Server running on port 3002');
 });
 
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));

@@ -16,6 +16,7 @@ import SocialSidebar from "./SocialSidebar";
 import ReactToolTip from "react-tooltip";
 import generateContent from "../../utilities/TipContent";
 import { LoginContext } from "../../utilities/context";
+import AnnotationsPage from '../pages-components/AnnotationsPage'
 
 export default function PageContent({
   query,
@@ -56,7 +57,6 @@ export default function PageContent({
         <Route path="/social">
           <div className="social-page-content">
             <SocialPage />
-            <SocialSidebar />
           </div>
         </Route>
         <Route path="/collection">
@@ -70,6 +70,9 @@ export default function PageContent({
         <Route path="/tracks">
           {loggedIn ? <LikePage /> : <Redirect to="/" />}
         </Route>
+        <Route path='/annotations'>
+                {loggedIn ? <AnnotationsPage />:<Redirect to='/'/>}
+            </Route>
       </Switch>
       <div className={`status-bar-wrapper ${status ? "active" : ""}`}>
         <div className={`status-bar ${status ? "active" : ""}`}>{message}</div>

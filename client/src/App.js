@@ -14,8 +14,8 @@ import CTAbanner from './components/footer-components/CTAbanner'
 import Player from './components/footer-components/Player'
 import Featured from './components/featured-components/Featured.js'
 import Loading from './components/featured-components/Loading.js'
-
-import {UserContext, LoginContext, TokenContext, MessageContext, PlayContext} from './utilities/context'
+import {UserContext, LoginContext, TokenContext, MessageContext, PlayContext, SongContext} from './utilities/context'
+import getHashParams from './utilities/getHashParams.js';
 
 function App() {
   const [loading, setLoading] = useState(true)
@@ -26,78 +26,60 @@ function App() {
 
   const [status, setStatus] = useState(false) 
   const [message, setMessage] = useState('')
+  // Boolean value that will be used to detect when I song has changed
+  const [song, setSong] = useState(0)
 
   const timerRef = useRef(null)
 
   useEffect(() => {
-    let access_token = null;
-    let error = "Not logged in."
-
-    const hash = window.location.hash
-      .substring(1)
-      .split("&")
-      .reduce(function(initial, item) {
-        if (item) {
-          var parts = item.split("=");
-          initial[parts[0]] = decodeURIComponent(parts[1]);
-        }
-        return initial;
-      }, {});
-    
-    if (hash.access_token) {
-      access_token = hash.access_token;
-      error = null;
+    if (token) {
+      setLoading(false);
+      return;
     }
 
-    if (error) {
-      setLoading(false);
-      setStatusMessage(`ERROR: ${error}`);
+    let access_token = null;
+    const hash = getHashParams();
+    access_token = hash?.access_token;
+
+    if (!access_token) {
+      setStatusMessage(`ERROR: Not logged in.`);
 
     } else {
-      // The access token exists within the hash params
       setToken(access_token)
       localStorage.setItem('token', access_token);
       setloggedIn(true)
       window.location.hash = ''
-      // add a catch error to this
-      setLoading(false);
-
     }
 
-  }, [])
+    setLoading(false);
+
+  }, [token])
 
   useEffect(() => {
     if (token) {
-      fetch('https://api.spotify.com/v1/me', {
-        method: 'GET', headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + token
-        }
-      })
-      .then((response) => {
-        console.log(response.json().then(
-          (data) => { 
+      const headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      }
+      fetch('https://api.spotify.com/v1/me', { method: 'GET', headers })
+        .then((response) => {
+          console.log(response.json().then(
+            (data) => { 
               console.log(data)
               setuserInfo(data)
             }
           ));
         });
 
-        fetch('https://api.spotify.com/v1/me/playlists', {
-          method: 'GET', headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
-          }
-      })
-      .then((response) => {
-        console.log(response.json().then(
-          (data) => { 
-            setPlaylists(data.items)
-          }
-        ));
-      });
+      fetch('https://api.spotify.com/v1/me/playlists', { method: 'GET', headers })
+        .then((response) => {
+          console.log(response.json().then(
+            (data) => { 
+              setPlaylists(data.items)
+            }
+          ));
+        });
     }
   }, [token])
 
@@ -144,14 +126,17 @@ function App() {
         <Loading type='app'/> :
         <MessageContext.Provider value={setStatusMessage}>
           <LoginContext.Provider value={loggedIn}>
-              
+            <SongContext.Provider value={{song, setSong}}>
               <Sidebar>
                 <Logo />
                 <NavList>
-                  <NavItem to='/' exact={true} name='Home' label='Home' />
-                  <NavItem to='/search' exact={true} name='Search' label='Search' />
-                  <NavItem to='/social' exact={true} name='Social' label='Social' /> 
-                  <NavItem to='/collection' exact={false} name='Library' label='Your Library' data_tip='library' data_for='tooltip' data_event='click' style={{ pointerEvents: loggedIn? 'auto':'none'}}/>
+                  <TokenContext.Provider value={token}>
+                    <NavItem to='/' exact={true} name='Home' label='Home' />
+                    <NavItem to='/search' exact={true} name='Search' label='Search' />
+                    <NavItem to='/social' exact={true} name='Social' label='Social' /> 
+                    <NavItem to='/collection' exact={false} name='Library' label='Your Library' data_tip='library' data_for='tooltip' data_event='click' style={{ pointerEvents: loggedIn? 'auto':'none'}}/>
+                  </TokenContext.Provider>
+                  
                 </NavList>
                 <PlayLists 
                   top={<FeaturedPlaylist>
@@ -174,7 +159,7 @@ function App() {
               <Footer>
                 {loggedIn? <Player token={token} ref={playerRef}/>: <CTAbanner/>}
               </Footer>
-                  
+            </SongContext.Provider>     
           </LoginContext.Provider>
 
         </MessageContext.Provider>

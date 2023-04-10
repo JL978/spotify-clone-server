@@ -20,8 +20,7 @@ const ConnectDevices = ({ token, closeTip }) => {
 		window.addEventListener("click", clickExit);
 		requestDevices()
 			.then((response) => {
-				console.log(response.devices);
-				const _devices = response.devices;
+				const _devices = response.data.devices;
 				setDevices(_devices);
 			})
 			.catch((error) => console.log(error));
