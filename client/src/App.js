@@ -15,6 +15,7 @@ import Player from './components/footer-components/Player'
 import Featured from './components/featured-components/Featured.js'
 import Loading from './components/featured-components/Loading.js'
 import {UserContext, LoginContext, TokenContext, MessageContext, PlayContext, SongContext} from './utilities/context'
+import getHashParams from './utilities/getHashParams.js';
 
 function App() {
   const [loading, setLoading] = useState(true)
@@ -31,74 +32,54 @@ function App() {
   const timerRef = useRef(null)
 
   useEffect(() => {
-    let access_token = null;
-    let error = "Not logged in."
-
-    const hash = window.location.hash
-      .substring(1)
-      .split("&")
-      .reduce(function(initial, item) {
-        if (item) {
-          var parts = item.split("=");
-          initial[parts[0]] = decodeURIComponent(parts[1]);
-        }
-        return initial;
-      }, {});
-    
-    if (hash.access_token) {
-      access_token = hash.access_token;
-      error = null;
+    if (token) {
+      setLoading(false);
+      return;
     }
 
-    if (error) {
-      setLoading(false);
-      setStatusMessage(`ERROR: ${error}`);
+    let access_token = null;
+    const hash = getHashParams();
+    access_token = hash?.access_token;
+
+    if (!access_token) {
+      setStatusMessage(`ERROR: Not logged in.`);
 
     } else {
-      // The access token exists within the hash params
       setToken(access_token)
       localStorage.setItem('token', access_token);
       setloggedIn(true)
       window.location.hash = ''
-      // add a catch error to this
-      setLoading(false);
-
     }
 
-  }, [])
+    setLoading(false);
+
+  }, [token])
 
   useEffect(() => {
     if (token) {
-      fetch('https://api.spotify.com/v1/me', {
-        method: 'GET', headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + token
-        }
-      })
-      .then((response) => {
-        console.log(response.json().then(
-          (data) => { 
+      const headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      }
+      fetch('https://api.spotify.com/v1/me', { method: 'GET', headers })
+        .then((response) => {
+          console.log(response.json().then(
+            (data) => { 
               console.log(data)
               setuserInfo(data)
             }
           ));
         });
 
-        fetch('https://api.spotify.com/v1/me/playlists', {
-          method: 'GET', headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
-          }
-      })
-      .then((response) => {
-        console.log(response.json().then(
-          (data) => { 
-            setPlaylists(data.items)
-          }
-        ));
-      });
+      fetch('https://api.spotify.com/v1/me/playlists', { method: 'GET', headers })
+        .then((response) => {
+          console.log(response.json().then(
+            (data) => { 
+              setPlaylists(data.items)
+            }
+          ));
+        });
     }
   }, [token])
 

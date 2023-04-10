@@ -1,12 +1,16 @@
 function getHashParams() {
-    var hashParams = {};
-    var e, r = /([^&;=]+)=?([^&;]*)/g,
-        q = window.location.hash.substring(1);
-    // eslint-disable-next-line
-    while ( e = r.exec(q)) {
-       hashParams[e[1]] = decodeURIComponent(e[2]);
-    }
-    return hashParams;
+    const hash = window.location.hash
+      .substring(1)
+      .split("&")
+      .reduce(function(initial, item) {
+        if (item) {
+          var parts = item.split("=");
+          initial[parts[0]] = decodeURIComponent(parts[1]);
+        }
+        return initial;
+      }, {});
+    
+    return hash;
 }
 
-export default getHashParams
+export default getHashParams;
