@@ -15,7 +15,7 @@ export default function Comment(props) {
     return (
           <div class="spotify-tweet-box">
             <div class="avatar">
-              <img src="https://via.placeholder.com/50x50" alt="User avatar"/>
+              {/* <img src="https://via.placeholder.com/50x50" alt="User avatar"/> */}
             </div>
             <div class="content">
               <div class="header">
