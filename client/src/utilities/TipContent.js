@@ -17,6 +17,8 @@ export default function generateContent(dataTip){
             return <TipContent title='Save for later' tip="Log in to save this playlist to Your Library."/>
         case 'follow':
             return <TipContent title='Follow' tip="Log in to follow"/>
+        case 'social':
+            return <TipContent title='Social' tip="Log in to see what your friends think about their favorite songs."/>
         default:
             return null
     }

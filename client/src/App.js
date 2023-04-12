@@ -133,7 +133,7 @@ function App() {
                   <TokenContext.Provider value={token}>
                     <NavItem to='/' exact={true} name='Home' label='Home' />
                     <NavItem to='/search' exact={true} name='Search' label='Search' />
-                    <NavItem to='/social' exact={true} name='Social' label='Social' /> 
+                    <NavItem to='/social' exact={true} name='Social' label='Social' data_tip='social' data_for='tooltip' data_event='click' style={{ pointerEvents: loggedIn? 'auto':'none'}}/> 
                     <NavItem to='/collection' exact={false} name='Library' label='Your Library' data_tip='library' data_for='tooltip' data_event='click' style={{ pointerEvents: loggedIn? 'auto':'none'}}/>
                   </TokenContext.Provider>
                   
