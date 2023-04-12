@@ -69,7 +69,7 @@ export default function PlayListPage({playlists, refreshPlaylist}) {
                     mixRequest()
                         .then(response => {
                             console.log(response)
-                            const {name, description, owner, followers, primary_color, tracks, images, uri} = response;
+                            const {name, description, owner, followers, primary_color, tracks, images, uri} = response.data;
                             
                             setbannerInfo(bannerInfo => ({...bannerInfo, name, description, user:[owner], followers, primary_color, images}))
                             setTracks(tracks.items.map((track) => track.track))
