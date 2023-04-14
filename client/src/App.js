@@ -39,7 +39,9 @@ function App() {
 
     let access_token = null;
     const hash = getHashParams();
-    access_token = hash?.access_token;
+    if (hash.access_token) {
+      access_token = hash.access_token;
+    }
 
     if (!access_token) {
       setStatusMessage(`ERROR: Not logged in.`);
