@@ -45,12 +45,20 @@ export default function GenrePage() {
     // eslint-disable-next-line
     }, [id])
 
+    function renderPlaylist(playlist) {
+        if (playlist) {
+            return <PlayCard ref={lastRef} key={playlist.id} info={playlist} type="playlist"/>;
+        } else {
+            return <></>;
+        }
+    }
+
     return (
         <div className='GenrePage page-content'>
             <PageTitle name={name}/>
             <div className="browseGrid">
                 {playLists.map(playlist => (
-                    <PlayCard ref={lastRef} key={playlist.id} info={playlist} type="playlist"/>
+                    renderPlaylist(playlist)
                 ))}
             </div>
         </div>

@@ -93,7 +93,7 @@ const TrackListItem = React.forwardRef(({ track, styleName, highlight, playConte
 									title="Comment"
 									icon="Comment" 
 									size="x-larger"
-                  onClick={() => setSongCommentTip(true)}
+                  onClick={() => setSongCommentTip(!songCommentTip)}
 								/>
 
       <div className='trackItemDuration'>

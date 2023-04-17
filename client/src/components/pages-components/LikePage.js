@@ -51,7 +51,8 @@ const LikePage = () => {
             return track.uri
         })
         const body = {
-            uris: track_uris
+            uris: track_uris,
+            offset: {uri: trackUri}
         }
 
         if (token) {

@@ -22,7 +22,7 @@ router.get("/:id", async (_req, res) => {
 });
 
 //GET comments by songID
-router.get("/:song", async(_req, res) => {
+router.get("/song/:song", async(_req, res) => {
   try {
     const comments = await Comment.find({"songID":_req.params.song});
     res.send({comments})

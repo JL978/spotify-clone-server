@@ -1,15 +1,16 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 export default function BrowseCard({info}) {
     const {icons, name, id} = info
     const img_link = icons[0].url
     return (
         <div className="browseLinkContainer">
-            <a href={`/genre/${id}`} className='browseLink'>
+            <Link to={`/genre/${id}`} className='browseLink'>
                     <h3 style={titleStyle}>{name}</h3>
                     <div style={overlayStyle}></div>
                     <img loading="lazy" src={img_link} alt="" style={{width:'100%'}}/>
-            </a>
+            </Link>
         </div>
     )
 }

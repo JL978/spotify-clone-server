@@ -910,6 +910,10 @@
     z-index: 3;
     border: #ffff00;
   }
+
+  .annotation-page-content {
+    display: flex;
+  }
   
   .pageContent {
     padding: 16px 0;
@@ -2021,7 +2025,8 @@
   position: relative;
   padding-top: 10px;
   padding-bottom: 10px;
-  height: 8%;
+  /* height: 8%; */
+  height: 3em;
   width: 60%;
   left: 15px;
   top: 10px;
@@ -2030,6 +2035,9 @@
   outline: 1px solid blue;
 }
 
+.lyrics-container {
+  width: 50%;
+}
 /* Comment Viewbox Info */
 
 .song-comment-list{
