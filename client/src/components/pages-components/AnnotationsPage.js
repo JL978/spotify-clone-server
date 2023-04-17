@@ -5,6 +5,8 @@ import reqWithToken from '../../utilities/reqWithToken'
 import LyricsContainer from '../featured-components/LyricsContainer'
 // We need to display annotations here as well, so we would need to
 // import some component that holds the annotations for the song.
+import Comment from '../featured-components/Comment'
+import PageTitle from '../featured-components/PageTitle'
 
 
 export default function AnnotationsPage() {
@@ -15,6 +17,9 @@ export default function AnnotationsPage() {
     // Need a state variable for the text displaying lyrics in the component.
     // The state variable, `currentLyrics` is first set to an empty string.
     const [lyrics, setLyrics] = useState('')
+    const [id, setId] = useState('');
+    const [feed,setFeed] = useState([]);
+    // const loggedIn = useContext(LoginContext);
 
     const cancelSource = axios.CancelToken.source()
     useEffect(() => {
@@ -49,7 +54,9 @@ export default function AnnotationsPage() {
                 console.log("Song info requested")
                 const data = response.data
                 songName = data.item.name
-                // console.log(data.item.name)
+                // console.log(data.item.id)
+                setId(data.item.id)
+                console.log(data.item.id)
                 artists = data.item.artists.map(({name}) => name)
                 // console.log(artists)
                 const info = {
@@ -137,6 +144,7 @@ export default function AnnotationsPage() {
 
 
         
+        
     
         
     /**NOTE: Right now, the code is set up to use the song context to detect when a song has changed. The issue is that
@@ -151,11 +159,59 @@ export default function AnnotationsPage() {
     // console.log(songName)
     // console.log(lyrics)
 
+    useEffect(() => {
+        console.log(`/comments/${id}`);
+
+        if (id.length > 0) {
+            axios.get(`/comments/song/${id}`)
+                .then(response => {
+                const data = response.data;
+                console.log(data);
+                const jsonData = data.comments.map(item => {
+                    const stringifiedObjectId = item._id.toString();
+                    return {
+                    authorID: item.authorID,
+                    songID: item.songID,
+                    commentBody: item.commentBody,
+                    timestamp: item.timestamp,
+                    likes: item.likes,
+                    replies: item.replies,
+                    reshares: item.reshares,
+                    _id: stringifiedObjectId
+                    };
+                })
+                setFeed(jsonData.reverse());
+                console.log(jsonData);
+                }
+            )
+        }
+  
+        
+      },[id])
+
     return (
-        <div className='page-content'>
+        <div className='annotation-page-content'>
             <script type="text/javascript" src="http://tracking.musixmatch.com/t1.0/AMa6hJCIEzn1v8RuOP"></script>
-            <div className='pageContent'>
+            <div className='pageContent lyrics-container'>
                 <LyricsContainer lyrics={lyrics}/>
+            </div>
+            <div className='lyrics-container'>
+                <div className="socialPage">
+                    <PageTitle name="Comments" />
+                    <div className="socialGrid">
+                    {feed.map(comm => 
+                        <Comment
+                            key = {comm._id}
+                            user = {comm.authorID}
+                            commentBody = {comm.commentBody}
+                            timestamp = {comm.timestamp}
+                            replies={comm.replies}
+                            likes={comm.likes}
+                            reshares={comm.reshares}
+                            songID = {comm.songID}
+                        ></Comment>)}
+                    </div>
+                </div>
             </div>
         </div>
     )
