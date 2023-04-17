@@ -27,11 +27,12 @@ router.get("/:id", async (_req, res) => {
 
 //POST annotation
 router.post("/add", async (req, res) => {
-  const { authorID, songID, noteBody, timestamp } = req.body;
+  const { authorID, songID, annotatedText, noteBody, timestamp } = req.body;
   console.log(req.body);
   const annotation = await Annotation.create({
     authorID: authorID,
     songID: songID,
+    annotatedText: annotatedText,
     noteBody: noteBody,
     timestamp: timestamp
   });

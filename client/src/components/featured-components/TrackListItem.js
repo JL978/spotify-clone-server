@@ -1,7 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import Icon from '../icons';
 import msTimeFormat from '../../utilities/utils';
 import { PlayContext } from '../../utilities/context';
+import ControlButton from '../footer-components/ControlButton';
+import SongCommentList from './SongCommentList';
+
+
 
 const TrackListItem = React.forwardRef(({ track, styleName, highlight, playContextTrack }, ref) => {
   const { album, artists, name, explicit, duration_ms, uri } = track;
@@ -10,6 +14,8 @@ const TrackListItem = React.forwardRef(({ track, styleName, highlight, playConte
   const thumbNail = styleName === 'simplify' && album.images.length > 0 ? album.images[album.images.length - 1].url : null;
   const formattedTime = msTimeFormat(duration_ms);
   const simplifyStyle = styleName === 'simplify';
+
+  const [songCommentTip, setSongCommentTip] = useState(false);
 
   const renderThumbnail = () => (
     thumbNail ? (
@@ -74,6 +80,21 @@ const TrackListItem = React.forwardRef(({ track, styleName, highlight, playConte
           {renderTrackInfo()}
         </div>
       </div>
+
+      <div className='trackItemComment'>
+        {songCommentTip && (
+          <SongCommentList 
+            closeTip={() => setSongCommentTip(false)}
+          />
+        )}
+      </div>
+
+      <ControlButton
+									title="Comment"
+									icon="Comment" 
+									size="x-larger"
+                  onClick={() => setSongCommentTip(true)}
+								/>
 
       <div className='trackItemDuration'>
         <div className={`duration ${simplifyStyle ? 'trackMidAlign' : 'trackTopAlign'}`}>

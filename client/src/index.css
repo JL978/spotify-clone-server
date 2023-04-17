@@ -2038,3 +2038,36 @@
 .lyrics-container {
   width: 50%;
 }
+/* Comment Viewbox Info */
+
+.song-comment-list{
+    position: fixed;
+    width: 400px;
+    height: 200px;
+    bottom: 50%;
+    right: 30%;
+    display: none;
+    background: #282828;
+    border-radius: 5px;
+    z-index: 999;
+    box-shadow: 0 4px 12px 4px rgba(0,0,0,.5);
+    display: block;
+    animation: fadeIn 333ms cubic-bezier(.3,0,0,1);
+}
+
+.pill-button-grey2 {
+    background-color: white;
+    border: none;
+    color: black;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 16px;
+    font-weight: bold;
+    right: 5%;
+    bottom: 5%;
+    position: absolute;
+  }
