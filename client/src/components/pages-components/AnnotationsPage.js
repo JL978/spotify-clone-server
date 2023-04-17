@@ -8,7 +8,8 @@ import {
 import reqWithToken from "../../utilities/reqWithToken";
 import LyricsContainer from "../featured-components/LyricsContainer";
 import AddAnnotation from "../featured-components/AddAnnotation";
-
+import Comment from "../featured-components/Comment";
+import PageTitle from "../featured-components/PageTitle";
 
 export default function AnnotationsPage() {
   const token = useContext(TokenContext);
@@ -17,6 +18,9 @@ export default function AnnotationsPage() {
   const [lyrics, setLyrics] = useState("");
   const [annotatedText, setAnnotatedText] = useState("");
   const [annotationTip, setAnnotationTip] = useState(false);
+  const [id, setId] = useState("");
+  const [feed, setFeed] = useState([]);
+  // const loggedIn = useContext(LoginContext);
 
   const cancelSource = axios.CancelToken.source();
   useEffect(() => {
@@ -55,7 +59,9 @@ export default function AnnotationsPage() {
         console.log("Song info requested");
         const data = response.data;
         songName = data.item.name;
-        // console.log(data.item.name)
+        // console.log(data.item.id)
+        setId(data.item.id);
+        console.log(data.item.id);
         artists = data.item.artists.map(({ name }) => name);
         // console.log(artists)
         const info = {
@@ -140,7 +146,7 @@ export default function AnnotationsPage() {
                       );
                       console.log(lyrics);
                     } else {
-                      setLyrics("No Lyrics"); 
+                      setLyrics("No Lyrics");
                       // set error message to fail gracefully
                       setMessage(
                         "Sorry, we couldn't find lyrics for this song"
@@ -176,21 +182,47 @@ export default function AnnotationsPage() {
 
   const openAnnotationTip = () => {
     if (annotationTip === false) {
-      setAnnotationTip(true)
+      setAnnotationTip(true);
     }
-  }
+  };
 
   const setAnnotatedTextCallback = (text) => {
-    setAnnotatedText(text)
-  }
+    setAnnotatedText(text);
+  };
+
+  useEffect(() => {
+    console.log(`/comments/${id}`);
+
+    if (id.length > 0) {
+      axios.get(`/comments/song/${id}`).then((response) => {
+        const data = response.data;
+        console.log(data);
+        const jsonData = data.comments.map((item) => {
+          const stringifiedObjectId = item._id.toString();
+          return {
+            authorID: item.authorID,
+            songID: item.songID,
+            commentBody: item.commentBody,
+            timestamp: item.timestamp,
+            likes: item.likes,
+            replies: item.replies,
+            reshares: item.reshares,
+            _id: stringifiedObjectId,
+          };
+        });
+        setFeed(jsonData.reverse());
+        console.log(jsonData);
+      });
+    }
+  }, [id]);
 
   return (
-    <div className="page-content">
+    <div className="annotation-page-content">
       <script
         type="text/javascript"
         src="http://tracking.musixmatch.com/t1.0/AMa6hJCIEzn1v8RuOP"
       ></script>
-      <div className="pageContent">
+      <div className="pageContent lyrics-container">
         <LyricsContainer
           lyrics={lyrics}
           selectionCallback={setAnnotatedTextCallback}
@@ -205,6 +237,25 @@ export default function AnnotationsPage() {
             />
           )}
         </span>
+      </div>
+      <div className="lyrics-container">
+        <div className="socialPage">
+          <PageTitle name="Comments" />
+          <div className="socialGrid">
+            {feed.map((comm) => (
+              <Comment
+                key={comm._id}
+                user={comm.authorID}
+                commentBody={comm.commentBody}
+                timestamp={comm.timestamp}
+                replies={comm.replies}
+                likes={comm.likes}
+                reshares={comm.reshares}
+                songID={comm.songID}
+              ></Comment>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
