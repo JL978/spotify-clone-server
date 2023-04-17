@@ -1,16 +1,9 @@
 import React from 'react';
 import CommentSongInfo from './CommentSongInfo';
+import millisToTime from '../../utilities/millisToTime';
 
 export default function Comment(props) {
     const {user, time, timestamp, songID, commentBody, replies, likes, reshares} = props;
-
-    function millisToTime(millis) {
-      var minutes = Math.floor(millis / 60000);
-      var seconds = ((millis % 60000) / 1000).toFixed(0);
-      return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
-    }
-
-
 
     return (
           <div class="spotify-tweet-box">

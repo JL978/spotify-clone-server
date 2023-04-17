@@ -8,7 +8,7 @@ import {
 import reqWithToken from "../../utilities/reqWithToken";
 import LyricsContainer from "../featured-components/LyricsContainer";
 import AddAnnotation from "../featured-components/AddAnnotation";
-import Comment from "../featured-components/Comment";
+import Annotation from "../featured-components/Annotation";
 import PageTitle from "../featured-components/PageTitle";
 
 export default function AnnotationsPage() {
@@ -191,22 +191,20 @@ export default function AnnotationsPage() {
   };
 
   useEffect(() => {
-    console.log(`/comments/${id}`);
+    console.log(`/annotations/${id}`);
 
     if (id.length > 0) {
-      axios.get(`/comments/song/${id}`).then((response) => {
+      axios.get(`/annotations/song/${id}`).then((response) => {
         const data = response.data;
         console.log(data);
-        const jsonData = data.comments.map((item) => {
+        const jsonData = data.f_annotation.map((item) => {
           const stringifiedObjectId = item._id.toString();
           return {
             authorID: item.authorID,
             songID: item.songID,
-            commentBody: item.commentBody,
+            noteBody: item.noteBody,
+            annotatedText: item.annotatedText,
             timestamp: item.timestamp,
-            likes: item.likes,
-            replies: item.replies,
-            reshares: item.reshares,
             _id: stringifiedObjectId,
           };
         });
@@ -243,16 +241,14 @@ export default function AnnotationsPage() {
           <PageTitle name="Comments" />
           <div className="socialGrid">
             {feed.map((comm) => (
-              <Comment
+              <Annotation
                 key={comm._id}
                 user={comm.authorID}
-                commentBody={comm.commentBody}
+                noteBody={comm.noteBody}
                 timestamp={comm.timestamp}
-                replies={comm.replies}
-                likes={comm.likes}
-                reshares={comm.reshares}
                 songID={comm.songID}
-              ></Comment>
+                annotatedText={comm.annotatedText}
+              ></Annotation>
             ))}
           </div>
         </div>

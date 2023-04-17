@@ -14,13 +14,22 @@ router.get("/all", async (_req, res) => {
 //GET annotations by ID
 router.get("/:id", async (_req, res) => {
   try {
-    const f_annotation = await Annotations.findById(_req.params.id);
+    const f_annotation = await Annotation.findById(_req.params.id);
     res.send({f_annotation});
   } catch (err) {
     console.error(err);
     console.log(err);
   }
 });
+
+router.get("/song/:song", async(_req, res) => {
+  try {
+    const f_annotation = await Annotation.find({"songID":_req.params.song});
+    res.send({f_annotation})
+  } catch (e) {
+    console.error(e);
+  }
+})
 
 //GET all comments from friends
 //not possible
