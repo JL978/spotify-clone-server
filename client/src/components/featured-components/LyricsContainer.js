@@ -1,10 +1,20 @@
 import React from 'react'
 
-// Lyrics container component. The component receives a `playInfo` prop
-// that contains current track name, artist, and id. 
-const LyricsContainer = ({lyrics}) => {
-    // Return JSX for the component. Will likely need the <div> tag with some react components
-    // sprinkled in. 
+// Lyrics container component. The component displays the lyrics provided to it.
+const LyricsContainer = ({lyrics, selectionCallback, openTip}) => {
+    const onMouseUpCallback = () => {
+        const selectionObject = window.getSelection();
+        // const selectionRange = selectionObject.getRangeAt(0);
+        // console.log(selectionRange);
+        const selectedText = selectionObject.toString();
+        // console.log(`Text selected: ${selectedText}`);
+        selectionCallback(selectedText);
+        if (selectedText === '') {
+            return
+        }
+        openTip();
+    }
+
     return (
         <div className='LyricsContainer'>
             <div className='lyric-container-title'>
@@ -13,13 +23,15 @@ const LyricsContainer = ({lyrics}) => {
                 </h1>
             </div>
             <div className='lyric-container-body'>
-                <h1>
-                    {lyrics}
-                </h1>
+                <span className='lyrics-container-body-wrapper' onMouseUp={onMouseUpCallback}>
+                    <h1>
+                        {lyrics}
+                    </h1>
+                </span>
             </div>
         </div>
+        
     )
 }
 
 export default LyricsContainer
-// **Will need some way to update the lyrics dynamically if the song changes.**

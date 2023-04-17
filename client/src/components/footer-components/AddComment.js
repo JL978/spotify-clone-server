@@ -13,7 +13,7 @@ import reqWithToken from "../../utilities/reqWithToken";
 
 
 
-const AddComment = ({ closeTip, song_id, token}) => {
+const AddComment = ({ closeTip, song_id, token, annotation = false, text = ''}) => {
 	const [songInfo, setSongInfo] = useState({
 		songId: "",
 		timestamp: ""
@@ -137,6 +137,24 @@ const AddComment = ({ closeTip, song_id, token}) => {
 		closeTip();
 	}
 
+	// Special callback to handle annotation submission
+	const handleAnnotationSubmit = event => {
+		console.log(text)
+		const annotationData = {
+			authorID: userInfo,
+			songID: songInfo.songId,
+			annotatedText: text,
+			noteBody: commenttext,
+			timestamp: songInfo.timestamp
+		}
+		console.log(annotationData);
+		axios.post("/annotations/add", annotationData);
+		setMessage(
+			"Annotation Added!"
+		);
+		closeTip();
+	}
+
 
 	return (
 		<div className="add-comment" data-source="inside">
@@ -148,7 +166,7 @@ const AddComment = ({ closeTip, song_id, token}) => {
 					<textarea class="textareacomment" name="freeform" rows="5.5" cols="43" onChange ={handleCommentChange}></textarea>
 				</div>
 				<button class="pill-button-grey" onClick = {closeCommentBox}>Cancel</button>
-				<button class="pill-button-green" onClick = {handleCommentSubmit}>Add</button>
+				<button class="pill-button-green" onClick = {annotation ? handleAnnotationSubmit : handleCommentSubmit}>Add</button>
 			</div>
 		</div>
 	);

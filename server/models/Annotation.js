@@ -9,6 +9,9 @@ const AnnotationSchema = new mongoose.Schema({
         type: "string",
         required: true
     },
+    annotatedText: {
+        type: "string"
+    },
     noteBody: {
         type: "string"
     },
