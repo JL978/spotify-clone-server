@@ -8,7 +8,7 @@ import TrackList from '../featured-components/TrackList'
 
 import {LoginContext, TokenContext, UserContext} from '../../utilities/context'
 import useTokenScroll from '../../utilities/hooks/useTokenScroll'
-import reqWithToken from '../../utilities/reqWithToken'
+import requestWithToken from '../../utilities/requestWithToken';
 import putWithToken from '../../utilities/putWithToken'
 
 
@@ -32,9 +32,7 @@ const LikePage = () => {
 
     useEffect(() => {
         if (token) {
-            const requestPlaylist = reqWithToken('https://api.spotify.com/v1/me/tracks?limit=50', token, source)
-
-            requestPlaylist()
+            requestWithToken('https://api.spotify.com/v1/me/tracks?limit=50', token, source)
                 .then((data) => {
                     const _tracks = data.data.items
                     setTracks(tracks => [...tracks, ..._tracks.map((track) => track.track)])

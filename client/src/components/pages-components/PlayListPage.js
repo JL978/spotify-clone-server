@@ -11,7 +11,7 @@ import {TokenContext, LoginContext, MessageContext, PlayContext} from '../../uti
 import useId from '../../utilities/hooks/useId'
 import useInfiScroll from '../../utilities/hooks/useInfiScroll'
 import putWithToken from '../../utilities/putWithToken'
-import reqWithToken from '../../utilities/reqWithToken'
+import requestWithToken from '../../utilities/requestWithToken'
 
 export default function PlayListPage({playlists, refreshPlaylist}) {
     const id = useId('playlist')
@@ -65,8 +65,7 @@ export default function PlayListPage({playlists, refreshPlaylist}) {
                     setLoading(false)
 
                 } catch (error) {
-                    const mixRequest = reqWithToken(`https://api.spotify.com/v1/playlists/${id}`, token, source);
-                    mixRequest()
+                    requestWithToken(`https://api.spotify.com/v1/playlists/${id}`, token, source)
                         .then(response => {
                             console.log(response)
                             const {name, description, owner, followers, primary_color, tracks, images, uri} = response.data;

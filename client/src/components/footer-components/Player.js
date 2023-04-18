@@ -4,6 +4,7 @@ import React, {
 	useContext,
 	useImperativeHandle,
 	useRef,
+	forwardRef,
 } from "react";
 import axios from "axios";
 
@@ -14,17 +15,14 @@ import ControlButton from "./ControlButton";
 
 import AddComment from "./AddComment";
 
-import reqWithToken from "../../utilities/reqWithToken";
+import requestWithToken from "../../utilities/requestWithToken";
 import msTimeFormat from "../../utilities/utils";
 import putWithToken from "../../utilities/putWithToken";
-import { MessageContext, SongContext } from "../../utilities/context";
+import { MessageContext } from "../../utilities/context";
 import { useHistory } from "react-router-dom";
 
-const Player = React.forwardRef(({ token }, ref) => {
+const Player = forwardRef(({ token }, ref) => {
 	const setMessage = useContext(MessageContext);
-	// Song status that will be used to keep track of when a song has changed and the setter
-	// function that indicates that change.
-	const {song, setSong} = useContext(SongContext)
 	const [playbackState, setPlaybackState] = useState({
 		play: false,
 		shuffle: false,
@@ -171,56 +169,49 @@ const Player = React.forwardRef(({ token }, ref) => {
 		if (timerRef.current) {
 			clearTimeout(timerRef.current);
 		}
-		const requestInfo = reqWithToken(
-			"https://api.spotify.com/v1/me/player",
-			token,
-			source
-		);
 
-		requestInfo()
+		requestWithToken("https://api.spotify.com/v1/me/player", token, source)
 			.then((response) => {
-				console.log(response)
-				if (response.status === 200) {
-					console.log('Song info request status 200')
-					const {
-						repeat_state,
-						shuffle_state,
-						is_playing,
-						progress_ms,
-						item,
-						device,
-					} = response.data;
-					setPlayback(progress_ms / item.duration_ms);
+				switch (response.status) {
+					case 200:
+						console.log('Song info request status 200')
+						const {
+							repeat_state,
+							shuffle_state,
+							is_playing,
+							progress_ms,
+							item,
+							device,
+						} = response.data;
+						setPlayback(progress_ms / item.duration_ms);
 
-					timerRef.current = setTimeout(
-						() => updateState(),
-						item.duration_ms - progress_ms + 10
-					);
+						timerRef.current = setTimeout(
+							() => updateState(),
+							item.duration_ms - progress_ms + 10
+						);
 
-					setVolume(device.volume_percent / 100);
-					setPlaybackState((state) => ({
-						...state,
-						play: is_playing,
-						shuffle: shuffle_state,
-						repeat: repeat_state !== "off",
-						progress: progress_ms,
-						total_time: item.duration_ms,
-					}));
-					setPlayInfo(item);
-					// Toggle the song context to indicate that the song has changed.
-					// This assumes that apiupdate is being called when the song changes.
-					console.log('Song switched')
-					song === 0 ? setSong(1) : setSong(0)
-				} else if (response.status === 204) {
-					setMessage(
-						"Player is not working, select a device to start listening"
-					);
-					setConnectTip(true);
-				} else {
-					console.log(response);
-					// setMessage(
-					// 	`ERROR: server response with ${response}. Player feature is unavailable!`
-					// );
+						setVolume(device.volume_percent / 100);
+						setPlaybackState((state) => ({
+							...state,
+							play: is_playing,
+							shuffle: shuffle_state,
+							repeat: repeat_state !== "off",
+							progress: progress_ms,
+							total_time: item.duration_ms,
+						}));
+						setPlayInfo(item);
+						break;
+					
+					case 204:
+                        setMessage(
+                            "Select a device to start listening"
+                        );
+                        setConnectTip(true);
+                        break;
+				
+					default:
+						console.log(response)
+						break;
 				}
 			})
 			.catch((error) => console.log(error));
@@ -234,9 +225,9 @@ const Player = React.forwardRef(({ token }, ref) => {
 
 	useEffect(() => {
 		if (playbackState.play) {
-		  playbackIntervalRef.current = setInterval(updatePlayback, 500);
+			playbackIntervalRef.current = setInterval(updatePlayback, 500);
 		} else {
-		  clearInterval(playbackIntervalRef.current);
+			clearInterval(playbackIntervalRef.current);
 		}
 	
 		return () => clearInterval(playbackIntervalRef.current);
@@ -258,6 +249,7 @@ const Player = React.forwardRef(({ token }, ref) => {
 					// );
 					console.log(response.status);
 				} else {
+					console.log(response.status)
 					setPlaybackState((state) => ({ ...state, play: !state.play }));
 					updateState();
 				}

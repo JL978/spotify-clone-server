@@ -1,17 +1,9 @@
 import React, { useEffect, useContext, useState } from "react";
 import axios from "axios";
 
-//import ConnectDevicesItem from "./ConnectDevicesItem";
-
-//import reqWithToken from "../../utilities/reqWithToken";
-//import putWithToken from "../../utilities/putWithToken";
-
 import { MessageContext } from "../../utilities/context";
-// import { UserContext } from '../../utilities/context';
-import reqWithToken from "../../utilities/reqWithToken";
 
-
-
+import requestWithToken from "../../utilities/requestWithToken";
 
 const AddComment = ({ closeTip, song_id, token, annotation = false, text = ''}) => {
 	const [songInfo, setSongInfo] = useState({
@@ -19,33 +11,14 @@ const AddComment = ({ closeTip, song_id, token, annotation = false, text = ''}) 
 		timestamp: ""
 	});
 	const [userInfo, setUserInfo] = useState("");
-	// const user = useContext(UserContext);
 	const setMessage = useContext(MessageContext);
 	const [commenttext, setCommentText] = useState("");
-	
-	// // can't post comments without being logged in
-	// if (!user) {
-	// 	setMessage("Please Log In to use this feature");
-	// 	return null;
-	// }
-
-	// const {id} = user;
-	// console.log(user)
-
-	
-	
-	
-
 	
 	useEffect(() => {
 
 		const source = axios.CancelToken.source();
-		const findSongInfo = reqWithToken(
-		"https://api.spotify.com/v1/me/player/currently-playing",
-		token,
-		source)
-		const findUserInfo = reqWithToken("https://api.spotify.com/v1/me",token,source)
-		findSongInfo()
+
+		requestWithToken("https://api.spotify.com/v1/me/player/currently-playing", token, source)
 			.then((response) => {
 				
 				// const time_stamp = response.timestamp;
@@ -63,7 +36,8 @@ const AddComment = ({ closeTip, song_id, token, annotation = false, text = ''}) 
 				// source.cancel();
 			})
 			.catch((error) => console.log(error));
-		findUserInfo()
+
+		requestWithToken("https://api.spotify.com/v1/me", token, source)
 			.then((response) => {
 				
 				const {id} = response.data

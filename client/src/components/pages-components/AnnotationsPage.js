@@ -5,7 +5,7 @@ import {
   SongContext,
   TokenContext,
 } from "../../utilities/context";
-import reqWithToken from "../../utilities/reqWithToken";
+import requestWithToken from "../../utilities/requestWithToken";
 import LyricsContainer from "../featured-components/LyricsContainer";
 import AddAnnotation from "../featured-components/AddAnnotation";
 import Annotation from "../featured-components/Annotation";
@@ -49,12 +49,7 @@ export default function AnnotationsPage() {
       return result;
     };
 
-    const requestSongInfo = reqWithToken(
-      "https://api.spotify.com/v1/me/player/currently-playing",
-      token,
-      cancelSource
-    );
-    requestSongInfo()
+    requestWithToken("https://api.spotify.com/v1/me/player/currently-playing", token, cancelSource)
       .then((response) => {
         console.log("Song info requested");
         const data = response.data;

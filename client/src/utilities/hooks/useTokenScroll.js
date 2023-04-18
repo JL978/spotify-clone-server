@@ -1,6 +1,6 @@
 // eslint-disable-next-line
 import React, { useState, useRef, useCallback } from 'react';
-import reqWithToken from '../reqWithToken'
+import requestWithToken from '../requestWithToken';
 
 function useTokenScroll(setList, token, source){
     const [next, setNext] = useState(null) 
@@ -10,9 +10,7 @@ function useTokenScroll(setList, token, source){
         if (observer.current) observer.current.disconnect()
         observer.current = new IntersectionObserver(entries => {
             if(entries[0].isIntersecting && next){
-                console.log('hi')
-                const makeRequest = reqWithToken(next, token, source)
-                makeRequest()
+                requestWithToken(next, token, source)
                     .then(response => {
                         const data = response.data
                         const resultList = data.items.map(track => track.track)

@@ -5,7 +5,7 @@ import axios from 'axios'
 import makeAxiosRequest from '../../utilities/makeAxiosRequest'
 import getLocale from '../../utilities/locale'
 import useId from '../../utilities/hooks/useId'
-import reqWithToken from '../../utilities/reqWithToken'
+import requestWithToken from '../../utilities/requestWithToken'
 import putWithToken from '../../utilities/putWithToken'
 import {TokenContext, LoginContext, MessageContext, PlayContext} from '../../utilities/context'
 
@@ -64,8 +64,7 @@ export default function ArtistPage() {
         const [relatedSource, requestRelated] = makeAxiosRequest(`https://api.spotify.com/v1/artists/${id}/related-artists`)
 
         if (loggedIn && id){
-            const requestFollow = reqWithToken(`https://api.spotify.com/v1/me/following/contains?type=artist&ids=${id}`, token, source)
-            requestFollow()
+            requestWithToken(`https://api.spotify.com/v1/me/following/contains?type=artist&ids=${id}`, token, source)
                 .then(response => {
                     setFollow(response.data[0])
                 })

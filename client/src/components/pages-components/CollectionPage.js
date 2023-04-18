@@ -5,7 +5,6 @@ import axios from 'axios'
 import CollectionRow from '../featured-components/CollectionRow'
 
 import {TokenContext} from '../../utilities/context'
-// import reqWithToken from '../../utilities/reqWithToken'
 
 const CollectionPage = ({playlists}) => {
     const [artists, setArtists] = useState([])

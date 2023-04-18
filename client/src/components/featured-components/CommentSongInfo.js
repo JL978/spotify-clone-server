@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 
 import { TokenContext } from '../../utilities/context';
-import reqWithToken from '../../utilities/reqWithToken';
+import requestWithToken from '../../utilities/requestWithToken';
 import axios from "axios";
 
 export default function CommentSongInfo({songID}) {
@@ -14,20 +14,15 @@ export default function CommentSongInfo({songID}) {
 
     useEffect(() => {
         const source = axios.CancelToken.source();
-        const fetchSongData = reqWithToken(
-            `https://api.spotify.com/v1/tracks/${songID}`,
-            token,
-            source
-        )
         
-        fetchSongData()
-        .then((response) => {
-            console.log(response.data);
-            const artist_name = response.data.artists[0].name;
-            const album_cover = response.data.album.images[2].url;
-            const track_name = response.data.name;
-            setSongData({...songData, artist: artist_name, album: album_cover, track: track_name});
-          })
+        requestWithToken(`https://api.spotify.com/v1/tracks/${songID}`, token, source)
+            .then((response) => {
+                console.log(response.data);
+                const artist_name = response.data.artists[0].name;
+                const album_cover = response.data.album.images[2].url;
+                const track_name = response.data.name;
+                setSongData({...songData, artist: artist_name, album: album_cover, track: track_name});
+            })
     },[])
 
     return (
