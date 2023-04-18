@@ -240,8 +240,7 @@ const Player = forwardRef(({ token }, ref) => {
 			? "https://api.spotify.com/v1/me/player/pause"
 			: "https://api.spotify.com/v1/me/player/play";
 
-		const request = putWithToken(url, token, source);
-		request()
+		putWithToken(url, token, source)
 			.then((response) => {
 				if (response.status !== 204) {
 					// setMessage(
@@ -258,12 +257,7 @@ const Player = forwardRef(({ token }, ref) => {
 	};
 
 	const toggleShuffle = () => {
-		const request = putWithToken(
-			`https://api.spotify.com/v1/me/player/shuffle?state=${!playbackState.shuffle}`,
-			token,
-			source
-		);
-		request()
+		putWithToken(`https://api.spotify.com/v1/me/player/shuffle?state=${!playbackState.shuffle}`, token, source)
 			.then((response) => {
 				if (response.status === 204) {
 					setMessage(`Shuffle ${playbackState.shuffle ? "Off" : "On"}`);
@@ -286,8 +280,7 @@ const Player = forwardRef(({ token }, ref) => {
 			? "https://api.spotify.com/v1/me/player/repeat?state=off"
 			: "https://api.spotify.com/v1/me/player/repeat?state=track";
 
-		const request = putWithToken(url, token, source);
-		request()
+		putWithToken(url, token, source)
 			.then((response) => {
 				if (response.status === 204) {
 					setMessage(`Repeat Track ${playbackState.repeat ? "Off" : "On"}`);
@@ -306,14 +299,7 @@ const Player = forwardRef(({ token }, ref) => {
 
 	const skipNext = () => {
 		console.log('Skip button pressed')
-		const request = putWithToken(
-			"https://api.spotify.com/v1/me/player/next",
-			token,
-			source,
-			{},
-			"POST"
-		);
-		request()
+		putWithToken("https://api.spotify.com/v1/me/player/next", token, source, {}, "POST")
 			.then((response) => {
 				if (response.status !== 204) {
 					console.log('Server error')
@@ -329,14 +315,7 @@ const Player = forwardRef(({ token }, ref) => {
 	};
 
 	const skipPrev = () => {
-		const request = putWithToken(
-			"https://api.spotify.com/v1/me/player/previous",
-			token,
-			source,
-			{},
-			"POST"
-		);
-		request()
+		putWithToken("https://api.spotify.com/v1/me/player/previous", token, source, {}, "POST")
 			.then((response) => {
 				if (response.status !== 204) {
 					setMessage(
@@ -351,13 +330,7 @@ const Player = forwardRef(({ token }, ref) => {
 
 	const seekPlayback = (ratio) => {
 		const time = Math.round(ratio * playbackState.total_time);
-		const request = putWithToken(
-			`https://api.spotify.com/v1/me/player/seek?position_ms=${time}`,
-			token,
-			source,
-			{}
-		);
-		request()
+		putWithToken(`https://api.spotify.com/v1/me/player/seek?position_ms=${time}`, token, source, {})
 			.then((response) => {
 				if (response.status === 204) {
 					setPlayback(ratio);
@@ -381,13 +354,7 @@ const Player = forwardRef(({ token }, ref) => {
 
 	const seekVolume = (ratio) => {
 		const integer = Math.round(ratio * 100);
-		const request = putWithToken(
-			`https://api.spotify.com/v1/me/player/volume?volume_percent=${integer}`,
-			token,
-			source,
-			null
-		);
-		request()
+		putWithToken(`https://api.spotify.com/v1/me/player/volume?volume_percent=${integer}`, token, source, {})
 			.then((response) => {
 				if (response.status === 204) {
 					setVolume(ratio);
@@ -397,7 +364,10 @@ const Player = forwardRef(({ token }, ref) => {
 					);
 				}
 			})
-			.catch((error) => setMessage(`ERROR: volume ${error}`));
+			.catch((error) => {
+				setMessage(`ERROR: volume ${error}`);
+				console.log(error);
+			});
 	};
 
 	// Redirects to the annotations page

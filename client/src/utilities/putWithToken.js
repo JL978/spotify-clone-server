@@ -1,29 +1,27 @@
-import axios from 'axios'
+import axios from 'axios';
 
-const putWithToken = (endpoint, access_token, cancelSource, data, method='PUT') =>{
-    const request = async () => {
-        const cancelToken = cancelSource.token
-        const options = {
-            url: endpoint,
-            method,
-            headers: { 
-                'Authorization': 'Bearer ' + access_token,
-                'Content-Type': 'application/json' },
-            data,
-            cancelToken
-        };
+const putWithToken = async (endpoint, access_token, source, data, method = 'PUT') => {
+    const cancelToken = source ? source.token : null;
+    const options = {
+        url: endpoint,
+        method,
+        headers: {
+            'Authorization': 'Bearer ' + access_token,
+            'Content-Type': 'application/json',
+        },
+        data,
+        cancelToken,
+    };
+  
+    try {
+        const result = await axios(options);
+        return result;
 
-        let result
-        try{
-            result = await axios(options)
-        }catch (err){
-            if (axios.isCancel(err)) return
-            throw err
-        }
-        return result 
+    } catch (error) {
+        if (axios.isCancel(error)) return;
+        throw error;
+
     }
-    
-    return request
-}
-
-export default putWithToken
+  };
+  
+export default putWithToken;

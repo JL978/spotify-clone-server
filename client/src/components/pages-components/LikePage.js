@@ -54,11 +54,8 @@ const LikePage = () => {
         }
 
         if (token) {
-            const request = putWithToken(`https://api.spotify.com/v1/me/player/play`, token, source, body)
-            request()
-                .then(response => {
-                    console.log(response)
-                })
+            putWithToken(`https://api.spotify.com/v1/me/player/play`, token, source, body)
+                .then(response => console.log(response))
                 .catch(error => console.log(error))
         }
 
@@ -70,11 +67,8 @@ const LikePage = () => {
             uris: [uri]
         }
         if (token) {
-            const request = putWithToken(`https://api.spotify.com/v1/me/player/play`, token, source, body)
-            request()
-                .then(response => {
-                    console.log(response)
-                })
+            putWithToken(`https://api.spotify.com/v1/me/player/play`, token, source, body)
+                .then(response => console.log(response))
                 .catch(error => console.log(error))
         }
         

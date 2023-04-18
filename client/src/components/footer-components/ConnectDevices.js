@@ -33,15 +33,10 @@ const ConnectDevices = ({ token, closeTip }) => {
 	};
 
 	const switchDevice = (e) => {
+		console.log(e);
 		const id = e.currentTarget.dataset.id;
 		const data = { device_ids: [id] };
-		const reqTransfer = putWithToken(
-			"https://api.spotify.com/v1/me/player",
-			token,
-			source,
-			data
-		);
-		reqTransfer()
+		putWithToken("https://api.spotify.com/v1/me/player", token, source, data)
 			.then((response) => {
 				if (response.status === 204) {
 					closeTip();

@@ -90,8 +90,7 @@ export default function UserPage({query, setMessage}) {
 
     const followUser = () => {
         if (loggedIn) {
-            const request = putWithToken(`https://api.spotify.com/v1/me/following?type=user&ids=${id}`, token, source, {}, follow? 'DELETE':'PUT')
-            request()
+            putWithToken(`https://api.spotify.com/v1/me/following?type=user&ids=${id}`, token, source, {}, follow? 'DELETE':'PUT')
                 .then(response => {
                     if (response.status === 204){
                         if (follow){

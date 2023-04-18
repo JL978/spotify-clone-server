@@ -105,8 +105,7 @@ export default function PlayListPage({playlists, refreshPlaylist}) {
     }, [id, loggedIn])
 
     const followPlaylist = () => {
-        const followReq = putWithToken(`https://api.spotify.com/v1/playlists/${id}/followers`, token, source, {}, like?'DELETE':'PUT')
-        followReq()
+        putWithToken(`https://api.spotify.com/v1/playlists/${id}/followers`, token, source, {}, like?'DELETE':'PUT')
             .then(response => {
                 if (response.status === 200){
                     if(like){
@@ -127,8 +126,7 @@ export default function PlayListPage({playlists, refreshPlaylist}) {
         const body = {
             context_uri: uri
         }
-        const request = putWithToken(`https://api.spotify.com/v1/me/player/play`, token, source, body)
-        request()
+        putWithToken(`https://api.spotify.com/v1/me/player/play`, token, source, body)
             .then(response => {
                 if (response.status === 204){
                     setTimeout(() => updatePlayer(), 500)
@@ -144,8 +142,7 @@ export default function PlayListPage({playlists, refreshPlaylist}) {
             context_uri: uri,
             offset: {uri: trackUri}
         }
-        const request = putWithToken(`https://api.spotify.com/v1/me/player/play`, token, source, body)
-        request()
+        putWithToken(`https://api.spotify.com/v1/me/player/play`, token, source, body)
             .then(response => {
                 if (response.status === 204){
                     setTimeout(() => updatePlayer(), 500)

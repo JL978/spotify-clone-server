@@ -14,69 +14,20 @@ const AddComment = ({ closeTip, song_id, token, annotation = false, text = ''}) 
 	const setMessage = useContext(MessageContext);
 	const [commenttext, setCommentText] = useState("");
 	
+	/*
+	 * Get the song that's currently playing and the id of the user making the comment.
+	 */
 	useEffect(() => {
-
 		const source = axios.CancelToken.source();
-
+		
 		requestWithToken("https://api.spotify.com/v1/me/player/currently-playing", token, source)
-			.then((response) => {
-				
-				// const time_stamp = response.timestamp;
-				const {progress_ms, item} = response.data;
-				console.log(item)
-				const song_id = item.id;
-				// const duration = item.duration_ms;
-				if (true) {
-					setSongInfo({...songInfo, songId:song_id, timestamp: progress_ms});
-				} 
-				// else {
-				// 	setSongInfo({...songInfo, songId:song_id, timestamp: 0});
-				// }
-				
-				// source.cancel();
-			})
+			.then(({ data: { progress_ms, item: { id } } }) => setSongInfo({ ...songInfo, songId: id, timestamp: progress_ms }))
 			.catch((error) => console.log(error));
 
 		requestWithToken("https://api.spotify.com/v1/me", token, source)
-			.then((response) => {
-				
-				const {id} = response.data
-				setUserInfo(id);
-				// source.cancel();
-				
-			})
+			.then(({ data: { id } }) => setUserInfo(id))
 			.catch((error) => console.log(error));
 
-		
-
-	// 	// const exitTarget = document.getElementsByClassName("pill-button-grey");
-	// 	// exitTarget[0].addEventListener("click", () => {
-	// 	// 	closeTip();
-	// 	// });
-		
-		
-	// 	//close comment input box
-	// 	// const addtarget = document.getElementsByClassName("pill-button-green");
-	// 	// addtarget[0].addEventListener("click", () => {
-	// 	// 	// console.log(id);
-	// 	// 	const commentData = {
-	// 	// 		//todo: find userid rn
-	// 	// 		authorID: "",
-	// 	// 		songID: id,
-	// 	// 		commentBody: commenttext,
-	// 	// 		timestamp: musictime
-	// 	// 	}
-	// 	// 	axios.post("/comments/add",commentData);
-	// 	// 	setMessage(
-	// 	// 		"Comment Added!"
-	// 	// 	);
-	// 	// 	closeTip();
-	// 	// });
-
-	// 	// return () => {
-	// 	// 	source.cancel();
-	// 	// };
-	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const handleCommentChange = event => {
@@ -89,12 +40,7 @@ const AddComment = ({ closeTip, song_id, token, annotation = false, text = ''}) 
 	}
 
 	const handleCommentSubmit = event => {
-		
-		// const axConfig = {
-
-		// }
 		const commentData = {
-			//todo: find userid rn
 			authorID: userInfo,
 			songID: songInfo.songId,
 			commentBody: commenttext,

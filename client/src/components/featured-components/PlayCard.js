@@ -45,8 +45,8 @@ const PlayCard = React.forwardRef(({info, type}, ref) => {
                     context_uri: uri
                 }
             }
-            const request = putWithToken(`https://api.spotify.com/v1/me/player/play`, token, source, body)
-            request()
+
+            putWithToken(`https://api.spotify.com/v1/me/player/play`, token, source, body)
                 .then(response => {
                     if (response.status === 204){
                         setTimeout(() => updatePlayer(), 1000)

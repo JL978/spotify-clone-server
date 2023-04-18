@@ -125,8 +125,7 @@ export default function ArtistPage() {
 
     const followArtist = () => {
         if (loggedIn) {
-            const request = putWithToken(`https://api.spotify.com/v1/me/following?type=artist&ids=${id}`, token, source, {}, follow? 'DELETE':'PUT')
-            request()
+            putWithToken(`https://api.spotify.com/v1/me/following?type=artist&ids=${id}`, token, source, {}, follow? 'DELETE':'PUT')
                 .then(response => {
                     if (response.status === 204){
                         if (follow){
@@ -147,8 +146,8 @@ export default function ArtistPage() {
         const body = {
             context_uri: uri
         }
-        const request = putWithToken(`https://api.spotify.com/v1/me/player/play`, token, source, body)
-        request()
+
+        putWithToken(`https://api.spotify.com/v1/me/player/play`, token, source, body)
             .then(response => {
                 if (response.status === 204){
                     setTimeout(() => setPlay(), 500)
@@ -163,8 +162,7 @@ export default function ArtistPage() {
         const body = {
             uris: [trackUri]
         }
-        const request = putWithToken(`https://api.spotify.com/v1/me/player/play`, token, source, body)
-        request()
+        putWithToken(`https://api.spotify.com/v1/me/player/play`, token, source, body)
             .then(response => {
                 if (response.status === 204){
                     setTimeout(() => setPlay(), 500)
