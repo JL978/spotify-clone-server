@@ -1741,10 +1741,12 @@
   
   .avatar {
     margin-right: 16px;
-    width: 75px;
-    height: 75px;
+    margin-left: 16px;
+    /* width: 75px;
+    height: 75px; */
     overflow: hidden;
-    border-radius: 50%;
+    /* border-radius: 50%; */
+    margin-top: 2.5em;
     position: relative;
   }
   

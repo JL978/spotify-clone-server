@@ -6,14 +6,16 @@ export default function Annotation(props) {
 
     return (
           <div class="spotify-tweet-box">
-            <div class="avatar"></div>
+            <div class="avatar">
+                <span class="timestamp">@{millisToTime(timestamp)}</span>
+            </div>
             <div class="content">
                 <div class="header">
                     <span class="username">{user}</span>
                     <span class="time">{time}</span>
                 </div>
                 <div class="message">
-                    <span class="timestamp">@{millisToTime(timestamp)}</span>
+                    
                     <h3>{noteBody}</h3>
                     <i>{annotatedText}</i>
                     
