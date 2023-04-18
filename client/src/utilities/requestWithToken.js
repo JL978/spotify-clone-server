@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const requestWithToken = async (endpoint, access_token, source) => {
-    const cancelToken = source?.token;
+    const cancelToken = source ? source.token : null;
     const options = {
         url: endpoint,
         method: 'GET',
@@ -14,7 +14,7 @@ const requestWithToken = async (endpoint, access_token, source) => {
 
     try {
         const result = await axios(options);
-        return result.data;
+        return result;
 
     } catch (error) {
         if (axios.isCancel(error)) {
