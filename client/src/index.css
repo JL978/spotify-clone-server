@@ -302,7 +302,7 @@
   }
   
   .extra-controls {
-    width: 180px;
+    /* width: 180px; */
     display: flex;
     align-items: center;
   }
@@ -2073,3 +2073,7 @@
     bottom: 5%;
     position: absolute;
   }
+
+.social-features {
+  display: flex;
+}
