@@ -6,7 +6,6 @@ import React, {
 	useRef,
 } from "react";
 import axios from "axios";
-import Heartbeat from "react-heartbeat";
 
 import ProgressBar from "./ProgressBar";
 import NowPlaying from "./NowPlaying";
@@ -51,6 +50,7 @@ const Player = React.forwardRef(({ token }, ref) => {
 	});
 
 	const timerRef = useRef(null);
+	const playbackIntervalRef = useRef(null);
 	let player = useRef(null);
 
 	useEffect(() => {
@@ -62,6 +62,7 @@ const Player = React.forwardRef(({ token }, ref) => {
 		return () => {
 			source.cancel();
 			clearTimeout(timerRef.current);
+			clearInterval(playbackIntervalRef.current);
 			player.disconnect();
 		};
 		// eslint-disable-next-line
@@ -230,6 +231,16 @@ const Player = React.forwardRef(({ token }, ref) => {
 		setPlayback((playback) => playback + interval);
 		setPlaybackState((state) => ({ ...state, progress: state.progress + 500 }));
 	};
+
+	useEffect(() => {
+		if (playbackState.play) {
+		  playbackIntervalRef.current = setInterval(updatePlayback, 500);
+		} else {
+		  clearInterval(playbackIntervalRef.current);
+		}
+	
+		return () => clearInterval(playbackIntervalRef.current);
+	  }, [playbackState.play]);
 
 	const source = axios.CancelToken.source();
 
@@ -414,10 +425,6 @@ const Player = React.forwardRef(({ token }, ref) => {
 
 	return (
 		<>
-			{/* {playbackState.play ? null:<Heartbeat heartbeatFunction={updateState} heartbeatInterval={10000}/>} */}
-			{playbackState.play ? (
-				<Heartbeat heartbeatFunction={updatePlayback} heartbeatInterval={500} />
-			) : null}
 			<div className="player">
 				<div className="player-left">
 					<NowPlaying playInfo={playInfo} />
