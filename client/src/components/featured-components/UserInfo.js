@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 
 import { UserContext } from '../../utilities/context';
+import { Link } from 'react-router-dom';
 
 const UserInfoOptions = ({ id, logout }) => (
     <ul className="UserInfoOptions" style={{ display: 'block' }}>
@@ -15,7 +16,7 @@ const UserInfoOptions = ({ id, logout }) => (
             </a>
         </li>
         <li>
-            <a href={`/user/${id}`}>Profile</a>
+            <Link to={`/user/${id}`}>Profile</Link>
         </li>
         <li>
             <button onClick={logout}>Log out</button>
