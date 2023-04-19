@@ -470,7 +470,11 @@ const Player = forwardRef(({ token }, ref) => {
 										title="Annotations"
 										icon="Annotation"
 										size="x-larger"
-										onClick={routeChangeAnnotations}
+										onClick={() => {
+											if (playInfo.name !== "") {
+												routeChangeAnnotations()
+											}
+										}}
 									/>
 							</span>
 
