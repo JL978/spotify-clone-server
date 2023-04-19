@@ -1,9 +1,10 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 //Spotify icon logo with letter in svg format
 export default function Logo() {
     return (
-        <a href="/" className="logo-link no-outline">
+        <Link to={"/"} className="logo-link no-outline">
             <div className='logo'>
                 <svg viewBox="0 0 1134 340" className="spotify-logo">
                     <title>Spotify</title>
@@ -40,6 +41,6 @@ export default function Logo() {
                     4 3s-2 3-4 3h-4v-6h4z"></path>
                 </svg>
             </div>
-        </a>
+        </Link>
     )
 }
