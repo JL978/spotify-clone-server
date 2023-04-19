@@ -1,19 +1,21 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Icon from '../icons'
-import {NavLink} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
-const FeaturedItem = ({label, loggedIn}) => {
-    return (
-        <div className='featured-item' style={{cursor: 'pointer'}} data-tip='list' data-for='tooltip' data-event='click'>
-            <NavLink exact to="/tracks" className='featured-item-link' style={{ pointerEvents: loggedIn? 'auto':'none'}} activeStyle={{opacity:'1'}}>
-                <div className="playlist-icon">
-                    <Icon name='Like' />
-                </div>
-                <span className="featured-label">{label}</span>
-            </NavLink>
-        </div>
-    );
+class FeaturedItem extends Component {
+    render() {
+        const { exact, to, label } = this.props;
+        return (
+                <Link exact={exact} to={to} className='featured-item-link' activeClassName="activeMainNav" style={this.props.style}>
+                    <div className="playlist-icon">
+                        <Icon name='Like' />
+                    </div>
+                    <span className="featured-label">{label}</span>
+                </Link>
+        );
+    }
 }
 
 export default FeaturedItem;
+
 

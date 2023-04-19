@@ -142,7 +142,8 @@ function App() {
                 </NavList>
                 <PlayLists 
                   top={<FeaturedPlaylist>
-                          <FeaturedItem label='Liked Songs' loggedIn={loggedIn} />
+                          {/* <FeaturedItem label='Liked Songs' loggedIn={loggedIn} /> */}
+                          <FeaturedItem to='/tracks' exact={true} name='Liked Songs' label='Liked Songs' data_event='click' style={{ pointerEvents: loggedIn? 'auto':'none'}}/>
                         </FeaturedPlaylist>}
                   bottom={<OtherPlaylist playlists={playlists}/>}
                 />
