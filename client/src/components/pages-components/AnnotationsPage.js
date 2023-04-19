@@ -24,157 +24,62 @@ export default function AnnotationsPage() {
 
   const cancelSource = axios.CancelToken.source();
   useEffect(() => {
-    console.log("useEffect rendering");
-    // Get the info on the curretly-playing song
     let songName = "";
-    let artists = [];
-
-    const apikey = "d6c8b83bfc21e9bb13c124be7dc6062b"; // apikey for musixmatch requests
-    const track_search_base_url = "http://localhost:3001/api/track-search?";
-    const lyrics_search_base_url = "http://localhost:3002/api/lyrics-search?";
-    // Function to make axios requests to musixMatch
+    const track_search_base_url = "http://localhost:4000/api/track-search?";
+    const lyrics_search_base_url = "http://localhost:4000/api/lyrics-search?";
+    
     const musixMatchRequest = async (url) => {
-      let result;
       try {
-        console.log("Making API request to localhost");
-        result = await axios.get(url);
-        console.log(result);
+        const result = await axios.get(url);
+        return result;
       } catch (err) {
-        console.log(err);
         setMessage(err.message);
-        // THROW MUSIXMATCH ERROR
         return err;
       }
-
-      return result;
     };
-
-    requestWithToken("https://api.spotify.com/v1/me/player/currently-playing", token, cancelSource)
-      .then((response) => {
-        console.log("Song info requested");
+  
+    const getSongInfo = async () => {
+      try {
+        const response = await requestWithToken("https://api.spotify.com/v1/me/player/currently-playing", token, cancelSource);
         const data = response.data;
         songName = data.item.name;
-        // console.log(data.item.id)
         setId(data.item.id);
-        console.log(data.item.id);
-        artists = data.item.artists.map(({ name }) => name);
-        // console.log(artists)
-        const info = {
-          songName: songName,
-          artists: artists,
-        };
-        console.log(info);
-        return info;
-      })
-      .catch((error) => {
-        console.log("Error getting song info");
-        setMessage(error.message);
-      })
-      .then((info) => {
-        // console.log(info.songName)
-        // console.log(info.artists)
-        // Append the search params. We take the first artist in the list of artists, assuming that the first is the primary artist.
-        const search_params = "artist=".concat(
-          info.artists[0],
-          "&track=",
-          info.songName,
-          "&apikey=",
-          apikey
-        );
-        // console.log(search_params)
-
-        // Use axios to make a musixmatch api call to search for the musixmatch track_id.
+        const artists = data.item.artists.map(({ name }) => name);
+        const search_params = "artist=".concat(artists[0], "&track=", songName);
         const search_call = track_search_base_url.concat(search_params);
-        console.log(search_call);
-        musixMatchRequest(search_call)
-          .then((response) => {
-            let track_ids = [];
-            console.log(response);
-            if (response.status === 200) {
-              // set track_id to track_id returned from the response
-              console.log(response.data.message.body.track_list);
-              track_ids = response.data.message.body.track_list.map(
-                (track) => track.track.track_id
-              );
-              console.log(track_ids);
-              console.log(track_ids);
-            } else {
-              setLyrics(""); // Set lyrics to blank
-              // set error message to fail gracefully
-              setMessage(
-                `Sorry, we couldn't find lyrics for this song:${songName}. No track id.(${response.status})`
-              );
-            }
-
-            return track_ids;
-          })
-          .then((track_ids) => {
-            // Only search for lyrics if we were able to obtain the musixmatch track_id
-            console.log(track_ids);
-            let num_track_ids = track_ids.length;
-            console.log(num_track_ids);
-            if (num_track_ids > 0) {
-              console.log("Searching for track lyrics");
-              // Use axios to make a musixmatch api call to search for the musixmatch lyrics for the given
-              // track_id.
-              for (const track_id of track_ids) {
-                console.log(`checking track id ${track_id}`);
-                const lyrics_params = "track_id=".concat(
-                  track_id,
-                  "&apikey=",
-                  apikey
-                );
-                const lyrics_call =
-                  lyrics_search_base_url.concat(lyrics_params);
-                musixMatchRequest(lyrics_call)
-                  .then((response) => {
-                    if (
-                      response.status === 200 &&
-                      response.data.message.header.status_code !== 404
-                    ) {
-                      console.log("got lyrics");
-                      console.log(response.data);
-                      setLyrics(
-                        "\n".concat(
-                          response.data.message.body.lyrics.lyrics_body
-                        )
-                      );
-                      console.log(lyrics);
-                    } else {
-                      setLyrics("No Lyrics");
-                      // set error message to fail gracefully
-                      setMessage(
-                        "Sorry, we couldn't find lyrics for this song"
-                      );
-                    }
-                  })
-                  .catch((err) => {
-                    setLyrics("No Lyrics");
-                    // set error message to fail gracefully
-                    setMessage(
-                      `Sorry, we couldn't find lyrics for this song: ${err}`
-                    );
-                  });
-                if (lyrics !== "No Lyrics") {
-                  break;
-                }
-              }
-            } else {
-              console.log(
-                `Not searching for track lyrics. ${track_ids.length}`
-              );
-            }
-          });
-      })
-      .catch((err) => {
-        // Just show error message for now, but eventaually add an error handler
-        //**TODO: Add error handler to handle errors from different steps in the promise chain. */
-        setMessage(`general error: ${err}`);
-      });
-      // eslint-disable-next-line
+        const responseTrack = await musixMatchRequest(search_call);
+        let track_ids = [];
+        if (responseTrack.status === 200) {
+          track_ids = responseTrack.data.message.body.track_list.map((track) => track.track.track_id);
+        } else {
+          setLyrics("");
+          setMessage(`Sorry, we couldn't find lyrics for this song:${songName}. No track id.(${responseTrack.status})`);
+          return;
+        }
+        let foundLyrics = false;
+        for (const track_id of track_ids) {
+          const lyrics_params = "track_id=".concat(track_id);
+          const lyrics_call = lyrics_search_base_url.concat(lyrics_params);
+          const responseLyrics = await musixMatchRequest(lyrics_call);
+          if (responseLyrics.status === 200 && responseLyrics.data.message.header.status_code !== 404) {
+            setLyrics("\n".concat(responseLyrics.data.message.body.lyrics.lyrics_body));
+            foundLyrics = true;
+            break;
+          }
+        }
+        if (!foundLyrics) {
+          setLyrics("No Lyrics");
+          setMessage("Sorry, we couldn't find lyrics for this song");
+        }
+      } catch (error) {
+        setMessage(error.message);
+      }
+    };
+  
+    console.log("useEffect rendering");
+    getSongInfo();
+    // eslint-disable-next-line
   }, [song, token]);
-  // console.log(songName)
-  // console.log(lyrics)
 
   const openAnnotationTip = () => {
     if (annotationTip === false) {

@@ -5,6 +5,7 @@ if (process.env.NODE_ENV !== "production") {
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
 const db_uri = process.env.MY_MONGO_URI;
+const musixmatch = process.env.MUSIXMATCH;
 
 const { client_auth, authed_header } = require("./utils/client-auth");
 const random_string = require("./utils/random");
@@ -219,47 +220,30 @@ app.get("/logout", (req, res) => {
 
 // Handles proxy requests for tracks. 
 app.get("/api/track-search", async (req, res) => {
-  const track = req.query.track;
-  const artist = req.query.artist;
-  const apikey = req.query.apikey;
-  // console.log('Got request');
+  const { track, artist } = req.query;
+
   try {
-    const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.search?q_artist=${artist}&q_track=${track}&apikey=${apikey}`);
-    // console.log(`musixmatch track search response:${response}`);
+    const response = await axios.get(
+      `https://api.musixmatch.com/ws/1.1/track.search?q_artist=${artist}&q_track=${track}&apikey=${musixmatch}`
+    );
     res.json(response.data);
   } catch (error) {
-    // console.log('failed');
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
 // Handles proxy requests for lyrics. 
 app.get("/api/lyrics-search", async (req, res) => {
-  const track_id = req.query.track_id;
-  const apikey = req.query.apikey;
-  // console.log('Got request');
+  const { track_id } = req.query;
+
   try {
-    const response = await axios.get(`https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=${track_id}&apikey=${apikey}`);
-    // console.log(`musixmatch lyrics search response:${response}`);
+    const response = await axios.get(
+      `https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=${track_id}&apikey=${musixmatch}`
+    );
     res.json(response.data);
   } catch (error) {
-    // console.log('failed');
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: error.message });
   }
-});
-
-/**
- * TODO: Figure out a way to make proxy requests on the same
- * port.
- */
-// Server for listening for requests to search for a track.
-app.listen(3001, () => {
-  console.log('Server running on port 3001');
-});
-
-// Server for listening for requests to search for lyrics.
-app.listen(3002, () => {
-  console.log('Server running on port 3002');
 });
 
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
