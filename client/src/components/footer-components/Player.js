@@ -231,6 +231,7 @@ const Player = forwardRef(({ token }, ref) => {
 		}
 	
 		return () => clearInterval(playbackIntervalRef.current);
+		// eslint-disable-next-line
 	  }, [playbackState.play]);
 
 	const source = axios.CancelToken.source();

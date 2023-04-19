@@ -23,12 +23,13 @@ export default function CommentSongInfo({songID}) {
                 const track_name = response.data.name;
                 setSongData({...songData, artist: artist_name, album: album_cover, track: track_name});
             })
+        // eslint-disable-next-line
     },[])
 
     return (
         <div class="spotify-track">
             <div class="player-cover">
-                <img src={songData.album}></img> 
+                <img src={songData.album} alt='album'></img> 
             </div>
             <div class="track-details">
                 <h2 class="track-name">{songData.track}</h2>

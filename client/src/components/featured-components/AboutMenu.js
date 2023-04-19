@@ -1,9 +1,9 @@
 import React from 'react';
-import {Route} from 'react-router-dom'
+import {Route} from 'react-router-dom';
 
-import AboutNavItem from './AboutNavItem'
-import RowGrid from './RowGrid'
-import ArtistRow from './ArtistRow'
+import AboutNavItem from './AboutNavItem';
+import RowGrid from './RowGrid';
+import ArtistRow from './ArtistRow';
 
 const AboutMenu = ({id, related, tracks, album, single, appear, compilation, playContextTrack}) => {
     return (

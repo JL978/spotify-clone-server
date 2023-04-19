@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
-import Comment from './Comment';
+// import Comment from './Comment';
 
+// eslint-disable-next-line
 const SongCommentList = ({ closeTip, song_id }) => {
     //display a list of Comment components for each comment in the database with this song_id
+    // eslint-disable-next-line
     const [feed,setFeed] = useState([]);
 
     

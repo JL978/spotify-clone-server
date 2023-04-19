@@ -3,7 +3,7 @@ import CommentSongInfo from './CommentSongInfo';
 import millisToTime from '../../utilities/millisToTime';
 
 export default function Comment(props) {
-    const {user, time, timestamp, songID, commentBody, replies, likes, reshares} = props;
+    const {user, time, timestamp, songID, commentBody} = props;
 
     return (
           <div class="spotify-tweet-box">

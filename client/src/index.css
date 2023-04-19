@@ -2077,3 +2077,11 @@
 .social-features {
   display: flex;
 }
+
+.aboutSpan {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 16px;
+  letter-spacing: normal;
+  text-transform: none;
+}

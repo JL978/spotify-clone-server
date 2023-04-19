@@ -2,6 +2,7 @@ import React from 'react';
 import millisToTime from '../../utilities/millisToTime';
 
 export default function Annotation(props) {
+    // eslint-disable-next-line
     const {user, time, timestamp, songID, annotatedText, noteBody} = props;
 
     return (

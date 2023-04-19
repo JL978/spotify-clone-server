@@ -11,7 +11,6 @@ import ArtistPage from "../pages-components/ArtistPage";
 import CollectionPage from "../pages-components/CollectionPage";
 import LikePage from "../pages-components/LikePage";
 import SocialPage from "../pages-components/SocialPage";
-import SocialSidebar from "./SocialSidebar";
 
 import ReactToolTip from "react-tooltip";
 import generateContent from "../../utilities/TipContent";

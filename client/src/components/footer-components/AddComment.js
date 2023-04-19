@@ -27,8 +27,8 @@ const AddComment = ({ closeTip, song_id, token, annotation = false, text = ''}) 
 		requestWithToken("https://api.spotify.com/v1/me", token, source)
 			.then(({ data: { id } }) => setUserInfo(id))
 			.catch((error) => console.log(error));
-
-	}, []);
+	// eslint-disable-next-line
+	}, []); // songInfo, token
 
 	const handleCommentChange = event => {
 		setCommentText(event.target.value);

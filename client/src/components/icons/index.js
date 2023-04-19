@@ -76,6 +76,8 @@ export default function Icon(props) {
       return <Comment />;
     case "Annotation":
       return <Annotation />;
+    case "Bars":
+      return <Bars {...props}/>
     default:
       return null;
   }

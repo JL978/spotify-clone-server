@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import {
   MessageContext,
@@ -171,6 +171,7 @@ export default function AnnotationsPage() {
         //**TODO: Add error handler to handle errors from different steps in the promise chain. */
         setMessage(`general error: ${err}`);
       });
+      // eslint-disable-next-line
   }, [song, token]);
   // console.log(songName)
   // console.log(lyrics)
