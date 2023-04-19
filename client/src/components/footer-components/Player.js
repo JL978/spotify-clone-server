@@ -462,7 +462,11 @@ const Player = forwardRef(({ token }, ref) => {
 									title="Comment"
 									icon="Comment" 
 									size="x-larger"
-									onClick={() => setCommentTip(!commentTip)}
+									onClick={() => {
+										if (playInfo.name !== "") {
+											setCommentTip(!commentTip)
+										}
+									}}
 								/>
 							</span>
 							<span className="annotation-wrapper">
