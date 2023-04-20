@@ -21,6 +21,9 @@ export default function CommentPage() {
     })
 
     useEffect(() => {
+        if (!uri) {
+            return;
+        }
         const [source, makeRequest] = makeAxiosRequest(`https://api.spotify.com/v1/tracks/${uri}`)
         makeRequest()
             .then((data) => {
@@ -42,6 +45,7 @@ export default function CommentPage() {
                 console.log(album)
             })
             .then(() => source.cancel())
+            .catch((error) => console.log(error))
     }, [uri])
 
     useEffect(() => {
@@ -67,6 +71,7 @@ export default function CommentPage() {
                 console.log(jsonData);
             }
         )
+        .catch((error) => console.log(error))
       },[uri])
     
 
