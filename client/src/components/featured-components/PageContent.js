@@ -16,6 +16,7 @@ import ReactToolTip from "react-tooltip";
 import generateContent from "../../utilities/TipContent";
 import { LoginContext } from "../../utilities/context";
 import AnnotationsPage from '../pages-components/AnnotationsPage'
+import CommentPage from "../pages-components/CommentPage";
 
 export default function PageContent({
   query,
@@ -71,6 +72,9 @@ export default function PageContent({
         </Route>
         <Route path='/annotations'>
                 {loggedIn ? <AnnotationsPage />:<Redirect to='/'/>}
+            </Route>
+            <Route path='/comments'>
+              <CommentPage/>
             </Route>
       </Switch>
       <div className={`status-bar-wrapper ${status ? "active" : ""}`}>

@@ -4,7 +4,7 @@ import msTimeFormat from '../../utilities/utils';
 import { PlayContext } from '../../utilities/context';
 import ControlButton from '../footer-components/ControlButton';
 import SongCommentList from './SongCommentList';
-
+import { useHistory } from "react-router-dom";
 
 
 const TrackListItem = React.forwardRef(({ track, styleName, highlight, playContextTrack }, ref) => {
@@ -55,6 +55,18 @@ const TrackListItem = React.forwardRef(({ track, styleName, highlight, playConte
     )
   );
 
+  function getId(str) {
+    const splitArr = str.split(':');
+    return splitArr[splitArr.length - 1];
+  }
+
+  const history = useHistory();
+  const routeChangeComments = () => {
+    console.log(getId(uri))
+    const path = '/comments/' + getId(uri);
+    history.push(path);
+  }
+
   return (
     <li ref={ref} className={`trackListItem ${highlight ? 'highlight' : ''}`}>
       <div className='trackItemPlay' style={simplifyStyle ? simplyStyle : null}>
@@ -93,7 +105,7 @@ const TrackListItem = React.forwardRef(({ track, styleName, highlight, playConte
 									title="Comment"
 									icon="Comment" 
 									size="x-larger"
-                  onClick={() => setSongCommentTip(!songCommentTip)}
+                  onClick={routeChangeComments}
 								/>
 
       <div className='trackItemDuration'>

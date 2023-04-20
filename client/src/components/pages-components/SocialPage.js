@@ -57,6 +57,7 @@ export default function SocialPage() {
             likes={comm.likes}
             reshares={comm.reshares}
             songID = {comm.songID}
+            showSong = {true}
             ></Comment>)}
           {/* <Comment user="viducco" timeOfPost="20m" timestamp="0:10" track="Love Sosa" artist="Chief Keef" comment="Lorem Ipsum" replies="10" likes="15" reshares="100"/> */}
         </div>
