@@ -302,31 +302,39 @@ const Player = forwardRef(({ token }, ref) => {
 		console.log('Skip button pressed')
 		putWithToken("https://api.spotify.com/v1/me/player/next", token, source, {}, "POST")
 			.then((response) => {
-				if (response.status !== 204) {
-					console.log('Server error')
-					setMessage(
-						`ERROR: (skipnext) Something went wrong! Server response: ${response.status}`
-					);
-					return;
+				switch (response.status) {
+					case 204:
+					case 202:
+						updateState();
+						return;
+				
+					default:
+						setMessage(
+							`ERROR: Something went wrong! Server response: ${response.status}`
+						);
+						break;
 				}
-				console.log('Updating state')
-				updateState();
 			})
-			.catch((error) => setMessage(`ERROR: (skipnext 2) ${error}`));
+			.catch((error) => setMessage(`ERROR: ${error}`));
 	};
 
 	const skipPrev = () => {
 		putWithToken("https://api.spotify.com/v1/me/player/previous", token, source, {}, "POST")
 			.then((response) => {
-				if (response.status !== 204) {
-					setMessage(
-						`ERROR: Something went wrong! Server response: ${response.status}`
-					);
-					return;
+				switch (response.status) {
+					case 204:
+					case 202:
+						updateState();
+						return;
+				
+					default:
+						setMessage(
+							`ERROR: Something went wrong! Server response: ${response.status}`
+						);
+						break;
 				}
-				updateState();
 			})
-			.catch((error) => setMessage(`ERROR: previos ${error}`));
+			.catch((error) => setMessage(`ERROR: ${error}`));
 	};
 
 	const seekPlayback = (ratio) => {
@@ -338,8 +346,11 @@ const Player = forwardRef(({ token }, ref) => {
 					setPlaybackState((state) => ({ ...state, progress: time }));
 					updateState();
 				} else {
+					if (response.status === 202) {
+						return;
+					}
 					setMessage(
-						`ERROR: Something went wrong! Server response: ${response.status}`
+						`ERROR: (seekplayback) Something went wrong! Server response: ${response.status}`
 					);
 				}
 			})
