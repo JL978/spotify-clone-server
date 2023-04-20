@@ -49,6 +49,9 @@ export default function CommentPage() {
     }, [uri])
 
     useEffect(() => {
+        if (!uri) {
+            return;
+        }
         axios.get(`/comments/song/${uri}`)
             .then(response => {
                 const data = response.data;
