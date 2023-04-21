@@ -5,11 +5,14 @@ import { PlayContext } from '../../utilities/context';
 import ControlButton from '../footer-components/ControlButton';
 import SongCommentList from './SongCommentList';
 import { useHistory } from "react-router-dom";
+import { useEffect } from 'react';
+import axios from 'axios';
 
 
 const TrackListItem = React.forwardRef(({ track, styleName, highlight, playContextTrack }, ref) => {
   const { album, artists, name, explicit, duration_ms, uri } = track;
   const updatePlayer = useContext(PlayContext);
+  const [feed, setFeed] = useState([]);
 
   const thumbNail = styleName === 'simplify' && album.images.length > 0 ? album.images[album.images.length - 1].url : null;
   const formattedTime = msTimeFormat(duration_ms);
@@ -67,6 +70,17 @@ const TrackListItem = React.forwardRef(({ track, styleName, highlight, playConte
     history.push(path);
   }
 
+  useEffect(() => {
+    if (uri.length > 0) {
+      axios.get(`/comments/song/${getId(uri)}`)
+        .then((response) => {
+          const data = response.data;
+          setFeed(data.comments);
+        })
+    }
+  }, [])
+  
+
   return (
     <li ref={ref} className={`trackListItem ${highlight ? 'highlight' : ''}`}>
       <div className='trackItemPlay' style={simplifyStyle ? simplyStyle : null}>
@@ -100,13 +114,19 @@ const TrackListItem = React.forwardRef(({ track, styleName, highlight, playConte
           />
         )}
       </div>
-
-      <ControlButton
-									title="Comment"
-									icon="Comment" 
-									size="x-larger"
-                  onClick={routeChangeComments}
-								/>
+      <div className='trackItemCommentCount'>
+        {feed.length}
+      </div>
+      
+      <div className='trackItemCommentButton'>
+        <ControlButton
+          title="Comment"
+          icon="Comment" 
+          size="x-larger"
+          onClick={routeChangeComments}
+				/>
+      </div>
+      
 
       <div className='trackItemDuration'>
         <div className={`duration ${simplifyStyle ? 'trackMidAlign' : 'trackTopAlign'}`}>
