@@ -1746,17 +1746,17 @@
     height: 75px; */
     overflow: hidden;
     /* border-radius: 50%; */
-    margin-top: 2.5em;
+    margin-top: 1em;
     position: relative;
   }
   
   .avatar img {
     display: block;
-    width: 100%;
-    height: auto;
-    position: absolute;
+    width: 5em;
+    height: 5em;
+    /* position: absolute;
     top: 0;
-    left: 0;
+    left: 0; */
   }
   
   .content {
@@ -1866,12 +1866,12 @@
   
   .timestamp {
     font-family: 'Courier New', Courier, monospace;
-    background-color: #f7f7f7;
-    color: #333;
-    padding: 0 4px;
-    border-radius: 4px;
-    font-size: 14px;
-    margin-right: 5px;
+    /* background-color: #f7f7f7; */
+    /* color: #333; */
+    /* padding: 0 4px; */
+    border-radius: 50%;
+    /* font-size: 14px; */
+    /* margin-right: 5px; */
   }
   
   
@@ -1996,12 +1996,22 @@
   }
 
 .textareacomment {
-    resize: none;
     background-color:black;
-    border: none;
-    outline: none;
     color: #fff;
-    font: 'Gotham Book', Gotham-Book, Arial, sans-serif;
+    padding: 8px 20px;
+    height: 80px;
+    width: 90%;
+    border: 0;
+    border-radius: 10px;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.015em;
+    resize: none;
+    /* font: 'Gotham Book'; */
+    font-family: "Rubik", "Poppins", "Nunito", "Open Sans", "Roboto",
+    "Helvetica Neue", Helvetica, Arial, "Hiragino Kaku Gothic Pro", "Meiryo",
+    "MS Gothic", sans-serif;
   }
 
 .commentdiv {
@@ -2084,4 +2094,15 @@
   line-height: 16px;
   letter-spacing: normal;
   text-transform: none;
+}
+
+.trackItemCommentCount {
+  font-family: "Rubik", "Poppins", "Nunito", "Open Sans", "Roboto",
+  "Helvetica Neue", Helvetica, Arial, "Hiragino Kaku Gothic Pro", "Meiryo",
+  "MS Gothic", sans-serif;
+  margin: 1em 0em 1em 1em;
+}
+
+.trackItemCommentButton {
+  margin: 0.5em;
 }
