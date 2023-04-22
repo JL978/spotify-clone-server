@@ -78,7 +78,7 @@ const TrackListItem = React.forwardRef(({ track, styleName, highlight, playConte
           setFeed(data.comments);
         })
     }
-  }, [])
+  }, [uri])
   
 
   return (

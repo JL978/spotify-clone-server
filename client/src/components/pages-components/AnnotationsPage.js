@@ -10,6 +10,7 @@ import LyricsContainer from "../featured-components/LyricsContainer";
 import AddAnnotation from "../featured-components/AddAnnotation";
 import Annotation from "../featured-components/Annotation";
 import PageTitle from "../featured-components/PageTitle";
+import { useHistory } from "react-router-dom";
 
 export default function AnnotationsPage() {
   const token = useContext(TokenContext);
@@ -20,6 +21,7 @@ export default function AnnotationsPage() {
   const [annotationTip, setAnnotationTip] = useState(false);
   const [id, setId] = useState("");
   const [feed, setFeed] = useState([]);
+  const history = useHistory()
   // const loggedIn = useContext(LoginContext);
 
   const cancelSource = axios.CancelToken.source();
@@ -52,6 +54,7 @@ export default function AnnotationsPage() {
         if (responseTrack.status === 200) {
           track_ids = responseTrack.data.message.body.track_list.map((track) => track.track.track_id);
         } else {
+          history.push("/")
           setLyrics("");
           setMessage(`Sorry, we couldn't find lyrics for this song:${songName}. No track id.(${responseTrack.status})`);
           return;
@@ -68,6 +71,7 @@ export default function AnnotationsPage() {
           }
         }
         if (!foundLyrics) {
+          history.push("/")
           setLyrics("No Lyrics");
           setMessage("Sorry, we couldn't find lyrics for this song");
         }
