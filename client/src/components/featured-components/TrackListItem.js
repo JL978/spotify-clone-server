@@ -7,6 +7,7 @@ import SongCommentList from './SongCommentList';
 import { useHistory } from "react-router-dom";
 import { useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 
 const TrackListItem = React.forwardRef(({ track, styleName, highlight, playContextTrack }, ref) => {
@@ -41,16 +42,16 @@ const TrackListItem = React.forwardRef(({ track, styleName, highlight, playConte
         {explicit && <span className='explicit-label'>E</span>}
         <span className='trackArtists ellipsis-one-line'>
           {artists.map((artist) => (
-            <a href={`/artist/${artist.id}`} key={artist.id}>
+            <Link to={`/artist/${artist.id}`} key={artist.id}>
               {artist.name}
-            </a>
+            </Link>
           ))}
         </span>
         {album && (
           <>
             <span className='trackInfoSep'>•</span>
             <span className='trackAlbum ellipsis-one-line'>
-              <a href={`/ablum/${album.id}`}>{album.name}</a>
+              <Link to={`/album/${album.id}`}>{album.name}</Link>
             </span>
           </>
         )}
