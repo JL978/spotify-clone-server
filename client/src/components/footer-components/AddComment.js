@@ -50,7 +50,7 @@ const AddComment = ({ closeTip, song_id, token, annotation = false, text = ''}) 
 			reshares: 0
 		}
 		console.log(commentData);
-		axios.post("/comments/add",commentData);
+		axios.post(process.env.REACT_APP_BACK_URI + "/comments/add",commentData);
 		setMessage(
 			"Comment Added!"
 		);
@@ -68,7 +68,7 @@ const AddComment = ({ closeTip, song_id, token, annotation = false, text = ''}) 
 			timestamp: songInfo.timestamp
 		}
 		console.log(annotationData);
-		axios.post("/annotations/add", annotationData);
+		axios.post(process.env.REACT_APP_BACK_URI + "/annotations/add", annotationData);
 		setMessage(
 			"Annotation Added!"
 		);

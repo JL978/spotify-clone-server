@@ -73,7 +73,7 @@ const TrackListItem = React.forwardRef(({ track, styleName, highlight, playConte
 
   useEffect(() => {
     if (uri.length > 0) {
-      axios.get(`/comments/song/${getId(uri)}`)
+      axios.get(process.env.REACT_APP_BACK_URI + `/comments/song/${getId(uri)}`)
         .then((response) => {
           const data = response.data;
           setFeed(data.comments);
