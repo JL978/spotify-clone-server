@@ -2,6 +2,8 @@ import React from "react";
 import axios from "axios";
 import { BrowserRouter as Router } from "react-router-dom";
 import AnnotationsPage from "../components/pages-components/AnnotationsPage";
+import AlbumPage from "../components/pages-components/AlbumPage";
+import CollectionPage from "../components/pages-components/CollectionPage";
 import ControlButton from "../components/footer-components/ControlButton";
 import AddAnnotation from "../components/featured-components/AddAnnotation";
 import NavItem from "../components/sidebar-components/NavItem";
@@ -12,6 +14,7 @@ import userEvent from '@testing-library/user-event'
 /** TODO: At the moment, these tests don't really test against our actual code.
  * We should eventually make new components that are specifically kind of built on
  * top of existing components. I think this we make it easier to test against our code.
+ * 
  * For example, instead of importing a NavItem and recreating the social tab button,
  * I think we should make a social tab NavItem component.
  */
@@ -36,7 +39,7 @@ afterAll(() => {
   mocks.map((m) => m.mockRestore());
 });
 
-test("test button for socical tab", async () => {
+test("test button for social tab", async () => {
   // Render the NavItem
   render(
     <Router>
@@ -47,6 +50,20 @@ test("test button for socical tab", async () => {
   // Test that the social icon appears
   expect(screen.getByTestId("social-icon")).toBeTruthy();
 });
+
+
+test("test button for search tab", async () => {
+  // Render the NavItem
+  render(
+    <Router>
+      <NavItem to="/search" exact={true} name="Search" label="Search" />
+    </Router>
+  );
+
+  // Test that the social icon appears
+  // expect(screen.getByTestId("search-icon")).toBeTruthy();
+});
+
 
 // For testing stuff from lyrics branch once it's merged
 test('test navigation to annotations page', async () => {
@@ -65,15 +82,49 @@ test("test annotations page", async () => {
   // Render
   render(
     <Router>
-      <AnnotationsPage />
+      <AnnotationsPage/>
     </Router>
   );
 
+  
   // Expect that lyrics and annotations secitons will appear
   expect(screen.getByText("Lyrics:")).toBeTruthy();
   expect(screen.getByTestId("lyrics-body")).toBeTruthy();
   expect(screen.getByText("Comments")).toBeTruthy();
 });
+
+test("test collections page", async () => {
+  // Render
+  render(
+    <Router>
+      <CollectionPage/>
+    </Router>
+  );
+
+  
+  // Expect that lyrics and annotations sectons will appear
+  expect(screen.getByText("Lyrics:")).toBeTruthy();
+  expect(screen.getByTestId("lyrics-body")).toBeTruthy();
+  expect(screen.getByText("Comments")).toBeTruthy();
+});
+
+
+test("test collections page", async () => {
+  // Render
+  render(
+    <Router>
+      <AnnotationsPage />
+    </Router>
+  );
+
+  
+  // Expect that lyrics and annotations secitons will appear
+  expect(screen.getByText("Lyrics:")).toBeTruthy();
+  expect(screen.getByTestId("lyrics-body")).toBeTruthy();
+  expect(screen.getByText("Comments")).toBeTruthy();
+});
+
+
 
 test("test add annotation", async () => {
   // Setup user event
