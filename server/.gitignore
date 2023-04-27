@@ -2,6 +2,3 @@ node_modules
 client_key.js
 .env
 .vscode
-
-package-lock.json
-package.json
