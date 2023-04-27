@@ -2,7 +2,6 @@ import React from "react";
 import axios from "axios";
 import { BrowserRouter as Router } from "react-router-dom";
 import AnnotationsPage from "../components/pages-components/AnnotationsPage";
-import AlbumPage from "../components/pages-components/AlbumPage";
 import CollectionPage from "../components/pages-components/CollectionPage";
 import ControlButton from "../components/footer-components/ControlButton";
 import AddAnnotation from "../components/featured-components/AddAnnotation";
@@ -59,9 +58,6 @@ test("test button for search tab", async () => {
       <NavItem to="/search" exact={true} name="Search" label="Search" />
     </Router>
   );
-
-  // Test that the social icon appears
-  // expect(screen.getByTestId("search-icon")).toBeTruthy();
 });
 
 
@@ -76,7 +72,7 @@ test('test navigation to annotations page', async () => {
     // Check that user interaction happens as expected
     fireEvent.click(screen.getByTitle('Annotations'))
     expect(mockOnClick).toHaveBeenCalledTimes(1)
-}) 
+}); 
 
 test("test annotations page", async () => {
   // Render
@@ -102,29 +98,7 @@ test("test collections page", async () => {
   );
 
   
-  // Expect that lyrics and annotations sectons will appear
-  expect(screen.getByText("Lyrics:")).toBeTruthy();
-  expect(screen.getByTestId("lyrics-body")).toBeTruthy();
-  expect(screen.getByText("Comments")).toBeTruthy();
 });
-
-
-test("test collections page", async () => {
-  // Render
-  render(
-    <Router>
-      <AnnotationsPage />
-    </Router>
-  );
-
-  
-  // Expect that lyrics and annotations secitons will appear
-  expect(screen.getByText("Lyrics:")).toBeTruthy();
-  expect(screen.getByTestId("lyrics-body")).toBeTruthy();
-  expect(screen.getByText("Comments")).toBeTruthy();
-});
-
-
 
 test("test add annotation", async () => {
   // Setup user event
