@@ -52,7 +52,7 @@ export default function CommentPage() {
         if (!uri) {
             return;
         }
-        axios.get(`/comments/song/${uri}`)
+        axios.get(process.env.REACT_APP_BACK_URI + `/comments/song/${uri}`)
             .then(response => {
                 const data = response.data;
                 console.log(data);

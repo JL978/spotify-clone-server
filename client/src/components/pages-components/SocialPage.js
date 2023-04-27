@@ -10,7 +10,7 @@ export default function SocialPage() {
     const loggedIn = useContext(LoginContext);
 
     useEffect(() => {
-      axios.get("/comments/all")
+      axios.get(process.env.REACT_APP_BACK_URI + "/comments/all")
       .then(response => {
         const data = response.data;
         console.log(data);
