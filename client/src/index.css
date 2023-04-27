@@ -5,8 +5,9 @@
     --main-text: #b3b3b3;
     --player-height: 90px;
     --side-bar-margin: 24px;
+    --highlight-color: #1DB954;
   }
-  
+
   * {
     box-sizing: border-box;
     margin: 0;
@@ -2024,14 +2025,20 @@
 .lyric-container-body{
   position: relative;
   height: 100%;
-  width: 60%;
+  width: 80%;
   left: 15px;
   top: 10px;
   line-height: 230%;
-  overflow: auto;
-  white-space: pre;
-  outline: 1px solid blue;
+  white-space: pre-line;
+  color: white;
+
 }
+
+
+.lyric-container-body ::selection {
+  background: var(--highlight-color);
+}
+
 
 .lyric-container-title{
   position: relative;
@@ -2043,8 +2050,8 @@
   left: 15px;
   top: 10px;
   line-height: 150%;
-  overflow: auto;
-  outline: 1px solid blue;
+  color: white;
+
 }
 
 .lyrics-container {
