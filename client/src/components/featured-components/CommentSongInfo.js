@@ -28,10 +28,10 @@ export default function CommentSongInfo({songID}) {
 
     return (
         <div class="spotify-track">
-            <div class="player-cover">
+            <div class="player-cover" data-testid="comment-play-cover">
                 <img src={songData.album} alt='album'></img> 
             </div>
-            <div class="track-details">
+            <div class="track-details" data-testid="comment-track-details">
                 <h2 class="track-name">{songData.track}</h2>
                 <h3 class="artist-name">{songData.artist}</h3>
             </div>

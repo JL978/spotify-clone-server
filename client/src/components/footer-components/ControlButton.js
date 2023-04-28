@@ -3,7 +3,7 @@ import Icon from '../icons'
 
 export default function ControlButton({title, icon, size, active, extraClass, onClick}) {
     return (
-        <button title={title} className={`control-button ${size && size} ${active? 'active':''} ${extraClass&&extraClass} no-outline`} onClick={onClick}>
+        <button title={title} className={`control-button ${size && size} ${active? 'active':''} ${extraClass&&extraClass} no-outline`} onClick={onClick} data-testid="control-button">
             <Icon name={icon}/>
         </button>
     )

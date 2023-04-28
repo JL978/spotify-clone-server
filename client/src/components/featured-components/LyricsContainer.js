@@ -23,7 +23,7 @@ const LyricsContainer = ({lyrics, selectionCallback, openTip}) => {
                 </h1>
             </div>
             <div className='lyric-container-body' data-testid="lyrics-body">
-                <span className='lyrics-container-body-wrapper' onMouseUp={onMouseUpCallback}>
+                <span className='lyrics-container-body-wrapper' onMouseUp={onMouseUpCallback} data-testid="lyrics-selection-wrapper">
                     <h1>
                         {lyrics}
                     </h1>
