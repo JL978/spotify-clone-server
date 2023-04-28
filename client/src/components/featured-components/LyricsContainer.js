@@ -1,9 +1,12 @@
 import React from 'react'
 
+
+
 // Lyrics container component. The component displays the lyrics provided to it.
 const LyricsContainer = ({lyrics, selectionCallback, openTip}) => {
     const onMouseUpCallback = () => {
         const selectionObject = window.getSelection();
+
         // const selectionRange = selectionObject.getRangeAt(0);
         // console.log(selectionRange);
         const selectedText = selectionObject.toString();

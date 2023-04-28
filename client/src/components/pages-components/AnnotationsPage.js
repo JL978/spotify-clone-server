@@ -27,8 +27,8 @@ export default function AnnotationsPage() {
   const cancelSource = axios.CancelToken.source();
   useEffect(() => {
     let songName = "";
-    const track_search_base_url = "http://localhost:4000/api/track-search?";
-    const lyrics_search_base_url = "http://localhost:4000/api/lyrics-search?";
+    const track_search_base_url = process.env.REACT_APP_BACK_URI + "/api/track-search?";
+    const lyrics_search_base_url = process.env.REACT_APP_BACK_URI + "/api/lyrics-search?";
     
     const musixMatchRequest = async (url) => {
       try {
@@ -99,7 +99,7 @@ export default function AnnotationsPage() {
     console.log(`/annotations/${id}`);
 
     if (id.length > 0) {
-      axios.get(`/annotations/song/${id}`).then((response) => {
+      axios.get(process.env.REACT_APP_BACK_URI + `/annotations/song/${id}`).then((response) => {
         const data = response.data;
         console.log(data);
         const jsonData = data.f_annotation.map((item) => {
