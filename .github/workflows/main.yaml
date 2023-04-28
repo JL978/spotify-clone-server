@@ -1,9 +1,9 @@
 name: CI
 on:
   push:
-    branches: [main, dev, testing]
+    branches: [main, testing]
   pull_request:
-    branches: [main, dev, testing]
+    branches: [main, testing]
 env:
   NODE_ENV: ci
   CI: true
