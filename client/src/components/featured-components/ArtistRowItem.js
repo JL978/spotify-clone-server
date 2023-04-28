@@ -1,22 +1,26 @@
 import React from 'react';
 import Icon from '../icons'
-import { Link } from 'react-router-dom';
 
 const ArtistRowItem = ({info}) => {
-    const {name, type, id, images} = info;
-    const thumbNail = images.length > 0 ? images[0].url : null;
+    const {name, type, id, images} = info 
+    let thumbNail 
+    if (images.length > 0){
+        thumbNail = images[0].url
+    }
 
     return (
         <div className='artistRowItem'>
-            <Link to={`/${type}/${id}`}>
+            <a href={`/${type}/${id}`}>
                 <div className='artistRowThumb'>
-                    {thumbNail 
-                        ? <img loading="lazy" src={thumbNail} style={{width:'100%', height:'100%'}} alt="" />
-                        : <Icon name='CD' />}
+                    {thumbNail? 
+                        <img loading="lazy" src={thumbNail} style={{width:'100%', height:'100%'}} alt="" />: 
+                        <div>
+                            <Icon name='CD'/>
+                        </div>}
                 </div>
-            </Link>
+            </a>
             <div className="artistRowName ellipsis-one-line">
-                <Link to={`/${type}/${id}`}>{name}</Link>
+                <a href={`/${type}/${id}`}>{name}</a>
             </div>
         </div>
     );
