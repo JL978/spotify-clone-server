@@ -248,6 +248,8 @@ app.get("/api/lyrics-search", async (req, res) => {
   }
 });
 
+export default app;
+
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
-// export default app;
+
