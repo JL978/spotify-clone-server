@@ -5,7 +5,7 @@ import Comment from "../models/Comment";
 import Annotation from "../models/Annotation";
 
 // COMMENTS TESTS
-describe("Comment tests", () => {
+describe("Comments tests", () => {
   let testComments = [];
 
   beforeEach(async () => {
@@ -21,7 +21,6 @@ describe("Comment tests", () => {
   it("Get all comments", async () => {
     const res = await request(app).get("/comments/all");
     expect(res.status).toEqual(200);
-    console.log(res.body.comments);
     testComments = await Promise.all([
       Comment.findOne({
         _id: "644288a4bc480271bb932a91",
@@ -34,46 +33,45 @@ describe("Comment tests", () => {
     ]);
   });
 
-  // NEEDS REPAIR
-  it("Get new comment", async () => {
-    testComments = await Comment.create([
-      {
+  // GOOD TEST
+  it("Create new comment", async () => {
+    const res = await request(app).post("/comments/add").send({
+      authorID: "harryshindika",
+      songID: "3TCwVkFRDD11ez23pfI0ch",
+      commentBody: "Bam Wam",
+      timestamp: 38991,
+    });
+    expect(res.status).toEqual(201);
+    testComments = await Promise.all([
+      Comment.findOne({
         authorID: "harryshindika",
         songID: "3TCwVkFRDD11ez23pfI0ch",
-        commentBody: "GNARLY SONG YOOOO!",
-        timestamp: 38991,
-        likes: 2,
-        replies: 5,
-        reshares: 20,
-      },
+        commentBody: "Bam Wam",
+      }),
     ]);
-
-    const res = await request(app).get("/comments");
-    expect(res.status).toEqual(404);
-    // expect(res.body.comments).toHaveLength(3);
+    expect(testComments).toHaveLength(1);
+    expect(testComments[0]).toBeTruthy();
   });
 
-  // NEEDS REPAIR
+  // GOOD TEST
   it("Delete a comment", async () => {
-    testComments = await Comment.create([
-      {
-        authorID: "harryshindika",
-        songID: "20cjeL1xWO9Li2e2OaD9xS",
-        commentBody: "PLEASE DONT SAVE",
-        timestamp: 6456,
-        likes: 2,
-        replies: 5,
-        reshares: 20,
-      },
-    ]);
+    testComments = await Comment.create({
+      authorID: "harryshindika",
+      songID: "2VND3CJN5N7uB5ZQwsygVo",
+      commentBody: "Bam Wam",
+      timestamp: 38991,
+    });
+
     const res = await request(app)
-      .delete("/comment")
-      .query({ id: testComments[0]._id.toString()});
-    expect(res.status).toEqual(404);
+      .delete("/comments/delete/2VND3CJN5N7uB5ZQwsygVo")
+      .query({  });
+
+    testComments = await Comment.deleteOne({
+      songID: "2VND3CJN5N7uB5ZQwsygVo",
+    });
+    expect(res.status).toEqual(201);
   });
 });
-
-
 
 // ANNOTATIONS TESTS
 describe("Annotations tests", () => {
@@ -92,35 +90,28 @@ describe("Annotations tests", () => {
   it("Get all Annotations for a song", async () => {
     const res = await request(app).get("/annotations/all");
     expect(res.status).toEqual(200);
-    console.log(res.body.annotations);
+    console.log(res.body);
     testAnnotations = await Promise.all([
-      Annotation.findOne({
+      Annotation.find({
         // _id: "644288a4bc480271bb932a91",
         authorID: "harryshindika",
         songID: "7KokYm8cMIXCsGVmUvKtof",
-        annotatedText: "e terrified to look down\'Cause if you ",
-        noteBody: 'test annotation',
+        annotatedText: "e terrified to look down'Cause if you ",
+        noteBody: "test annotation",
         timestamp: 4628,
-        __v: 0,
       }),
     ]);
   });
 
-  // NEEDS REPAIR
-  it("Get new annotation", async () => {
-    testAnnotations = await Annotation.create([
-      {
-        authorID: "harryshindika",
-        songID: "7KokYm8cMIXCsGVmUvKtof",
-        annotatedText: "e terrified to look down\'Cause if you ",
-        noteBody: 'Mello made it right',
-        timestamp: 4628,
-      },
-    ]);
-
-    const res = await request(app).get("/annotations");
-    expect(res.status).toEqual(404);
-    // expect(res.body.comments).toHaveLength(3);
+  // GOOD TEST
+  it("Create new annotation", async () => {
+    const res = await request(app).post("/annotations/add").send({
+      authorID: "harryshindika",
+      songID: "7KokYm8cMIXCsGVmUvKtof",
+      annotatedText: "e terrified to look down'Cause if you ",
+      noteBody: "love me",
+      timestamp: 4628,
+    });
+    expect(res.status).toEqual(201);
   });
-
 });
