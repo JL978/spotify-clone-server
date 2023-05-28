@@ -14,6 +14,9 @@ export default function SocialPage() {
       .then(response => {
         const data = response.data;
         console.log(data);
+        if (data === undefined) {
+          return;
+        }
         const jsonData = data.comments.map(item => {
           const stringifiedObjectId = item._id.toString();
           return {

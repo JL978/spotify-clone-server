@@ -4,6 +4,10 @@
     "description": "",
     "main": "index.js",
     "scripts": {
+        "install:client": "cd client && npm install",
+        "install:server": "cd server && npm install",
+        "test:client": "cd client && npm test",
+        "test:server": "cd server && npm test",
         "test": "echo \"Error: no test specified\" && exit 1",
         "server": "npm start --prefix server",
         "client": "npm start --prefix client",

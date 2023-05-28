@@ -6,7 +6,8 @@ const Annotation = (props) => {
         x="0px" 
         y="0px" 
         viewBox="0 0 16 16"
-        space="preserve">
+        space="preserve"
+        data-testid="annotation-icon">
             <g>
                 <path 
                     fill="currentColor" 

@@ -59,7 +59,7 @@ const AddComment = ({ closeTip, song_id, token, annotation = false, text = ''}) 
 
 	// Special callback to handle annotation submission
 	const handleAnnotationSubmit = event => {
-		console.log(text)
+		// console.log(text)
 		const annotationData = {
 			authorID: userInfo,
 			songID: songInfo.songId,
@@ -67,8 +67,8 @@ const AddComment = ({ closeTip, song_id, token, annotation = false, text = ''}) 
 			noteBody: commenttext,
 			timestamp: songInfo.timestamp
 		}
-		console.log(annotationData);
-		axios.post(process.env.REACT_APP_BACK_URI + "/annotations/add", annotationData);
+		// console.log(annotationData);
+		axios.post("/annotations/add", annotationData);
 		setMessage(
 			"Annotation Added!"
 		);
@@ -83,10 +83,10 @@ const AddComment = ({ closeTip, song_id, token, annotation = false, text = ''}) 
 					<h1 data-source="inside">Add Comment</h1>
 				</div>
 				<div className="commentdiv" data-source="inside">
-					<textarea class="textareacomment" name="freeform" rows="5.5" cols="43" onChange ={handleCommentChange}></textarea>
+					<textarea className="textareacomment" name="freeform" rows="5.5" cols="43" onChange ={handleCommentChange}></textarea>
 				</div>
-				<button class="pill-button-grey" onClick = {closeCommentBox}>Cancel</button>
-				<button class="pill-button-green" onClick = {annotation ? handleAnnotationSubmit : handleCommentSubmit}>Add</button>
+				<button className="pill-button-grey" onClick = {closeCommentBox}>Cancel</button>
+				<button className="pill-button-green" onClick = {annotation ? handleAnnotationSubmit : handleCommentSubmit}>Add</button>
 			</div>
 		</div>
 	);

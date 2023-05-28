@@ -1,0 +1,44 @@
+name: CI
+on:
+  push:
+    branches: [main, testing]
+  pull_request:
+    branches: [main, testing]
+env:
+  NODE_ENV: ci
+  CI: true
+jobs:
+  test-and-build-client:
+    name: Test & Build Client
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: npm run install:client
+      - name: Run Tests
+        run: npm run test:client
+
+  test-and-build-server:
+    name: Test & Build Server
+    runs-on: ubuntu-latest
+    container: node:16.13.2
+    services:
+      mongodb:
+        image: mongo:5.0.6
+        env:
+          MONGO_INITDB_ROOT_USERNAME: user
+          MONGO_INITDB_ROOT_PASSWORD: pass
+          MONGO_INITDB_DATABASE: mydatabase
+        ports:
+          - 27017:27017
+    steps:
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16.14"
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: npm run install:server
+      - name: Run Tests
+        run: npm run test:server

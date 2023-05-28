@@ -49,7 +49,9 @@ router.post("/add", async (req, res) => {
     });
   });
 
-//DELETE a comment
+
+
+// DELETE a comment
 router.delete("/delete/:id", async (req, res) => {
   Comment.deleteOne({ id: req.params.id }).then(function(){
     console.log("Comment deleted"); // Success
@@ -58,5 +60,24 @@ router.delete("/delete/:id", async (req, res) => {
     console.log(error); // Failure
 });
 });
+
+
+// //DELETE a comment
+// router.delete("/delete/:id", async (req, res) => {
+//   const { id } = req.query;
+//   if (!id) return res.status(400).send({ message: "Please provide an id." });
+
+//   const comment = await Comment.findById(id);
+//   if (!comment)
+//     return res
+//       .status(400)
+//       .send({ message: "Doggo with this id does not exist." });
+
+//   await comment.remove();
+
+//   res.status(200).send({ message: "Doggo successfully deleted." });
+// });
+
+
 
 module.exports = router;

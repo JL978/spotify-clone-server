@@ -54,15 +54,15 @@ const CollectionPage = ({playlists}) => {
     }, [])
 
     return (
-        <div className='page-content' style={{paddingTop:'16px'}}>
+        <div className='page-content' style={{paddingTop:'16px'}} data-testid="collection-page-content">
             <Route exact path='/collection/playlist'>
-                <CollectionRow name='Playlists' playlists={playlists}/>
+                <CollectionRow name='Playlists' playlists={playlists} data-testid="playlists-row"/>
             </Route>
             <Route exact path='/collection/artist'>
-                <CollectionRow name='Artists' playlists={artists}/>
+                <CollectionRow name='Artists' playlists={artists} data-testid="artist-row"/>
             </Route>
             <Route exact path='/collection/album'>
-                <CollectionRow name='Albums' playlists={albums}/>
+                <CollectionRow name='Albums' playlists={albums} data-testid="albums-row"/>
             </Route>
         </div>
     );

@@ -57,6 +57,9 @@ RE_URI = http://localhost:4000/callback
 REXP = /\.localhost:3000/
 ```
 
+## Running tests
+
+
 ## The architecture
 ### Client Credential Flow (un-authorized requests)
 
